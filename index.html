@@ -1,0 +1,315 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>전일 손세차</title>
+<link href="https://fonts.googleapis.com/css2?family=Black+Han+Sans&family=Noto+Sans+KR:wght@300;400;500;700;900&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;margin:0;padding:0;}
+html{scroll-behavior:smooth;}
+:root{
+  --ink:#060d1f;--ink2:#0b1528;--surface:#0f1e38;--surface2:#132244;
+  --border:#1e3460;--border2:#243d6e;--red:#c0201a;--red2:#e8342c;
+  --accent:#4a9eff;--accent2:#2d7de0;--gray:#5a7099;--gray2:#3a5070;
+  --white:#e8f0ff;--white2:#c8d8f5;
+}
+body{background:var(--ink);color:var(--white);font-family:'Noto Sans KR',sans-serif;overflow-x:hidden;}
+body::before{content:'';position:fixed;inset:0;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");pointer-events:none;z-index:9999;opacity:0.35;}
+nav{position:fixed;top:0;left:0;right:0;z-index:200;background:rgba(6,13,31,0.95);backdrop-filter:blur(16px);display:flex;justify-content:space-between;align-items:center;padding:0 2.5rem;height:54px;border-bottom:1px solid var(--border);}
+.nav-logo{font-family:'Black Han Sans',sans-serif;font-size:1.2rem;letter-spacing:0.08em;color:var(--white);text-decoration:none;}
+.nav-logo b{color:var(--accent);}
+.nav-right{display:flex;align-items:center;gap:2rem;}
+.nav-links{display:flex;gap:1.8rem;list-style:none;}
+.nav-links a{color:var(--gray);font-size:0.78rem;letter-spacing:0.12em;text-decoration:none;transition:color .2s;}
+.nav-links a:hover{color:var(--accent);}
+.nav-call{background:var(--red);color:#fff;padding:0.4rem 1.1rem;font-size:0.8rem;font-weight:700;letter-spacing:0.08em;text-decoration:none;border-radius:1px;transition:background .2s;}
+.nav-call:hover{background:var(--red2);}
+.hero{min-height:100vh;background:var(--ink);position:relative;overflow:hidden;display:flex;flex-direction:column;padding-top:54px;}
+.hero-split{display:grid;grid-template-columns:1fr 1fr;flex:1;}
+.hero-left{background:var(--red);padding:5rem 3rem 4rem 4rem;display:flex;flex-direction:column;justify-content:space-between;position:relative;overflow:hidden;clip-path:polygon(0 0, 92% 0, 100% 100%, 0 100%);}
+.hero-left::before{content:'손';position:absolute;right:-0.1em;top:50%;transform:translateY(-50%);font-family:'Black Han Sans',sans-serif;font-size:28rem;color:rgba(0,0,0,0.1);line-height:1;pointer-events:none;}
+.hero-badge{display:inline-block;border:1.5px solid rgba(255,255,255,0.4);color:rgba(255,255,255,0.85);font-size:0.68rem;letter-spacing:0.35em;padding:0.3rem 0.9rem;border-radius:1px;width:fit-content;}
+.hero-main-title{font-family:'Black Han Sans',sans-serif;font-size:clamp(4rem,10vw,9rem);color:#fff;line-height:0.9;letter-spacing:-0.01em;position:relative;z-index:1;}
+.hero-main-title .sub-word{display:block;font-size:0.38em;color:rgba(255,255,255,0.6);letter-spacing:0.2em;margin-bottom:0.25em;font-family:'Noto Sans KR',sans-serif;font-weight:700;}
+.hero-left-bottom{position:relative;z-index:1;}
+.hero-desc-small{font-size:0.88rem;color:rgba(255,255,255,0.7);line-height:1.8;font-weight:300;max-width:280px;}
+.hero-right{background:var(--surface);padding:5rem 4rem 4rem 5rem;display:flex;flex-direction:column;justify-content:space-between;position:relative;overflow:hidden;}
+.hero-right::before{content:'';position:absolute;inset:0;background-image:linear-gradient(var(--border) 1px,transparent 1px),linear-gradient(90deg,var(--border) 1px,transparent 1px);background-size:40px 40px;opacity:0.3;pointer-events:none;}
+.hero-num-grid{display:grid;grid-template-columns:1fr 1fr;gap:2px;margin-top:2rem;position:relative;z-index:1;}
+.hero-num-item{background:var(--ink2);padding:1.8rem 1.5rem;border:1px solid var(--border);transition:border-color .25s,background .25s;}
+.hero-num-item:hover{border-color:var(--accent);background:var(--surface2);}
+.h-num{font-family:'Black Han Sans',sans-serif;font-size:2.5rem;color:var(--accent);line-height:1;}
+.h-label{font-size:0.7rem;color:var(--gray);letter-spacing:0.15em;margin-top:0.3rem;}
+.hero-right-bottom{display:flex;flex-direction:column;gap:1.2rem;position:relative;z-index:1;}
+.hero-phone{font-family:'Black Han Sans',sans-serif;font-size:2.2rem;color:var(--white);text-decoration:none;letter-spacing:0.04em;border-bottom:2px solid var(--accent);padding-bottom:0.4rem;width:fit-content;transition:color .2s;}
+.hero-phone:hover{color:var(--accent);}
+.hero-ceo{font-size:0.82rem;color:var(--gray);letter-spacing:0.1em;}
+.hero-ceo b{color:var(--white2);font-weight:500;}
+.btn-hero{background:var(--red);color:#fff;padding:0.9rem 2rem;font-weight:700;font-size:0.9rem;letter-spacing:0.08em;text-decoration:none;display:inline-block;border-radius:1px;width:fit-content;transition:background .2s,transform .2s;}
+.btn-hero:hover{background:var(--red2);transform:translateY(-2px);}
+.divider{height:4px;background:repeating-linear-gradient(90deg,var(--accent) 0,var(--accent) 30px,var(--border) 30px,var(--border) 34px);}
+.services{background:var(--ink2);padding:6rem 4rem;}
+.sec-header{display:flex;justify-content:space-between;align-items:flex-end;margin-bottom:3rem;padding-bottom:1.5rem;border-bottom:1px solid var(--border);}
+.sec-eyebrow{font-size:0.68rem;letter-spacing:0.4em;color:var(--accent);margin-bottom:0.5rem;}
+.sec-title{font-family:'Black Han Sans',sans-serif;font-size:clamp(2rem,4vw,3.5rem);color:var(--white);line-height:1;}
+.sec-note{font-size:0.82rem;color:var(--gray);max-width:220px;text-align:right;line-height:1.6;}
+.svc-row{display:grid;grid-template-columns:repeat(3,1fr);gap:2px;background:var(--border);border:1px solid var(--border);}
+.svc-box{background:var(--ink2);padding:3rem 2.5rem;position:relative;overflow:hidden;transition:background .25s;cursor:default;}
+.svc-box::before{content:'';position:absolute;top:0;left:0;bottom:0;width:3px;background:var(--accent);transform:scaleY(0);transform-origin:bottom;transition:transform .4s ease;}
+.svc-box:hover{background:var(--surface);}
+.svc-box:hover::before{transform:scaleY(1);}
+.svc-deco{font-family:'Black Han Sans',sans-serif;font-size:6rem;color:var(--border);line-height:1;margin-bottom:-1rem;transition:color .25s;}
+.svc-box:hover .svc-deco{color:var(--border2);}
+.svc-name-kr{font-family:'Black Han Sans',sans-serif;font-size:1.8rem;color:var(--white);margin-bottom:0.3rem;}
+.svc-name-en{font-size:0.72rem;color:var(--gray2);letter-spacing:0.2em;margin-bottom:1.2rem;}
+.svc-desc-txt{font-size:0.85rem;color:var(--gray);line-height:1.7;font-weight:300;}
+.svc-tags{display:flex;flex-wrap:wrap;gap:0.4rem;margin-top:1rem;}
+.svc-tag{font-size:0.68rem;letter-spacing:0.1em;border:1px solid var(--border2);color:var(--gray);padding:0.2rem 0.7rem;border-radius:1px;}
+.svc-price-line{margin-top:2rem;padding-top:1.5rem;border-top:1px solid var(--border);display:flex;align-items:baseline;gap:0.4rem;}
+.svc-price-num{font-family:'Black Han Sans',sans-serif;font-size:2.2rem;color:var(--white);}
+.svc-price-unit{font-size:0.8rem;color:var(--gray);}
+.extra-bar{background:var(--surface2);border-top:1px solid var(--border);border-bottom:1px solid var(--border);padding:2.5rem 4rem;display:flex;align-items:center;gap:3rem;flex-wrap:wrap;}
+.extra-label{font-family:'Black Han Sans',sans-serif;font-size:1.1rem;color:var(--white);white-space:nowrap;border-right:1px solid var(--border2);padding-right:3rem;}
+.extra-items{display:flex;gap:1.5rem;flex-wrap:wrap;}
+.extra-item{font-size:0.9rem;color:var(--white2);font-weight:500;display:flex;align-items:center;gap:0.5rem;}
+.extra-item::before{content:'◆';font-size:0.5rem;color:var(--accent);}
+.process{background:var(--surface);border-top:1px solid var(--border);border-bottom:1px solid var(--border);padding:6rem 4rem;position:relative;overflow:hidden;}
+.process::before{content:'세차';position:absolute;right:-0.1em;bottom:-0.2em;font-family:'Black Han Sans',sans-serif;font-size:22rem;color:rgba(74,158,255,0.04);line-height:1;pointer-events:none;}
+.proc-steps{display:grid;grid-template-columns:repeat(4,1fr);gap:0;margin-top:3rem;position:relative;z-index:1;}
+.proc-steps::after{content:'';position:absolute;top:2.5rem;left:calc(12.5% + 1.5rem);right:calc(12.5% + 1.5rem);height:1px;background:repeating-linear-gradient(90deg,var(--accent) 0,var(--accent) 8px,transparent 8px,transparent 16px);opacity:0.4;}
+.proc-item{padding:0 2rem 0 0;position:relative;z-index:1;}
+.proc-circle{width:50px;height:50px;border-radius:50%;border:2px solid var(--accent);display:flex;align-items:center;justify-content:center;font-family:'Black Han Sans',sans-serif;font-size:1rem;color:var(--accent);background:var(--surface);margin-bottom:1.5rem;transition:background .25s,color .25s;}
+.proc-item:hover .proc-circle{background:var(--accent);color:#fff;}
+.proc-t{font-weight:900;font-size:1rem;margin-bottom:0.5rem;color:var(--white);}
+.proc-d{font-size:0.82rem;color:var(--gray);line-height:1.6;font-weight:300;}
+.reviews{background:var(--ink);padding:6rem 4rem;}
+.rev-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1.5px;background:var(--border);border:1px solid var(--border);margin-top:3rem;}
+.rev-card{background:var(--ink);padding:2.5rem;transition:background .25s;}
+.rev-card:hover{background:var(--ink2);}
+.rev-stars{font-size:0.75rem;color:var(--accent);letter-spacing:0.15em;margin-bottom:1rem;}
+.rev-q{font-family:'Black Han Sans',sans-serif;font-size:3rem;color:var(--border2);line-height:0.8;margin-bottom:0.5rem;}
+.rev-text{font-size:0.88rem;color:var(--gray);line-height:1.8;font-weight:300;margin-bottom:1.5rem;}
+.rev-name{font-weight:700;font-size:0.85rem;color:var(--white2);}
+.rev-sub{font-size:0.75rem;color:var(--gray2);margin-top:0.2rem;}
+.contact{background:var(--ink);padding:0;display:grid;grid-template-columns:1fr 1fr;min-height:60vh;border-top:1px solid var(--border);}
+.contact-left{background:var(--red);padding:6rem 4rem;display:flex;flex-direction:column;justify-content:center;}
+.contact-left .eyebrow{font-size:0.68rem;letter-spacing:0.4em;color:rgba(255,255,255,0.45);margin-bottom:1rem;}
+.contact-left-title{font-family:'Black Han Sans',sans-serif;font-size:clamp(3rem,6vw,6rem);color:#fff;line-height:0.92;margin-bottom:1.5rem;}
+.contact-left-title em{color:rgba(255,255,255,0.55);font-style:normal;}
+.contact-sub-txt{font-size:0.9rem;color:rgba(255,255,255,0.6);line-height:1.8;font-weight:300;}
+.contact-right{background:var(--surface);padding:6rem 4rem;display:flex;flex-direction:column;justify-content:center;gap:2rem;position:relative;overflow:hidden;}
+.contact-right::before{content:'';position:absolute;inset:0;background-image:linear-gradient(var(--border) 1px,transparent 1px),linear-gradient(90deg,var(--border) 1px,transparent 1px);background-size:40px 40px;opacity:0.2;pointer-events:none;}
+.ceo-line{font-size:0.82rem;color:var(--gray);letter-spacing:0.1em;padding-bottom:1.5rem;border-bottom:1px solid var(--border);position:relative;z-index:1;}
+.ceo-line b{color:var(--white);font-weight:700;}
+.big-phone{font-family:'Black Han Sans',sans-serif;font-size:clamp(2rem,5vw,3.8rem);color:var(--white);text-decoration:none;line-height:1;display:block;border-bottom:2px solid var(--accent);padding-bottom:0.5rem;width:fit-content;transition:color .2s;position:relative;z-index:1;}
+.big-phone:hover{color:var(--accent);}
+.info-block{font-size:0.85rem;color:var(--gray);line-height:2.2;font-weight:300;border-left:3px solid var(--accent);padding-left:1.2rem;position:relative;z-index:1;}
+.info-block strong{color:var(--white);font-weight:700;}
+.btn-call{background:var(--red);color:#fff;padding:1rem 2rem;font-weight:700;font-size:0.9rem;letter-spacing:0.08em;text-decoration:none;display:inline-block;border-radius:1px;width:fit-content;transition:background .2s;position:relative;z-index:1;}
+.btn-call:hover{background:var(--red2);}
+footer{background:var(--ink2);border-top:3px solid var(--accent);padding:2rem 4rem;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:1rem;}
+.f-logo{font-family:'Black Han Sans',sans-serif;font-size:1.1rem;color:var(--white);letter-spacing:0.05em;}
+.f-logo em{color:var(--accent);font-style:normal;}
+.f-info{font-size:0.75rem;color:var(--gray);line-height:1.7;text-align:center;}
+.f-copy{font-size:0.72rem;color:var(--gray2);letter-spacing:0.08em;}
+@media(max-width:900px){
+  .hero-split{grid-template-columns:1fr;}
+  .hero-left{clip-path:none;padding:4rem 2rem;}
+  .hero-right{padding:3rem 2rem;}
+  .hero-num-grid{grid-template-columns:repeat(2,1fr);}
+  nav{padding:0 1.5rem;}
+  .nav-links{display:none;}
+  .services,.process,.reviews{padding:4rem 1.5rem;}
+  .extra-bar{padding:2rem 1.5rem;gap:1.5rem;}
+  .extra-label{border-right:none;padding-right:0;border-bottom:1px solid rgba(255,255,255,.3);padding-bottom:1rem;width:100%;}
+  .svc-row{grid-template-columns:1fr;}
+  .proc-steps{grid-template-columns:1fr 1fr;gap:2rem;}
+  .proc-steps::after{display:none;}
+  .rev-grid{grid-template-columns:1fr;}
+  .contact{grid-template-columns:1fr;}
+  .contact-left,.contact-right{padding:4rem 1.5rem;}
+  footer{padding:1.5rem;flex-direction:column;align-items:flex-start;}
+  .f-info{text-align:left;}
+}
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <div style="display:flex;align-items:center;gap:1.5rem;">
+    <a href="#" class="nav-logo"><b>전일</b> 손세차</a>
+    <a href="tel:010-2606-3413" class="nav-call">📞 010-2606-3413</a>
+  </div>
+  <div class="nav-right">
+    <ul class="nav-links">
+      <li><a href="#services">서비스</a></li>
+      <li><a href="#process">과정</a></li>
+      <li><a href="#contact">연락처</a></li>
+    </ul>
+    <button onclick="copyAccount()" id="copy-btn" style="background:transparent;border:1px solid var(--border2);color:var(--white2);padding:0.4rem 1.1rem;font-size:0.78rem;font-weight:500;letter-spacing:0.06em;border-radius:1px;cursor:pointer;transition:all .2s;font-family:'Noto Sans KR',sans-serif;">
+      💸 송금하기
+    </button>
+  </div>
+</nav>
+<script>
+function copyAccount(){
+  navigator.clipboard.writeText('9002166963841').then(function(){
+    var btn = document.getElementById('copy-btn');
+    var orig = btn.innerText;
+    btn.innerText = '✅ 계좌번호 복사됨!';
+    btn.style.borderColor = 'var(--accent)';
+    btn.style.color = 'var(--accent)';
+    setTimeout(function(){ btn.innerText = orig; btn.style.borderColor=''; btn.style.color=''; }, 2000);
+  });
+}
+</script>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-split">
+    <div class="hero-left">
+      <div class="hero-badge">HAND CAR WASH · SINCE 2010</div>
+      <br>
+      <h1 class="hero-main-title">
+        <span class="sub-word">전 일</span>
+        손<br>세차
+      </h1>
+      <div class="hero-left-bottom">
+        <p class="hero-desc-small">손으로 직접, 구석구석 정성껏.<br>기계가 못 미치는 곳까지 닿습니다.</p>
+      </div>
+    </div>
+    <div class="hero-right">
+      <div class="hero-num-grid">
+        <div class="hero-num-item"><div class="h-num">10+</div><div class="h-label">운영 경력</div></div>
+        <div class="hero-num-item"><div class="h-num">100%</div><div class="h-label">핸드 세차</div></div>
+        <div class="hero-num-item"><div class="h-num">★4.9</div><div class="h-label">고객 만족</div></div>
+        <div class="hero-num-item"><div class="h-num">당일</div><div class="h-label">예약 가능</div></div>
+      </div>
+      <div class="hero-right-bottom">
+        <a href="tel:010-2606-3413" class="hero-phone">010-2606-3413</a>
+        <p class="hero-ceo">대표 <b>김영용</b></p>
+        <a href="tel:010-2606-3413" class="btn-hero">지금 전화 예약하기 →</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- SERVICES -->
+<section class="services" id="services">
+  <div class="sec-header">
+    <div><p class="sec-eyebrow">SERVICES</p><h2 class="sec-title">세차 패키지</h2></div>
+    <p class="sec-note">차량 상태에 맞는 최적의 플랜을 선택하세요.</p>
+  </div>
+  <div class="svc-row">
+    <div class="svc-box">
+      <div class="svc-deco">01</div><div class="svc-name-kr">기본 세차</div><div class="svc-name-en">BASIC WASH</div>
+      <p class="svc-desc-txt">일상적인 외부 오염을 깔끔하게 제거하는 기본 패키지.</p>
+      <div class="svc-tags"><span class="svc-tag">외부세척</span><span class="svc-tag">건조</span><span class="svc-tag">유리클리닝</span><span class="svc-tag">타이어세척</span></div>
+      <div class="svc-price-line"><span class="svc-price-num">₩9,000</span><span class="svc-price-unit">~ 부터</span></div>
+    </div>
+    <div class="svc-box">
+      <div class="svc-deco">02</div><div class="svc-name-kr">실내외 세차</div><div class="svc-name-en">PREMIUM DETAIL</div>
+      <p class="svc-desc-txt">내외부 모두 꼼꼼하게 케어하는 주간 추천 패키지.</p>
+      <div class="svc-tags"><span class="svc-tag">외부+왁스</span><span class="svc-tag">실내진공</span><span class="svc-tag">대시보드</span><span class="svc-tag">타이어광택</span></div>
+      <div class="svc-price-line"><span class="svc-price-num">₩25,000</span><span class="svc-price-unit">~ 부터</span></div>
+    </div>
+    <div class="svc-box">
+      <div class="svc-deco">03</div><div class="svc-name-kr">풀 코팅</div><div class="svc-name-en">FULL COATING</div>
+      <p class="svc-desc-txt">도장면 보호와 광택을 동시에. 최상위 디테일링 케어.</p>
+      <div class="svc-tags"><span class="svc-tag">유리막코팅</span><span class="svc-tag">왁싱</span><span class="svc-tag">내부풀클리닝</span><span class="svc-tag">엔진룸</span></div>
+      <div class="svc-price-line"><span class="svc-price-num">₩80,000</span><span class="svc-price-unit">~ 부터</span></div>
+    </div>
+  </div>
+</section>
+
+<div class="extra-bar">
+  <div class="extra-label">추가 서비스</div>
+  <div class="extra-items">
+    <div class="extra-item">밧데리 교환</div>
+    <div class="extra-item">엔진오일 교환</div>
+    <div class="extra-item">기타 경정비</div>
+    <div class="extra-item">에어컨 필터 교체</div>
+    <div class="extra-item">타이어 공기압 점검</div>
+    <div class="extra-item">워셔액 보충</div>
+  </div>
+</div>
+
+<!-- PROCESS -->
+<section class="process" id="process">
+  <p class="sec-eyebrow" style="font-size:.68rem;letter-spacing:.4em;margin-bottom:.5rem;">PROCESS</p>
+  <h2 style="font-family:'Black Han Sans',sans-serif;font-size:clamp(2rem,4vw,3rem);line-height:1;color:var(--white);">세차 4단계 과정</h2>
+  <div class="proc-steps">
+    <div class="proc-item"><div class="proc-circle">01</div><div class="proc-t">접수 & 상담</div><p class="proc-d">차량 상태 확인 후 최적 서비스를 안내합니다.</p></div>
+    <div class="proc-item"><div class="proc-circle">02</div><div class="proc-t">고압 세척</div><p class="proc-d">친환경 거품으로 오염물 분해 후 고압수 세척.</p></div>
+    <div class="proc-item"><div class="proc-circle">03</div><div class="proc-t">핸드 디테일링</div><p class="proc-d">구석구석 손으로 직접 꼼꼼하게 마무리합니다.</p></div>
+    <div class="proc-item"><div class="proc-circle">04</div><div class="proc-t">검수 & 인도</div><p class="proc-d">최종 품질 확인 후 깔끔하게 인도합니다.</p></div>
+  </div>
+</section>
+
+<!-- REVIEWS -->
+<section class="reviews" id="reviews">
+  <div class="sec-header">
+    <div><p class="sec-eyebrow">REVIEWS</p><h2 class="sec-title">고객 후기</h2></div>
+    <p class="sec-note">실제 고객의 솔직한 후기입니다.</p>
+  </div>
+  <div class="rev-grid">
+    <div class="rev-card"><div class="rev-q">"</div><div class="rev-stars">★★★★★</div><p class="rev-text">오래된 단골입니다. 항상 꼼꼼하게 해주시고 정말 친절해요. 손세차라 기계보다 훨씬 깔끔하고 스크래치 걱정도 없어요.</p><div class="rev-name">김○○ 고객</div><div class="rev-sub">실내외 세차 이용</div></div>
+    <div class="rev-card"><div class="rev-q">"</div><div class="rev-stars">★★★★★</div><p class="rev-text">밧데리 교환이랑 세차 같이 했는데 빠르고 저렴하게 해주셨어요. 사장님이 설명도 잘 해주시고 믿을 수 있는 곳입니다.</p><div class="rev-name">이○○ 고객</div><div class="rev-sub">밧데리교환 + 세차</div></div>
+    <div class="rev-card"><div class="rev-q">"</div><div class="rev-stars">★★★★★</div><p class="rev-text">지나다 처음 들렀다가 단골 됐어요. 마무리가 너무 깔끔하고 가격도 합리적입니다. 이제 여기만 옵니다!</p><div class="rev-name">박○○ 고객</div><div class="rev-sub">기본 세차 이용</div></div>
+  </div>
+</section>
+
+<!-- CONTACT -->
+<section class="contact" id="contact">
+  <div class="contact-left">
+    <p class="eyebrow">CONTACT</p>
+    <h2 class="contact-left-title">지금<br>바로<br><em>연락</em>하세요</h2>
+    <p class="contact-sub-txt">당일 예약 환영합니다.<br>전화 주시면 바로 안내해 드립니다.</p>
+  </div>
+  <div class="contact-right">
+    <div class="ceo-line">대표 <b>김영용</b></div>
+    <a href="tel:010-2606-3413" class="big-phone">010-2606-3413</a>
+    <div class="info-block">
+      <strong>영업시간</strong><br>
+      평일 &nbsp;08:00 — 20:00<br>
+      토요일 &nbsp;08:00 — 18:00<br>
+      일요일 &nbsp;휴무<br><br>
+      <strong>위치</strong><br>
+      광주 북구 용주로30번길 36<br>
+      <a href="https://naver.me/5yhBAGYj" target="_blank" style="color:var(--accent);text-decoration:none;font-weight:500;display:inline-flex;align-items:center;gap:0.3rem;margin-top:0.4rem;">
+        🗺️ 네이버 지도로 보기 →
+      </a><br><br>
+      <strong>서비스</strong><br>
+      손세차 · 밧데리교환<br>
+      엔진오일교환 · 기타경정비
+    </div>
+    <div class="info-block" style="border-left-color:var(--gray2);">
+      <strong>계좌번호</strong><br>
+      새마을금고 9002166963841<br>
+      예금주 김영용
+    </div>
+    <a href="tel:010-2606-3413" class="btn-call">📞 전화 예약하기</a>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="f-logo"><em>전일</em> 손세차</div>
+  <div class="f-info">
+    대표 김영용 &nbsp;|&nbsp; <a href="tel:010-2606-3413" style="color:inherit;text-decoration:none;">010-2606-3413</a><br>
+    광주 북구 용주로30번길 36 &nbsp;|&nbsp; <a href="https://naver.me/5yhBAGYj" target="_blank" style="color:var(--accent);text-decoration:none;">네이버 지도</a><br>
+    새마을금고 9002166963841 &nbsp;(예금주 김영용)<br>
+    밧데리교환 · 엔진오일교환 · 기타경정비
+  </div>
+  <div class="f-copy">© 2026 전일 손세차</div>
+</footer>
+<div style="background:var(--ink);border-top:1px solid var(--border);padding:1rem 4rem;text-align:center;font-size:0.78rem;color:var(--gray);letter-spacing:0.05em;font-family:'Noto Sans KR',sans-serif;">
+  새마을금고 &nbsp;<strong style="color:var(--white2);">9002166963841</strong>&nbsp; 예금주 김영용
+</div>
+
+</body>
+</html>
