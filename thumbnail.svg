@@ -1,0 +1,56 @@
+<svg width="1200" height="630" viewBox="0 0 1200 630" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="bgGrad" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#060d1f"/>
+      <stop offset="100%" stop-color="#0f1e38"/>
+    </linearGradient>
+    <linearGradient id="redGrad" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#e8342c"/>
+      <stop offset="100%" stop-color="#a01812"/>
+    </linearGradient>
+    <radialGradient id="glow" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#4a9eff" stop-opacity="0.15"/>
+      <stop offset="100%" stop-color="#4a9eff" stop-opacity="0"/>
+    </radialGradient>
+    <pattern id="grid" width="40" height="40" patternUnits="userSpaceOnUse">
+      <path d="M 40 0 L 0 0 0 40" fill="none" stroke="#1e3460" stroke-width="0.8" opacity="0.5"/>
+    </pattern>
+  </defs>
+  <rect width="1200" height="630" fill="url(#bgGrad)"/>
+  <rect width="1200" height="630" fill="url(#grid)"/>
+  <ellipse cx="900" cy="315" rx="380" ry="300" fill="url(#glow)"/>
+  <polygon points="0,0 560,0 600,630 0,630" fill="url(#redGrad)"/>
+  <text x="380" y="560" font-size="520" font-family="'Noto Sans KR', sans-serif" font-weight="900" fill="rgba(0,0,0,0.12)" text-anchor="middle">손</text>
+  <rect x="48" y="54" width="290" height="30" rx="2" fill="none" stroke="rgba(255,255,255,0.35)" stroke-width="1.2"/>
+  <text x="193" y="74" font-size="12" font-family="'Noto Sans KR', sans-serif" fill="rgba(255,255,255,0.8)" text-anchor="middle" letter-spacing="4">HAND CAR WASH · SINCE 2010</text>
+  <text x="48" y="175" font-size="52" font-family="'Noto Sans KR', sans-serif" font-weight="400" fill="rgba(255,255,255,0.6)" letter-spacing="20">전  일</text>
+  <text x="42" y="320" font-size="195" font-family="'Noto Sans KR', sans-serif" font-weight="900" fill="#ffffff" letter-spacing="-4">손세차</text>
+  <text x="48" y="380" font-size="20" font-family="'Noto Sans KR', sans-serif" font-weight="300" fill="rgba(255,255,255,0.65)" letter-spacing="1">손으로 직접, 구석구석 정성껏.</text>
+  <text x="48" y="408" font-size="20" font-family="'Noto Sans KR', sans-serif" font-weight="300" fill="rgba(255,255,255,0.65)" letter-spacing="1">기계가 못 미치는 곳까지 닿습니다.</text>
+  <text x="660" y="120" font-size="13" font-family="'Noto Sans KR', sans-serif" fill="#5a7099" letter-spacing="3">CONTACT</text>
+  <text x="660" y="175" font-size="46" font-family="'Noto Sans KR', sans-serif" font-weight="900" fill="#e8f0ff" letter-spacing="1">010-2606-3413</text>
+  <line x1="660" y1="185" x2="1140" y2="185" stroke="#4a9eff" stroke-width="2"/>
+  <text x="660" y="220" font-size="16" font-family="'Noto Sans KR', sans-serif" font-weight="300" fill="#5a7099" letter-spacing="2">대표  김영용</text>
+  <line x1="660" y1="255" x2="1140" y2="255" stroke="#1e3460" stroke-width="1"/>
+  <text x="660" y="295" font-size="14" font-family="'Noto Sans KR', sans-serif" fill="#5a7099" letter-spacing="2">📍  위치</text>
+  <text x="660" y="325" font-size="20" font-family="'Noto Sans KR', sans-serif" font-weight="500" fill="#c8d8f5" letter-spacing="0.5">광주 북구 용주로30번길 36</text>
+  <line x1="660" y1="355" x2="1140" y2="355" stroke="#1e3460" stroke-width="1"/>
+  <text x="670" y="415" font-size="38" font-family="'Noto Sans KR', sans-serif" font-weight="900" fill="#4a9eff">10+</text>
+  <text x="670" y="440" font-size="13" font-family="'Noto Sans KR', sans-serif" font-weight="300" fill="#5a7099" letter-spacing="2">운영 경력</text>
+  <text x="810" y="415" font-size="38" font-family="'Noto Sans KR', sans-serif" font-weight="900" fill="#4a9eff">100%</text>
+  <text x="810" y="440" font-size="13" font-family="'Noto Sans KR', sans-serif" font-weight="300" fill="#5a7099" letter-spacing="2">핸드 세차</text>
+  <text x="980" y="415" font-size="38" font-family="'Noto Sans KR', sans-serif" font-weight="900" fill="#4a9eff">★ 4.9</text>
+  <text x="980" y="440" font-size="13" font-family="'Noto Sans KR', sans-serif" font-weight="300" fill="#5a7099" letter-spacing="2">고객 만족</text>
+  <line x1="660" y1="465" x2="1140" y2="465" stroke="#1e3460" stroke-width="1"/>
+  <rect x="660" y="485" width="100" height="28" rx="2" fill="none" stroke="#243d6e" stroke-width="1"/>
+  <text x="710" y="504" font-size="13" font-family="'Noto Sans KR', sans-serif" fill="#5a7099" text-anchor="middle" letter-spacing="1">손세차</text>
+  <rect x="772" y="485" width="120" height="28" rx="2" fill="none" stroke="#243d6e" stroke-width="1"/>
+  <text x="832" y="504" font-size="13" font-family="'Noto Sans KR', sans-serif" fill="#5a7099" text-anchor="middle" letter-spacing="1">밧데리교환</text>
+  <rect x="904" y="485" width="120" height="28" rx="2" fill="none" stroke="#243d6e" stroke-width="1"/>
+  <text x="964" y="504" font-size="13" font-family="'Noto Sans KR', sans-serif" fill="#5a7099" text-anchor="middle" letter-spacing="1">엔진오일교환</text>
+  <rect x="1036" y="485" width="96" height="28" rx="2" fill="none" stroke="#243d6e" stroke-width="1"/>
+  <text x="1084" y="504" font-size="13" font-family="'Noto Sans KR', sans-serif" fill="#5a7099" text-anchor="middle" letter-spacing="1">기타경정비</text>
+  <rect x="0" y="614" width="600" height="3" fill="#c0201a" opacity="0.8"/>
+  <rect x="600" y="614" width="600" height="3" fill="#4a9eff" opacity="0.6"/>
+  <text x="660" y="598" font-size="13" font-family="'Noto Sans KR', sans-serif" font-weight="300" fill="#3a5070" letter-spacing="1">whoamiok-web.github.io/foot</text>
+</svg>
