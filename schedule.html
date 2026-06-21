@@ -216,16 +216,21 @@
 <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js"></script>
 <script>
-firebase.initializeApp({
-  apiKey:"AIzaSyDZjopLNSgnaqMOt4vml-GG-kha2OT8JEU",
-  authDomain:"joonghung-9a14c.firebaseapp.com",
-  databaseURL:"https://joonghung-9a14c-default-rtdb.asia-southeast1.firebasedatabase.app",
-  projectId:"joonghung-9a14c",
-  storageBucket:"joonghung-9a14c.firebasestorage.app",
-  messagingSenderId:"172884273870",
-  appId:"1:172884273870:web:32f594b0c8121a29a5be9f"
-});
+// 중복 초기화 방지
+if(!firebase.apps.length){
+  firebase.initializeApp({
+    apiKey:"AIzaSyDZjopLNSgnaqMOt4vml-GG-kha2OT8JEU",
+    authDomain:"joonghung-9a14c.firebaseapp.com",
+    databaseURL:"https://joonghung-9a14c-default-rtdb.asia-southeast1.firebasedatabase.app",
+    projectId:"joonghung-9a14c",
+    storageBucket:"joonghung-9a14c.firebasestorage.app",
+    messagingSenderId:"172884273870",
+    appId:"1:172884273870:web:32f594b0c8121a29a5be9f"
+  });
+}
 const db = firebase.database();
+// DB URL 명시
+const dbRef = firebase.database('https://joonghung-9a14c-default-rtdb.asia-southeast1.firebasedatabase.app');
 
 /* ── 상태 ── */
 const ADMIN_PW  = 'joonghung2015';
@@ -323,7 +328,7 @@ function getGames(){
 function loadMatches(){
   document.getElementById('match-list').innerHTML =
     '<div class="loading"><div class="spinner"></div>불러오는 중...</div>';
-  db.ref('matches').once('value').then(snap => {
+  dbRef.ref('matches').once('value').then(snap => {
     allMatches = [];
     if(snap.exists()) snap.forEach(c => allMatches.push({id:c.key, ...c.val()}));
     allMatches.sort((a,b) => b.date.localeCompare(a.date));
@@ -359,14 +364,14 @@ function saveMatch(){
   };
 
   if(editingId){
-    db.ref('matches/'+editingId).update(data).then(() => {
+    dbRef.ref('matches/'+editingId).update(data).then(() => {
       const idx = allMatches.findIndex(m => m.id===editingId);
       if(idx>-1) allMatches[idx] = {...allMatches[idx], ...data};
       done('✅ 수정되었습니다.');
     }).catch(e => { showToast('❌ 실패: '+e.message); btn.disabled=false; });
   } else {
     data.createdAt = Date.now();
-    db.ref('matches').push(data).then(r => {
+    dbRef.ref('matches').push(data).then(r => {
       allMatches.unshift({id:r.key, ...data});
       done('✅ 등록되었습니다.');
     }).catch(e => { showToast('❌ 실패: '+e.message); btn.disabled=false; });
@@ -375,7 +380,7 @@ function saveMatch(){
 
 function deleteMatch(id){
   if(!confirm('이 경기를 삭제하시겠습니까?')) return;
-  db.ref('matches/'+id).remove().then(() => {
+  dbRef.ref('matches/'+id).remove().then(() => {
     allMatches = allMatches.filter(m => m.id!==id);
     renderSummary(); renderList();
     showToast('✅ 삭제되었습니다.');
