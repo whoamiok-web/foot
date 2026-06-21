@@ -72,9 +72,12 @@
   .pw-err{font-size:12px;color:#ef4444;min-height:18px;margin-bottom:10px;}
   .toast{position:fixed;bottom:30px;left:50%;transform:translateX(-50%) translateY(20px);background:var(--dark);color:#fff;padding:12px 24px;border-radius:10px;font-size:14px;font-weight:600;opacity:0;transition:all .3s;pointer-events:none;z-index:999;}
   .toast.show{opacity:1;transform:translateX(-50%) translateY(0);}
-  footer{background:var(--dark);color:#6b7280;padding:28px 40px;font-size:13px;}
-  .footer-logo{font-size:17px;font-weight:900;color:#fff;margin-bottom:4px;}
-  @media(max-width:640px){.main-wrap{padding:24px 16px 48px;}.page-header{padding:28px 20px;}footer{background:var(--dark);color:#6b7280;padding:28px 40px;font-size:13px;}.record-images{grid-template-columns:repeat(2,1fr);}}
+  @media(max-width:640px){.main-wrap{padding:24px 16px 48px;}.page-header{padding:28px 20px;}.record-images{grid-template-columns:repeat(2,1fr);}}
+  footer{background:#111827;color:#6b7280;padding:32px 40px;font-size:13px;}
+  .footer-inner{max-width:1160px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;gap:24px;flex-wrap:wrap;}
+  .footer-left{flex:1;}
+  .footer-right{font-size:12px;color:#4b5563;white-space:nowrap;flex-shrink:0;}
+  .footer-logo{font-size:17px;font-weight:900;color:#fff;}
 </style>
 </head>
 <body>
@@ -194,14 +197,14 @@ document.querySelectorAll('.nav-links a').forEach(a=>{
 </div>
 
 <footer>
-  <div style="max-width:1200px;margin:0 auto;width:100%;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:16px;">
-    <div>
-      <a href="index.html" class="footer-logo" style="text-decoration:none;display:block;margin-bottom:4px;">⚽ 중흥FC</a>
+  <div class="footer-inner">
+    <div class="footer-left">
+      <a href="index.html" class="footer-logo" style="text-decoration:none;display:block;margin-bottom:6px;">⚽ 중흥FC</a>
       <div>광주광역시 북구 중흥동 | 매주 일요일 AM 06:30 | 전남대학교 부설중학교 운동장</div>
       <div style="margin-top:4px;">가입문의: 총무 010-4686-9320 | <a href="https://open.kakao.com/o/pFIIRBAi" target="_blank" style="color:#9ca3af;">💬 카카오톡 채널</a></div>
       <div style="margin-top:4px;">회비계좌: <span onclick="copyAccount(event)" style="cursor:pointer;color:#d1d5db;border-bottom:1px dashed #6b7280;" title="클릭하면 복사됩니다">카카오뱅크 7942&#8209;2614&#8209;9821 나성균</span> <span id="copy-toast" style="display:none;font-size:11px;color:#23a852;font-weight:700;">✅ 복사 완료!</span></div>
     </div>
-    <div style="font-size:12px;color:#4b5563;">© 2026 중흥FC. All rights reserved.</div>
+    <div class="footer-right">© 2026 중흥FC. All rights reserved.</div>
   </div>
 </footer>
 <script>
