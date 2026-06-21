@@ -469,54 +469,12 @@
   });
 </script>
 
-<script type="module">
-import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
-import { getDatabase, ref, query, orderByKey, limitToLast, get } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-database.js";
 
-const app = initializeApp({
-  apiKey: "AIzaSyDZjopLNSgnaqMOt4vml-GG-kha2OT8JEU",
-  authDomain: "joonghung-9a14c.firebaseapp.com",
-  databaseURL: "https://joonghung-9a14c-default-rtdb.asia-southeast1.firebasedatabase.app",
-  projectId: "joonghung-9a14c",
-  storageBucket: "joonghung-9a14c.firebasestorage.app",
-  messagingSenderId: "172884273870",
-  appId: "1:172884273870:web:32f594b0c8121a29a5be9f"
-});
-const db = getDatabase(app);
-
-function badgeClass(cat){ return cat==='NEW'?'badge-new':cat==='이벤트'?'badge-event':'badge-info'; }
-
-(async function loadHomeNotice(){
-  const list = document.getElementById('home-notice-list');
-  try {
-    // orderByKey + limitToLast(1) → Firebase가 직접 최신 1개만 반환
-    const q = query(ref(db,'posts'), orderByKey(), limitToLast(1));
-    const snap = await get(q);
-    if(!snap.exists()){
-      list.innerHTML='<div style="text-align:center;padding:24px;color:#9ca3af;">등록된 공지사항이 없습니다.</div>';
-      return;
-    }
-    let top=[];
-    snap.forEach(c => top.push({id:c.key, ...c.val()}));
-    list.innerHTML = top.map(p=>`
-      <div class="notice-item" onclick="location.href='notice.html?id=${p.id}'" style="cursor:pointer;">
-        <span class="notice-badge ${badgeClass(p.cat)}">${p.cat}</span>
-        <span class="notice-title">${p.title}</span>
-        <span class="notice-date">${p.date}</span>
-      </div>`).join('');
-  } catch(e){
-    list.innerHTML='<div style="text-align:center;padding:24px;color:#ef4444;font-size:13px;">공지사항을 불러올 수 없습니다.</div>';
-    console.error(e);
-  }
-})();
-</script>
-
-
-<script type="module">
-import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
-import { getDatabase, ref, query, orderByKey, limitToLast, get } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-database.js";
-
-const app2 = initializeApp({
+<!-- Firebase compat SDK -->
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js"></script>
+<script>
+firebase.initializeApp({
   apiKey:"AIzaSyDZjopLNSgnaqMOt4vml-GG-kha2OT8JEU",
   authDomain:"joonghung-9a14c.firebaseapp.com",
   databaseURL:"https://joonghung-9a14c-default-rtdb.asia-southeast1.firebasedatabase.app",
@@ -524,86 +482,115 @@ const app2 = initializeApp({
   storageBucket:"joonghung-9a14c.firebasestorage.app",
   messagingSenderId:"172884273870",
   appId:"1:172884273870:web:32f594b0c8121a29a5be9f"
-}, "app2");
-const db2 = getDatabase(app2);
+});
+const db = firebase.database();
 
-let allMatches = [];
+/* ── 공지사항 최신 1개 ── */
+function badgeClass(cat){ return cat==='NEW'?'badge-new':cat==='이벤트'?'badge-event':'badge-info'; }
+
+function loadHomeNotice(){
+  const list = document.getElementById('home-notice-list');
+  db.ref('posts').orderByKey().limitToLast(1).once('value').then(snap => {
+    if(!snap.exists()){
+      list.innerHTML='<div style="text-align:center;padding:24px;color:#9ca3af;">등록된 공지사항이 없습니다.</div>';
+      return;
+    }
+    let posts=[];
+    snap.forEach(c => posts.push({id:c.key,...c.val()}));
+    list.innerHTML = posts.map(p=>`
+      <div class="notice-item" onclick="location.href='notice.html?id=${p.id}'" style="cursor:pointer;">
+        <span class="notice-badge ${badgeClass(p.cat)}">${p.cat}</span>
+        <span class="notice-title">${p.title}</span>
+        <span class="notice-date">${p.date}</span>
+      </div>`).join('');
+  }).catch(() => {
+    list.innerHTML='<div style="text-align:center;padding:24px;color:#9ca3af;">공지사항을 불러올 수 없습니다.</div>';
+  });
+}
+
+/* ── 경기일정 ── */
+let homeMatches = [];
 let homeTab = 'result';
+const days = ['일','월','화','수','목','금','토'];
 
-async function loadHomeSchedule(){
-  try {
-    const snap = await get(ref(db2,'matches'));
-    allMatches = [];
-    if(snap.exists()) snap.forEach(c => allMatches.push({id:c.key,...c.val()}));
-    allMatches.sort((a,b) => b.date.localeCompare(a.date));
+function loadHomeSchedule(){
+  db.ref('matches').once('value').then(snap => {
+    homeMatches = [];
+    if(snap.exists()) snap.forEach(c => homeMatches.push({id:c.key,...c.val()}));
+    homeMatches.sort((a,b) => b.date.localeCompare(a.date));
     renderHomeSchedule();
-  } catch(e) {
+  }).catch(() => {
     document.getElementById('home-schedule-list').innerHTML =
       '<div style="text-align:center;padding:24px;color:#9ca3af;">경기 정보를 불러올 수 없습니다.</div>';
-  }
+  });
+}
+
+function hasResult(m){
+  return m.games && m.games.some(g =>
+    g.us!==''&&g.us!=null&&g.opp!==''&&g.opp!=null
+  );
 }
 
 function renderHomeSchedule(){
   const list = document.getElementById('home-schedule-list');
-  const hasResult = m => m.games && m.games.some(g => g.us!==''&&g.us!==null&&g.us!==undefined);
-  const filtered = allMatches.filter(m => homeTab==='result' ? hasResult(m) : !hasResult(m));
+  const filtered = homeMatches.filter(m => homeTab==='result' ? hasResult(m) : !hasResult(m));
   const top = filtered.slice(0,3);
 
   if(top.length===0){
-    list.innerHTML = '<div style="text-align:center;padding:32px;color:#9ca3af;font-size:14px;">등록된 경기가 없습니다.</div>';
+    list.innerHTML='<div style="text-align:center;padding:32px;color:#9ca3af;font-size:14px;">등록된 경기가 없습니다.</div>';
     return;
   }
 
-  const days=['일','월','화','수','목','금','토'];
-  list.innerHTML = '<div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:14px;">' +
-    top.map(m => {
-      const d = m.date||'';
-      const dateDisp = d.replace(/-/g,'.');
-      const dateObj = d ? new Date(d) : null;
-      const dayStr = dateObj ? `(${days[dateObj.getDay()]})` : '';
-      const typeLabel = m.homeaway||'홈';
-      const typeCls = typeLabel==='홈'?'match-type':'match-type away';
+  list.innerHTML = '<div class="schedule-grid">' + top.map(m => {
+    const d = m.date||'';
+    const obj = d ? new Date(d) : null;
+    const day = obj ? `(${days[obj.getDay()]})` : '';
+    const dateDisp = d.replace(/-/g,'.');
+    const typeCls = m.homeaway==='원정' ? 'match-type away' : 'match-type';
 
-      const gamesHTML = (m.games||[]).map((g,i) => {
-        const hasScore = g.us!==''&&g.us!==null&&g.us!==undefined&&g.opp!==''&&g.opp!==null&&g.opp!==undefined;
-        const us = parseInt(g.us), opp = parseInt(g.opp);
-        let scoreHTML = '';
-        if(hasScore && !isNaN(us) && !isNaN(opp)){
-          const wc = us>opp?'score-win':us===opp?'score-win':'score-lose';
-          const oc = opp>us?'score-lose':opp===us?'score-win':'score-win';
-          scoreHTML = `<div class="score-box" style="font-size:20px;">
-            <span class="${us>opp?'score-win':us<opp?'score-lose':''}">${us}</span>
-            <span class="score-sep">:</span>
-            <span class="${opp>us?'score-lose':opp<us?'score-win':''}">${opp}</span>
-          </div>`;
-        } else {
-          scoreHTML = `<div class="score-box" style="font-size:15px;color:#9ca3af;">VS</div>`;
-        }
-        return `<div style="display:flex;align-items:center;gap:8px;padding:5px 0;border-bottom:1px solid #f3f4f6;font-size:12px;color:#6b7280;">${i+1}게임&nbsp;
-          <span style="font-size:13px;font-weight:800;color:#1a7f3c;">중흥FC</span>
-          ${scoreHTML}
-          <span style="font-size:13px;font-weight:700;">${g.opp_name||'상대팀'}</span>
+    const gamesHTML = (m.games||[]).map((g,i) => {
+      const us=parseInt(g.us), opp=parseInt(g.opp);
+      const ok=!isNaN(us)&&!isNaN(opp)&&g.us!==''&&g.opp!=='';
+      let sc='';
+      if(ok){
+        const uc=us>opp?'score-win':us<opp?'score-lose':'';
+        const oc=opp>us?'score-lose':opp<us?'score-win':'';
+        sc=`<div class="score-box" style="font-size:18px;">
+          <span class="${uc}">${us}</span>
+          <span class="score-sep">:</span>
+          <span class="${oc}">${opp}</span>
         </div>`;
-      }).join('');
-
-      return `<div class="match-card" onclick="location.href='schedule.html'" style="cursor:pointer;flex-direction:column;gap:10px;padding:18px 20px;">
-        <div class="match-meta">
-          <span class="match-date-badge">${dateDisp} ${dayStr}</span>
-          <span class="${typeCls}">${typeLabel}</span>
-        </div>
-        <div>${gamesHTML||'<div style="font-size:13px;color:#9ca3af;">게임 정보 없음</div>'}</div>
-        ${m.location?`<div class="match-location">📍 ${m.location}</div>`:''}
+      } else {
+        sc=`<div class="score-box" style="font-size:14px;color:#9ca3af;">VS</div>`;
+      }
+      return `<div style="display:flex;align-items:center;gap:6px;padding:5px 0;border-bottom:1px solid #f3f4f6;">
+        <span style="font-size:11px;color:#9ca3af;width:36px;">${i+1}게임</span>
+        <span style="font-size:13px;font-weight:800;color:#1a7f3c;">중흥FC</span>
+        ${sc}
+        <span style="font-size:13px;font-weight:700;">${g.opp_name||'상대팀'}</span>
       </div>`;
-    }).join('') + '</div>';
+    }).join('');
+
+    return `<div class="match-card" onclick="location.href='schedule.html'" style="cursor:pointer;flex-direction:column;gap:10px;padding:18px 20px;">
+      <div class="match-meta">
+        <span class="match-date-badge">${dateDisp} ${day}</span>
+        <span class="${typeCls}">${m.homeaway||'홈'}</span>
+      </div>
+      <div>${gamesHTML||'<div style="font-size:13px;color:#9ca3af;">게임 정보 없음</div>'}</div>
+      ${m.location?`<div class="match-location">📍 ${m.location}</div>`:''}
+    </div>`;
+  }).join('') + '</div>';
 }
 
-window.homeScheduleTab = function(tab, btn){
+function homeScheduleTab(tab, btn){
   homeTab = tab;
-  document.querySelectorAll('.tab-btn').forEach(b=>b.classList.remove('active'));
+  document.querySelectorAll('#schedule .tab-btn').forEach(b => b.classList.remove('active'));
   btn.classList.add('active');
   renderHomeSchedule();
-};
+}
 
+/* ── 시작 ── */
+loadHomeNotice();
 loadHomeSchedule();
 </script>
 
