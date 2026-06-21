@@ -157,26 +157,39 @@
 </style>
 </head>
 <body>
-
 <nav>
-  <a style="display:flex;align-items:center;gap:10px;font-size:20px;font-weight:900;color:#fff;text-decoration:none;white-space:nowrap;cursor:pointer;" href="index.html">⚽ 중흥FC</a>
-  <ul style="display:flex;gap:18px;list-style:none;flex-wrap:nowrap;align-items:center;">
-    <li style="position:relative;">
-      <a href="intro.html" style="display:flex;align-items:center;gap:3px;">소개 <span style="font-size:10px;opacity:.7;">▾</span></a>
-      <div style="position:absolute;top:calc(100% + 14px);left:50%;transform:translateX(-50%);background:#1f2937;border-radius:10px;padding:6px 0;min-width:120px;box-shadow:0 8px 24px rgba(0,0,0,.3);opacity:0;pointer-events:none;transition:opacity .2s,transform .2s;" class="ddmenu">
-        <a href="intro.html" style="display:block;padding:9px 18px;color:#d1d5db;font-size:13px;font-weight:500;white-space:nowrap;">팀 소개</a>
-        <a href="members.html" style="display:block;padding:9px 18px;color:#d1d5db;font-size:13px;font-weight:500;white-space:nowrap;">회원명단</a>
-      </div>
-    </li>
-    <li><a href="notice.html" class="active">공지사항</a></li>
+  <a style="display:flex;align-items:center;gap:10px;font-size:20px;font-weight:900;color:#fff;text-decoration:none;white-space:nowrap;" href="index.html">
+    ⚽ 중흥FC
+    <span class="intro-wrap">
+      <span class="intro-badge">소개</span>
+      <span class="intro-dropdown">
+        <a href="intro.html">팀 소개</a>
+        <a href="members.html">회원명단</a>
+      </span>
+    </span>
+  </a>
+  <ul class="nav-links">
+    <li><a href="notice.html" style="color:#fff;">공지사항</a></li>
     <li><a href="schedule.html">경기일정</a></li>
     <li><a href="gallery.html">갤러리</a></li>
   </ul>
 </nav>
 <style>
-  nav li:hover .ddmenu{opacity:1!important;pointer-events:auto!important;}
-  nav a:hover{color:#fff!important;}
+  nav{position:sticky;top:0;z-index:100;background:#111827;display:flex;align-items:center;justify-content:space-between;flex-wrap:nowrap;gap:16px;padding:0 24px;height:60px;box-shadow:0 2px 12px rgba(0,0,0,.3);}
+  .intro-wrap{position:relative;display:inline-flex;align-items:center;}
+  .intro-badge{background:#1a7f3c;color:#fff;font-size:11px;font-weight:700;padding:3px 10px;border-radius:6px;cursor:pointer;letter-spacing:.3px;transition:background .2s;}
+  .intro-wrap:hover .intro-badge{background:#155f2e;}
+  .intro-dropdown{position:absolute;top:calc(100% + 14px);left:50%;transform:translateX(-50%) translateY(-4px);background:#1f2937;border-radius:10px;padding:6px 0;min-width:120px;box-shadow:0 8px 24px rgba(0,0,0,.3);opacity:0;pointer-events:none;transition:opacity .18s,transform .18s;z-index:200;}
+  .intro-dropdown::before{content:'';position:absolute;top:-5px;left:50%;transform:translateX(-50%);border:5px solid transparent;border-bottom-color:#1f2937;border-top:none;}
+  .intro-wrap:hover .intro-dropdown{opacity:1;pointer-events:auto;transform:translateX(-50%) translateY(0);}
+  .intro-dropdown a{display:block;padding:9px 18px;color:#d1d5db;font-size:13px;font-weight:500;white-space:nowrap;text-decoration:none;transition:background .15s,color .15s;}
+  .intro-dropdown a:hover{background:#374151;color:#fff;}
+  .nav-links{display:flex;gap:18px;list-style:none;flex-wrap:nowrap;}
+  .nav-links a{color:#9ca3af;font-size:13px;font-weight:500;text-decoration:none;white-space:nowrap;transition:color .2s;}
+  .nav-links a:hover,.nav-links a[style*="color:#fff"]{color:#fff;}
 </style>
+
+
 
 <div class="page-header">
   <div class="page-header-inner">
