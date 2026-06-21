@@ -376,7 +376,8 @@ function renderSummary(){
 const EXEC_ROLES = ['회장','감독','총무','수석','코치','대외'];
 function renderMembers(){
   const grid = document.getElementById('members-grid');
-  const filtered = allMembers.filter(m=>{
+  const EXEC_ORDER = ['회장','총무','감독','수석','코치','대외'];
+  let filtered = allMembers.filter(m=>{
     let posOk = false;
     if(curPos==='전체') posOk=true;
     else if(curPos==='고문') posOk=(m.role==='고문');
@@ -385,6 +386,13 @@ function renderMembers(){
     const srchOk = !curSearch || m.name.includes(curSearch);
     return posOk && srchOk;
   });
+  if(curPos==='집행부'){
+    filtered = filtered.sort((a,b)=>{
+      const ai = EXEC_ORDER.indexOf(a.role);
+      const bi = EXEC_ORDER.indexOf(b.role);
+      return (ai===-1?99:ai)-(bi===-1?99:bi);
+    });
+  }
   if(filtered.length===0){ grid.innerHTML='<div class="empty" style="grid-column:1/-1;">👤 등록된 회원이 없습니다.</div>'; return; }
   grid.innerHTML = filtered.map(m=>`
     <div class="member-card" style="flex-wrap:wrap;">
