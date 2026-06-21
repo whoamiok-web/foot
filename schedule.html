@@ -213,24 +213,8 @@
 <div class="toast" id="toast"></div>
 
 <!-- Firebase compat (일반 스크립트, window 전역) -->
-<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js"></script>
 <script>
-// 중복 초기화 방지
-if(!firebase.apps.length){
-  firebase.initializeApp({
-    apiKey:"AIzaSyDZjopLNSgnaqMOt4vml-GG-kha2OT8JEU",
-    authDomain:"joonghung-9a14c.firebaseapp.com",
-    databaseURL:"https://joonghung-9a14c-default-rtdb.asia-southeast1.firebasedatabase.app",
-    projectId:"joonghung-9a14c",
-    storageBucket:"joonghung-9a14c.firebasestorage.app",
-    messagingSenderId:"172884273870",
-    appId:"1:172884273870:web:32f594b0c8121a29a5be9f"
-  });
-}
-const db = firebase.database();
-// DB URL 명시
-const dbRef = firebase.database('https://joonghung-9a14c-default-rtdb.asia-southeast1.firebasedatabase.app');
+
 
 /* ── 상태 ── */
 const ADMIN_PW  = 'joonghung2015';
@@ -363,18 +347,23 @@ function saveMatch(){
     btn.textContent = editingId ? '수정하기' : '등록하기';
   };
 
+  const DB_URL = 'https://joonghung-9a14c-default-rtdb.asia-southeast1.firebasedatabase.app';
   if(editingId){
-    dbRef.ref('matches/'+editingId).update(data).then(() => {
-      const idx = allMatches.findIndex(m => m.id===editingId);
-      if(idx>-1) allMatches[idx] = {...allMatches[idx], ...data};
-      done('✅ 수정되었습니다.');
-    }).catch(e => { showToast('❌ 실패: '+e.message); btn.disabled=false; });
+    fetch(DB_URL+'/matches/'+editingId+'.json', {method:'PATCH', body:JSON.stringify(data)})
+      .then(r=>r.json())
+      .then(()=>{
+        const idx=allMatches.findIndex(m=>m.id===editingId);
+        if(idx>-1) allMatches[idx]={...allMatches[idx],...data};
+        done('✅ 수정되었습니다.');
+      }).catch(e=>{showToast('❌ 실패: '+e.message); btn.disabled=false;});
   } else {
     data.createdAt = Date.now();
-    dbRef.ref('matches').push(data).then(r => {
-      allMatches.unshift({id:r.key, ...data});
-      done('✅ 등록되었습니다.');
-    }).catch(e => { showToast('❌ 실패: '+e.message); btn.disabled=false; });
+    fetch(DB_URL+'/matches.json', {method:'POST', body:JSON.stringify(data)})
+      .then(r=>r.json())
+      .then(res=>{
+        allMatches.unshift({id:res.name, ...data});
+        done('✅ 등록되었습니다.');
+      }).catch(e=>{showToast('❌ 실패: '+e.message); btn.disabled=false;});
   }
 }
 
