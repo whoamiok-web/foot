@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>갤러리 – 중흥FC</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;700;900&display=swap" rel="stylesheet">
+<style>
+  *{box-sizing:border-box;margin:0;padding:0;}
+  body{font-family:'Noto Sans KR',sans-serif;background:#f4f6f8;min-height:100vh;display:flex;flex-direction:column;}
+  nav{background:#111827;display:flex;align-items:center;justify-content:space-between;padding:0 24px;height:60px;}
+  .nav-logo{font-size:20px;font-weight:900;color:#fff;cursor:pointer;display:flex;align-items:center;gap:8px;}
+  .badge{background:#1a7f3c;color:#fff;font-size:11px;padding:2px 7px;border-radius:6px;}
+  .nav-links{display:flex;gap:18px;list-style:none;}
+  .nav-links a{color:#9ca3af;font-size:13px;text-decoration:none;cursor:pointer;}
+  .nav-links a:hover{color:#fff;}
+  .wrap{flex:1;display:flex;align-items:center;justify-content:center;flex-direction:column;gap:20px;padding:60px 20px;}
+  .icon{font-size:72px;}
+  h1{font-size:24px;font-weight:900;color:#111827;}
+  p{font-size:15px;color:#6b7280;text-align:center;line-height:1.7;}
+  .back-btn{margin-top:8px;padding:12px 28px;background:#1a7f3c;color:#fff;border:none;border-radius:10px;font-size:15px;font-weight:700;cursor:pointer;font-family:inherit;}
+  .back-btn:hover{background:#155f2e;}
+  footer{background:#111827;color:#6b7280;padding:24px 40px;font-size:13px;text-align:center;}
+</style>
+</head>
+<body>
+<nav>
+  <div class="nav-logo" onclick="location.href='index.html'">⚽ 중흥FC <span class="badge">조기축구</span></div>
+  <ul class="nav-links">
+    <li><a onclick="location.href='notice.html'">공지사항</a></li>
+    <li><a onclick="location.href='schedule.html'">경기일정</a></li>
+    <li><a onclick="location.href='members.html'" >회원명단</a></li>
+    <li><a onclick="location.href='gallery.html'" style="color:#fff;">갤러리</a></li>
+  </ul>
+</nav>
+<div class="wrap">
+  <div class="icon">📸</div>
+  <h1>갤러리 준비 중</h1>
+  <p>현재 페이지를 열심히 준비하고 있습니다.<br>조금만 기다려 주세요! 🙏</p>
+  <button class="back-btn" onclick="location.href='index.html'">← 홈으로 돌아가기</button>
+</div>
+<footer>© 2026 중흥FC. All rights reserved.</footer>
+</body>
+</html>
