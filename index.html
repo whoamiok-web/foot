@@ -71,21 +71,23 @@
   .hero h1 span { color: var(--green2); }
   .hero p { font-size: 16px; color: #9ca3af; margin-bottom: 36px; }
   .hero-stats {
-    display: flex; gap: 0;
+    display: flex; align-items: center; gap: 0;
     background: rgba(255,255,255,.06);
     border: 1px solid rgba(255,255,255,.12);
-    border-radius: 18px; padding: 20px 0;
+    border-radius: 18px; padding: 18px 0;
     backdrop-filter: blur(8px);
     width: 100%; max-width: 580px;
   }
   .stat-item {
     text-align: center; flex: 1;
-    padding: 0 10px;
-    border-right: 1px solid rgba(255,255,255,.12);
-    min-width: 0; display: flex; flex-direction: column;
+    padding: 0 10px; min-width: 0;
+    display: flex; flex-direction: column;
     align-items: center; justify-content: center; gap: 6px;
   }
-  .stat-item:last-child { border-right: none; }
+  .stat-divider {
+    width: 1px; height: 36px; flex-shrink: 0;
+    background: rgba(255,255,255,.15);
+  }
   .stat-num {
     font-size: 16px; font-weight: 900; color: var(--green2);
     line-height: 1; white-space: nowrap;
@@ -292,14 +294,17 @@
       <div class="stat-num">50명</div>
       <div class="stat-label">활동 회원</div>
     </div>
+    <div class="stat-divider"></div>
     <div class="stat-item">
       <div class="stat-num">30년</div>
       <div class="stat-label">창단 연혁</div>
     </div>
+    <div class="stat-divider"></div>
     <div class="stat-item">
       <div class="stat-num">매주 일요일</div>
       <div class="stat-label">정기 경기</div>
     </div>
+    <div class="stat-divider"></div>
     <div class="stat-item">
       <div class="stat-num">AM 6:30</div>
       <div class="stat-label">경기 시작</div>
