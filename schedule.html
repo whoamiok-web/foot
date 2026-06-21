@@ -200,7 +200,7 @@
       </div>
       <div id="admin-status-top"></div>
     </div>
-    <button class="add-btn" onclick="checkAdmin()">+ 경기 등록</button>
+    <button class="add-btn" id="open-match-btn">+ 경기 등록</button>
   </div>
 
   <div class="match-list" id="match-list">
@@ -246,13 +246,13 @@
         <div></div>
       </div>
       <div id="game-inputs"></div>
-      <button class="btn-add-game" onclick="addGameRow()">+ 게임 추가</button>
+      <button class="btn-add-game" id="add-game-btn">+ 게임 추가</button>
       <div style="font-size:11px;color:var(--gray2);margin-top:8px;">※ 점수 미입력 시 예정 경기로 표시됩니다.</div>
     </div>
 
     <div class="modal-btns">
-      <button class="btn-cancel" onclick="closeMatchModal()">취소</button>
-      <button class="btn-submit" id="match-submit-btn" onclick="submitMatch()">등록하기</button>
+      <button class="btn-cancel" id="match-cancel-btn">취소</button>
+      <button class="btn-submit" id="match-submit-btn">등록하기</button>
     </div>
   </div>
 </div>
@@ -266,8 +266,8 @@
       onkeydown="if(event.key==='Enter') confirmAdmin()">
     <div class="modal-error" id="admin-pw-error"></div>
     <div class="modal-btns">
-      <button class="btn-cancel" onclick="document.getElementById('admin-modal').style.display='none'">취소</button>
-      <button class="btn-submit" onclick="confirmAdmin()">확인</button>
+      <button class="btn-cancel" id="admin-cancel-btn">취소</button>
+      <button class="btn-submit" id="admin-confirm-btn">확인</button>
     </div>
   </div>
 </div>
@@ -311,7 +311,7 @@ function isAdmin(){ return sessionStorage.getItem(ADMIN_KEY)==='1'; }
 function setAdminUI(){
   const el = document.getElementById('admin-status-top');
   el.innerHTML = isAdmin()
-    ? '<span class="admin-badge" onclick="logoutAdmin()">✅ 관리자 · 로그아웃</span>' : '';
+    ? '<span class="admin-badge" id="logout-badge">✅ 관리자 · 로그아웃</span>' : '';
   document.querySelectorAll('.match-actions').forEach(el=>{
     el.classList.toggle('admin-visible', isAdmin());
   });
@@ -570,6 +570,19 @@ function showToast(msg){
   t.textContent=msg; t.classList.add('show');
   setTimeout(()=>t.classList.remove('show'),2500);
 }
+
+// ── 버튼 이벤트 연결 ──
+document.getElementById('open-match-btn').addEventListener('click', () => checkAdmin());
+document.getElementById('match-cancel-btn').addEventListener('click', closeMatchModal);
+document.getElementById('match-submit-btn').addEventListener('click', () => window.submitMatch());
+document.getElementById('add-game-btn').addEventListener('click', () => window.addGameRow());
+document.getElementById('admin-confirm-btn').addEventListener('click', confirmAdmin);
+document.getElementById('admin-cancel-btn').addEventListener('click', () => {
+  document.getElementById('admin-modal').style.display='none';
+});
+document.getElementById('admin-pw').addEventListener('keydown', e => {
+  if(e.key==='Enter') confirmAdmin();
+});
 
 setAdminUI();
 loadMatches();
