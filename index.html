@@ -176,7 +176,7 @@
   .member-num { font-size: 12px; font-weight: 900; color: var(--gray3); width: 24px; text-align:center; flex-shrink:0; }
 
   /* ── GALLERY ── */
-  .gallery-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; }
+  .gallery-grid { display: grid; grid-template-columns: repeat(auto-fill,minmax(160px,1fr)); gap: 10px; }
   .gallery-item {
     border-radius: 12px; overflow: hidden;
     aspect-ratio: 1; position: relative;
@@ -351,63 +351,11 @@
     <div class="section-title"><span>📸</span> 사진 갤러리</div>
     <a href="gallery.html" class="more-btn">전체보기 →</a>
   </div>
-  <!-- 썸네일 미리보기 그리드 -->
-  <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:16px;">
-    <a href="https://drive.google.com/file/d/1NPOMLrqa7pYM8KhQJuEDyA5UUQCla1MI/view?usp=drivesdk" target="_blank" style="display:block;border-radius:10px;overflow:hidden;aspect-ratio:1;background:#1a2535;">
-      <img src="https://drive.google.com/thumbnail?id=1NPOMLrqa7pYM8KhQJuEDyA5UUQCla1MI&sz=w400"
-           style="width:100%;height:100%;object-fit:cover;transition:transform .25s;display:block;"
-           onmouseover="this.style.transform='scale(1.06)'" onmouseout="this.style.transform='scale(1)'"
-           onerror="this.parentElement.style.display='none'" loading="lazy">
-    </a>
-    <a href="https://drive.google.com/file/d/1ZmPaSCFms6WVoJ4OUZeJslvaEUMOkK2j/view?usp=drivesdk" target="_blank" style="display:block;border-radius:10px;overflow:hidden;aspect-ratio:1;background:#1a2535;">
-      <img src="https://drive.google.com/thumbnail?id=1ZmPaSCFms6WVoJ4OUZeJslvaEUMOkK2j&sz=w400"
-           style="width:100%;height:100%;object-fit:cover;transition:transform .25s;display:block;"
-           onmouseover="this.style.transform='scale(1.06)'" onmouseout="this.style.transform='scale(1)'"
-           onerror="this.parentElement.style.display='none'" loading="lazy">
-    </a>
-    <a href="https://drive.google.com/file/d/1NAK0S3GQWbsaoyKkjIlPpv_ofa0dWUiA/view?usp=drivesdk" target="_blank" style="display:block;border-radius:10px;overflow:hidden;aspect-ratio:1;background:#1a2535;">
-      <img src="https://drive.google.com/thumbnail?id=1NAK0S3GQWbsaoyKkjIlPpv_ofa0dWUiA&sz=w400"
-           style="width:100%;height:100%;object-fit:cover;transition:transform .25s;display:block;"
-           onmouseover="this.style.transform='scale(1.06)'" onmouseout="this.style.transform='scale(1)'"
-           onerror="this.parentElement.style.display='none'" loading="lazy">
-    </a>
-    <a href="https://drive.google.com/file/d/1iITcqYfn4mSPjRGWoELUfErX2x1a9ZAL/view?usp=drivesdk" target="_blank" style="display:block;border-radius:10px;overflow:hidden;aspect-ratio:1;background:#1a2535;">
-      <img src="https://drive.google.com/thumbnail?id=1iITcqYfn4mSPjRGWoELUfErX2x1a9ZAL&sz=w400"
-           style="width:100%;height:100%;object-fit:cover;transition:transform .25s;display:block;"
-           onmouseover="this.style.transform='scale(1.06)'" onmouseout="this.style.transform='scale(1)'"
-           onerror="this.parentElement.style.display='none'" loading="lazy">
-    </a>
-    <a href="https://drive.google.com/file/d/1f8fMGLpHgArou00_VtuOzJGkhBaLadj9/view?usp=drivesdk" target="_blank" style="display:block;border-radius:10px;overflow:hidden;aspect-ratio:1;background:#1a2535;">
-      <img src="https://drive.google.com/thumbnail?id=1f8fMGLpHgArou00_VtuOzJGkhBaLadj9&sz=w400"
-           style="width:100%;height:100%;object-fit:cover;transition:transform .25s;display:block;"
-           onmouseover="this.style.transform='scale(1.06)'" onmouseout="this.style.transform='scale(1)'"
-           onerror="this.parentElement.style.display='none'" loading="lazy">
-    </a>
-    <a href="https://drive.google.com/file/d/1xrcE_i_0TWbNoSm_UxLkTqrrUrVE35wI/view?usp=drivesdk" target="_blank" style="display:block;border-radius:10px;overflow:hidden;aspect-ratio:1;background:#1a2535;">
-      <img src="https://drive.google.com/thumbnail?id=1xrcE_i_0TWbNoSm_UxLkTqrrUrVE35wI&sz=w400"
-           style="width:100%;height:100%;object-fit:cover;transition:transform .25s;display:block;"
-           onmouseover="this.style.transform='scale(1.06)'" onmouseout="this.style.transform='scale(1)'"
-           onerror="this.parentElement.style.display='none'" loading="lazy">
-    </a>
-    <a href="https://drive.google.com/file/d/1G9Qv-BDCvCUWLxfm6NIMpVqG3mKM7gJS/view?usp=drivesdk" target="_blank" style="display:block;border-radius:10px;overflow:hidden;aspect-ratio:1;background:#1a2535;">
-      <img src="https://drive.google.com/thumbnail?id=1G9Qv-BDCvCUWLxfm6NIMpVqG3mKM7gJS&sz=w400"
-           style="width:100%;height:100%;object-fit:cover;transition:transform .25s;display:block;"
-           onmouseover="this.style.transform='scale(1.06)'" onmouseout="this.style.transform='scale(1)'"
-           onerror="this.parentElement.style.display='none'" loading="lazy">
-    </a>
-    <a href="https://drive.google.com/file/d/1ifdd5rxZsVqOR7ClV-INSqqHJ1kCzjWt/view?usp=drivesdk" target="_blank" style="display:block;border-radius:10px;overflow:hidden;aspect-ratio:1;background:#1a2535;">
-      <img src="https://drive.google.com/thumbnail?id=1ifdd5rxZsVqOR7ClV-INSqqHJ1kCzjWt&sz=w400"
-           style="width:100%;height:100%;object-fit:cover;transition:transform .25s;display:block;"
-           onmouseover="this.style.transform='scale(1.06)'" onmouseout="this.style.transform='scale(1)'"
-           onerror="this.parentElement.style.display='none'" loading="lazy">
-    </a>
-  </div>
-  <!-- Google Photos 전체 앨범 링크 -->
-  <div style="text-align:center;margin-top:4px;">
-    <a href="https://photos.app.goo.gl/63H6pSw5gnFGcLZR7" target="_blank"
-       style="display:inline-flex;align-items:center;gap:7px;background:#1a7f3c;color:#fff;border-radius:10px;padding:10px 24px;font-size:14px;font-weight:700;text-decoration:none;">
-      🔗 Google Photos 전체 앨범 보기
-    </a>
+  <div id="home-gallery-grid" style="display:grid;grid-template-columns:repeat(4,1fr);gap:10px;">
+    <div style="grid-column:1/-1;text-align:center;padding:24px;color:#9ca3af;font-size:14px;">
+      <div style="width:22px;height:22px;border:2px solid #e5e7eb;border-top-color:#1a7f3c;border-radius:50%;animation:spin .7s linear infinite;margin:0 auto 8px;"></div>
+      불러오는 중...
+    </div>
   </div>
 </div>
 </div>
@@ -584,9 +532,43 @@ function loadHomeMembers(){
     }).catch(()=>{});
 }
 
+
+/* ── 갤러리 ── */
+function driveThumbHome(url){
+  const m = url.match(/\/file\/d\/([^\/\?]+)/) || url.match(/[?&]id=([^&]+)/);
+  return m ? `https://drive.google.com/thumbnail?id=${m[1]}&sz=w400` : url;
+}
+
+function loadHomeGallery(){
+  const grid = document.getElementById('home-gallery-grid');
+  if(!grid) return;
+  fetch(DB+'/gallery.json')
+    .then(r=>r.json())
+    .then(data=>{
+      let photos=[];
+      if(data&&typeof data==='object') Object.entries(data).forEach(([k,v])=>{ if(v) photos.push({id:k,...v}); });
+      photos.sort((a,b)=>(b.createdAt||0)-(a.createdAt||0));
+      const top = photos.slice(0,8);
+      if(top.length===0){
+        grid.innerHTML='<div style="grid-column:1/-1;text-align:center;padding:24px;color:#9ca3af;">등록된 사진이 없습니다.</div>';
+        return;
+      }
+      grid.innerHTML = top.map(p=>`
+        <a href="gallery.html" style="display:block;border-radius:10px;overflow:hidden;aspect-ratio:1;background:#1a2535;">
+          <img src="${driveThumbHome(p.url)}" loading="lazy"
+               style="width:100%;height:100%;object-fit:cover;display:block;transition:transform .25s;"
+               onmouseover="this.style.transform='scale(1.06)'" onmouseout="this.style.transform='scale(1)'"
+               onerror="this.parentElement.style.display='none'">
+        </a>`).join('');
+    }).catch(()=>{
+      grid.innerHTML='<div style="grid-column:1/-1;text-align:center;padding:24px;color:#9ca3af;">사진을 불러올 수 없습니다.</div>';
+    });
+}
+
 loadHomeNotice();
 loadHomeSchedule();
 loadHomeMembers();
+loadHomeGallery();
 </script>
 
 </body>
