@@ -1,0 +1,318 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>회칙 – 중흥FC</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700;900&display=swap" rel="stylesheet">
+<style>
+  *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+  :root{--green:#1a7f3c;--green2:#23a852;--dark:#111827;--gray1:#374151;--gray2:#6b7280;--gray3:#d1d5db;--bg:#f4f6f8;--white:#fff;--shadow:0 2px 16px rgba(0,0,0,.07);--radius:14px;}
+  body{font-family:'Noto Sans KR','Apple SD Gothic Neo','Malgun Gothic',sans-serif;background:var(--bg);color:var(--dark);min-height:100vh;}
+
+  .page-header{background:linear-gradient(135deg,#0f2027 0%,#1a4a2e 60%,#203a43 100%);padding:40px 40px 36px;}
+  .page-header-inner{max-width:800px;margin:0 auto;}
+  .breadcrumb{font-size:12px;color:#6b7280;margin-bottom:10px;display:flex;align-items:center;gap:6px;}
+  .breadcrumb .cur{color:var(--green2);font-weight:600;}
+  .page-header h1{font-size:28px;font-weight:900;color:#fff;}
+  .page-header p{font-size:14px;color:#9ca3af;margin-top:6px;}
+
+  .main-wrap{max-width:800px;margin:0 auto;padding:36px 40px 60px;}
+
+  /* 목차 */
+  .toc{background:#fff;border-radius:var(--radius);box-shadow:var(--shadow);padding:22px 28px;margin-bottom:24px;}
+  .toc-title{font-size:14px;font-weight:800;color:var(--dark);margin-bottom:12px;}
+  .toc-list{display:flex;flex-direction:column;gap:6px;}
+  .toc-item{display:flex;align-items:center;gap:8px;font-size:13px;color:var(--green);cursor:pointer;text-decoration:none;}
+  .toc-item:hover{text-decoration:underline;}
+  .toc-dot{width:6px;height:6px;border-radius:50%;background:var(--green);flex-shrink:0;}
+
+  /* 회칙 카드 */
+  .rule-card{background:#fff;border-radius:var(--radius);box-shadow:var(--shadow);padding:28px 32px;margin-bottom:16px;}
+  .chapter-title{font-size:18px;font-weight:900;color:var(--dark);padding-bottom:14px;border-bottom:2px solid var(--green);margin-bottom:20px;display:flex;align-items:center;gap:8px;}
+  .chapter-badge{background:var(--green);color:#fff;font-size:11px;font-weight:700;padding:3px 9px;border-radius:6px;}
+  .article{margin-bottom:20px;}
+  .article:last-child{margin-bottom:0;}
+  .article-title{font-size:14px;font-weight:800;color:var(--dark);margin-bottom:8px;display:flex;align-items:baseline;gap:6px;}
+  .article-num{color:var(--green);font-size:13px;font-weight:700;flex-shrink:0;}
+  .article-body{font-size:14px;line-height:1.9;color:var(--gray1);}
+  .sub-list{margin-top:8px;display:flex;flex-direction:column;gap:5px;padding-left:4px;}
+  .sub-item{display:flex;align-items:flex-start;gap:8px;font-size:13px;color:var(--gray1);line-height:1.7;}
+  .sub-num{color:var(--green);font-weight:700;flex-shrink:0;min-width:20px;}
+  .clause{margin-top:8px;padding:10px 14px;background:#f0fdf4;border-left:3px solid var(--green);border-radius:0 6px 6px 0;font-size:13px;color:var(--gray1);line-height:1.8;}
+
+  /* 부칙 */
+  .addendum{background:#f9fafb;border:1.5px solid var(--gray3);border-radius:var(--radius);padding:20px 24px;margin-bottom:16px;}
+  .addendum-title{font-size:14px;font-weight:800;color:var(--gray1);margin-bottom:10px;}
+
+  /* 제정일 */
+  .enacted{text-align:right;font-size:12px;color:var(--gray2);margin-bottom:24px;}
+
+  footer{background:var(--dark);color:#6b7280;padding:28px 40px;font-size:13px;display:flex;align-items:center;justify-content:space-between;}
+  .footer-logo{font-size:17px;font-weight:900;color:#fff;margin-bottom:4px;}
+  @media(max-width:640px){.main-wrap{padding:24px 16px 48px;}.page-header{padding:28px 20px;}.rule-card{padding:20px 18px;}footer{flex-direction:column;gap:12px;}}
+</style>
+</head>
+<body>
+<nav>
+  <a class="nav-logo" href="index.html">⚽ 중흥FC</a>
+  <ul class="nav-links">
+    <li class="nav-item-drop">
+      <a href="intro.html" class="">소개 <span class="nav-arrow">▾</span></a>
+      <div class="nav-dropdown"><a href="intro.html">팀 소개</a><a href="members.html">회원명단</a><a href="rules.html">회칙</a></div>
+    </li>
+    <li><a href="notice.html" class="">공지사항</a></li>
+    <li><a href="schedule.html" class="">경기일정</a></li>
+    <li><a href="record.html" class="">경기기록</a></li>
+    <li><a href="attendance.html" class="">참여율</a></li>
+    <li><a href="gallery.html" class="">갤러리</a></li>
+  </ul>
+</nav>
+<style>
+  nav{position:sticky;top:0;z-index:100;background:#111827;display:flex;align-items:center;justify-content:space-between;flex-wrap:nowrap;gap:10px;padding:0 20px;height:60px;box-shadow:0 2px 12px rgba(0,0,0,.3);}
+  .nav-logo{font-size:18px;font-weight:900;color:#fff;text-decoration:none;white-space:nowrap;flex-shrink:0;}
+  .nav-links{display:flex;gap:2px;list-style:none;flex-wrap:nowrap;align-items:center;flex-shrink:0;}
+  .nav-links li{position:relative;}
+  .nav-links a{color:#9ca3af;font-size:14px;font-weight:500;text-decoration:none;white-space:nowrap;display:inline-flex;align-items:center;gap:2px;padding:5px 9px;border-radius:6px;transition:color .2s,background .2s;}
+  .nav-links a:hover{color:#fff;}
+  .nav-active{color:#fff!important;background:#1a7f3c!important;}
+  .nav-arrow{font-size:9px;opacity:.6;}
+  .nav-dropdown{position:absolute;top:calc(100% + 10px);left:50%;transform:translateX(-50%) translateY(-4px);background:#1f2937;border-radius:10px;padding:6px 0;min-width:110px;box-shadow:0 8px 24px rgba(0,0,0,.3);opacity:0;pointer-events:none;transition:opacity .18s,transform .18s;z-index:200;}
+  .nav-dropdown::before{content:'';position:absolute;top:-5px;left:50%;transform:translateX(-50%);border:5px solid transparent;border-bottom-color:#1f2937;border-top:none;}
+  .nav-item-drop:hover .nav-dropdown{opacity:1;pointer-events:auto;transform:translateX(-50%) translateY(0);}
+  .nav-dropdown a{display:block;padding:8px 16px;color:#d1d5db;font-size:13px;font-weight:500;white-space:nowrap;text-decoration:none;background:none;border-radius:0;transition:background .15s,color .15s;}
+  .nav-dropdown a:hover{background:#374151!important;color:#fff!important;}
+  @media(max-width:520px){.nav-logo{font-size:16px;}.nav-links a{font-size:12px;padding:4px 6px;}}
+</style>
+
+<div class="page-header">
+  <div class="page-header-inner">
+    <div class="breadcrumb">
+      <span onclick="location.href='index.html'" style="cursor:pointer;">홈</span><span>›</span>
+      <span onclick="location.href='intro.html'" style="cursor:pointer;">소개</span><span>›</span>
+      <span class="cur">회칙</span>
+    </div>
+    <h1>📋 중흥FC 회칙</h1>
+    <p>제정 2025년 10월</p>
+  </div>
+</div>
+
+<div class="main-wrap">
+
+  <div class="enacted">제정 2025. 10.</div>
+
+  <!-- 목차 -->
+  <div class="toc">
+    <div class="toc-title">📌 목차</div>
+    <div class="toc-list">
+      <a class="toc-item" href="#ch1"><div class="toc-dot"></div>제1장 총칙 (제1조~제4조)</a>
+      <a class="toc-item" href="#ch2"><div class="toc-dot"></div>제2장 회원 (제5조~제9조)</a>
+      <a class="toc-item" href="#ch3"><div class="toc-dot"></div>제3장 조직 및 집행부 (제10조~제12조)</a>
+      <a class="toc-item" href="#ch4"><div class="toc-dot"></div>제4장 회의 운영 (제13조~제15조)</a>
+      <a class="toc-item" href="#ch5"><div class="toc-dot"></div>제5장 재정 (제16조~제17조)</a>
+      <a class="toc-item" href="#ch6"><div class="toc-dot"></div>제6장 상벌 (제18조~제20조)</a>
+      <a class="toc-item" href="#addendum"><div class="toc-dot"></div>부칙</a>
+    </div>
+  </div>
+
+  <!-- 제1장 총칙 -->
+  <div class="rule-card" id="ch1">
+    <div class="chapter-title"><span class="chapter-badge">제1장</span>총칙</div>
+    <div class="article">
+      <div class="article-title"><span class="article-num">제1조</span>명칭</div>
+      <div class="article-body">본 회는 <b>중흥FC 축구회</b>라 칭한다.</div>
+    </div>
+    <div class="article">
+      <div class="article-title"><span class="article-num">제2조</span>목적</div>
+      <div class="article-body">본 회는 축구 활동을 통해 회원들의 건강 증진 및 생활 체육 활성화에 기여하고, 친목 도모 및 건전한 여가 문화 형성을 목적으로 한다.</div>
+    </div>
+    <div class="article">
+      <div class="article-title"><span class="article-num">제3조</span>활동</div>
+      <div class="article-body">본 동호회는 제2조의 목적을 달성하기 위해 다음 각 호의 활동을 수행할 수 있다.</div>
+      <div class="sub-list">
+        <div class="sub-item"><span class="sub-num">1.</span>정기적인 축구 경기 및 훈련</div>
+        <div class="sub-item"><span class="sub-num">2.</span>회원 간의 친목 도모를 위한 각종 행사 (정기총회, 야유회 등)</div>
+        <div class="sub-item"><span class="sub-num">3.</span>대외 경기 참여 및 교류활동</div>
+        <div class="sub-item"><span class="sub-num">4.</span>기타 본 동호회 목적 달성에 필요한 활동</div>
+      </div>
+    </div>
+    <div class="article">
+      <div class="article-title"><span class="article-num">제4조</span>장소</div>
+      <div class="article-body">본 회의 주 운동장은 <b>전남대학교사범대학부설중·고등학교</b>로 한다.</div>
+    </div>
+  </div>
+
+  <!-- 제2장 회원 -->
+  <div class="rule-card" id="ch2">
+    <div class="chapter-title"><span class="chapter-badge">제2장</span>회원</div>
+    <div class="article">
+      <div class="article-title"><span class="article-num">제5조</span>자격</div>
+      <div class="article-body">본 회의 회원 자격은 축구를 사랑하는 성실한 회원이어야 한다.</div>
+    </div>
+    <div class="article">
+      <div class="article-title"><span class="article-num">제6조</span>회원의 의무와 권리</div>
+      <div class="clause">① 회원은 다음과 같은 사항을 준수하여야 한다.</div>
+      <div class="sub-list">
+        <div class="sub-item"><span class="sub-num">1.</span>회칙 및 제반 규정</div>
+        <div class="sub-item"><span class="sub-num">2.</span>회에서 주관하는 행사 및 경기에 적극 참여</div>
+        <div class="sub-item"><span class="sub-num">3.</span>월회비 매월 2만원 또는 연회비 22만원 모임통장 입금</div>
+        <div class="sub-item"><span class="sub-num">4.</span>회원 간의 상호 존중과 협력</div>
+      </div>
+      <div class="clause" style="margin-top:10px;">② 회원은 다음과 같은 권리를 가질 수 있다.</div>
+      <div class="sub-list">
+        <div class="sub-item"><span class="sub-num">1.</span>회 활동에 참여할 권리</div>
+        <div class="sub-item"><span class="sub-num">2.</span>회 운영에 대한 의견을 제시 및 건의</div>
+        <div class="sub-item"><span class="sub-num">3.</span>회장 선임의 의결권 및 선거권</div>
+      </div>
+    </div>
+    <div class="article">
+      <div class="article-title"><span class="article-num">제7조</span>입회절차</div>
+      <div class="article-body">입회 희망자는 1개월간 유예기간을 두고 집행부의 의결을 거쳐 공식 소개 후 입회하는 것을 원칙으로 하며, 입회 시에는 입회비 매월 2만원 또는 연회비 22만원과 함께 모임통장 이체함으로 입회 절차가 완료됨으로 한다.</div>
+    </div>
+    <div class="article">
+      <div class="article-title"><span class="article-num">제8조</span>탈퇴</div>
+      <div class="article-body">본인의 의사에 따라 언제든지 탈퇴할 수 있으며, 탈퇴의사를 집행부에게 통보해야하며, 납부된 회비는 반환하지 않는다.</div>
+    </div>
+    <div class="article">
+      <div class="article-title"><span class="article-num">제9조</span>회원의 제명 및 징계</div>
+      <div class="article-body">다음 각 호에 해당하는 회원은 집행부 또는 정기총회의 의결을 거쳐 제명하거나 징계할 수 있다.</div>
+      <div class="sub-list">
+        <div class="sub-item"><span class="sub-num">1.</span>회의 명예를 훼손하거나 목적에 위배되는 행위를 한 경우</div>
+        <div class="sub-item"><span class="sub-num">2.</span>회칙 및 제반 규정을 중대하게 위반한 경우</div>
+        <div class="sub-item"><span class="sub-num">3.</span>정당한 사유 없이 연속 3개월 이상 회비를 미납한 경우</div>
+        <div class="sub-item"><span class="sub-num">4.</span>회원 간의 화합을 저해하는 비윤리적인 행위를 한 경우</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 제3장 조직 및 집행부 -->
+  <div class="rule-card" id="ch3">
+    <div class="chapter-title"><span class="chapter-badge">제3장</span>조직 및 집행부</div>
+    <div class="article">
+      <div class="article-title"><span class="article-num">제10조</span>집행부의 종류 및 구성</div>
+      <div class="clause">① 본 회는 다음 각 호의 임원을 둘 수 있다.</div>
+      <div class="sub-list">
+        <div class="sub-item"><span class="sub-num">1.</span>회장: 1인</div>
+        <div class="sub-item"><span class="sub-num">2.</span>총무: 1인</div>
+        <div class="sub-item"><span class="sub-num">3.</span>감독: 1인</div>
+        <div class="sub-item"><span class="sub-num">4.</span>수석코치: 1인</div>
+        <div class="sub-item"><span class="sub-num">5.</span>코치: 2인</div>
+        <div class="sub-item"><span class="sub-num">6.</span>감사: 1인</div>
+      </div>
+      <div class="clause" style="margin-top:10px;">② 집행부의 구성은 선출된 회장에 따라 조직구성을 변경할 수 있다.</div>
+    </div>
+    <div class="article">
+      <div class="article-title"><span class="article-num">제11조</span>집행부의 선출 및 임기</div>
+      <div class="clause">① 본 회의 임원은 다음 각 호에 따라 선출한다.</div>
+      <div class="sub-list">
+        <div class="sub-item"><span class="sub-num">1.</span>회장은 정기총회에서 회원의 추천을 통하여 재적인원의 다득표자</div>
+        <div class="sub-item"><span class="sub-num">2.</span>감독은 회장이 임명 (코치는 감독이 임명)</div>
+        <div class="sub-item"><span class="sub-num">3.</span>총무는 회장이 임명</div>
+        <div class="sub-item"><span class="sub-num">4.</span>감사는 정기총회에서 회원의 추천을 통하여 재적인원의 다득표자</div>
+      </div>
+      <div class="clause" style="margin-top:10px;">② 집행부의 임기는 1년으로 한다.</div>
+    </div>
+    <div class="article">
+      <div class="article-title"><span class="article-num">제12조</span>집행부의 직무</div>
+      <div class="clause">① 회의 집행부는 다음 각호의 직무를 성실히 수행하여야 한다.</div>
+      <div class="sub-list">
+        <div class="sub-item"><span class="sub-num">1.</span>회장은 본 회를 대표하여 제반 업무를 총괄하여 최종 결정권을 가지며 본 회의 운영상 필요한 의결 및 집행상황을 회원들에게 보고할 의무를 갖는다.</div>
+        <div class="sub-item"><span class="sub-num">2.</span>총무는 회장을 보좌하여 본 회의 운영에 필요한 제반 사무업무를 담당한다.</div>
+        <div class="sub-item"><span class="sub-num">3.</span>감독은 본 회의 내·외 경기 및 회원의 기술지도 등 업무를 총괄한다.</div>
+        <div class="sub-item"><span class="sub-num">4.</span>코치는 감독을 보좌하여 본 회의 내·외 경기 및 회원 기술지도 등 실무를 담당한다.</div>
+        <div class="sub-item"><span class="sub-num">5.</span>감사는 본 회의 운영 및 업무를 매월 검토하여 회원에게 알린다.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 제4장 회의 운영 -->
+  <div class="rule-card" id="ch4">
+    <div class="chapter-title"><span class="chapter-badge">제4장</span>회의 운영</div>
+    <div class="article">
+      <div class="article-title"><span class="article-num">제13조</span>총회</div>
+      <div class="article-body">본 회의 회의는 정기총회 및 임시총회로 구분하여 운영하며, 정기총회(매년 8월 중), 임시총회는 필요시 회장의 명에 의해서 수시로 개최할 수 있다.</div>
+    </div>
+    <div class="article">
+      <div class="article-title"><span class="article-num">제14조</span>의사진행</div>
+      <div class="article-body">본 회의는 모든 안건에 대한 찬반 결정은 별도의 규정이 없는 한 출석 회원 과반수 이상의 찬성으로 한다.</div>
+    </div>
+    <div class="article">
+      <div class="article-title"><span class="article-num">제15조</span>고문단 운영</div>
+      <div class="article-body">본 회는 역대 회장과 부회장을 역임한 회원으로 다음 각호의 사항들을 운영한다.</div>
+      <div class="sub-list">
+        <div class="sub-item"><span class="sub-num">1.</span>주요 행사에 대한 사전 자문</div>
+        <div class="sub-item"><span class="sub-num">2.</span>회칙이나 기타 방법으로 해결이 어려운 사항의 결정</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 제5장 재정 -->
+  <div class="rule-card" id="ch5">
+    <div class="chapter-title"><span class="chapter-badge">제5장</span>재정</div>
+    <div class="article">
+      <div class="article-title"><span class="article-num">제16조</span>회비</div>
+      <div class="clause">① 본회의 운영을 위하여 매월 2만원 정기회비를 정해진 모임통장 계좌로 납부한다.</div>
+      <div class="clause" style="margin-top:8px;">② 회비를 일시납 할 수 있다. 단, 일시납을 하는 비용은 22만원으로 한다.</div>
+      <div class="clause" style="margin-top:8px;">③ 필요시 특별회비도 각출할 수 있다.</div>
+    </div>
+    <div class="article">
+      <div class="article-title"><span class="article-num">제17조</span>회비사용 및 결산</div>
+      <div class="article-body">회비는 본회의 발전을 위하여 사용하여야 한다. 회장의 명을 받아 총무가 지출하고 지출 항목은 별도로 지정하지 않는다. (다만, 결산 보고 시 무리한 지출내용은 회원의 뜻에 따라 시정되어야 한다.)</div>
+    </div>
+  </div>
+
+  <!-- 제6장 상벌 -->
+  <div class="rule-card" id="ch6">
+    <div class="chapter-title"><span class="chapter-badge">제6장</span>상벌</div>
+    <div class="article">
+      <div class="article-title"><span class="article-num">제18조</span>포상</div>
+      <div class="article-body">본 회의 발전에 헌신적인 봉사와 현격한 공적이 있는 회원에 대하여서는 임원 총회의 결정에 따라서 포상할 수 있다.</div>
+    </div>
+    <div class="article">
+      <div class="article-title"><span class="article-num">제19조</span>벌칙</div>
+      <div class="article-body">본 회의 모든 회원은 다음과 같은 사유로 인하여 총회의 결정에 따라 제명될 수 있다.</div>
+      <div class="sub-list">
+        <div class="sub-item"><span class="sub-num">1.</span>정당한 사유없이 6개월 이상 모임에 불참석할 경우</div>
+        <div class="sub-item"><span class="sub-num">2.</span>월 정기회비를 6개월 이상 미납부할 경우</div>
+        <div class="sub-item"><span class="sub-num">3.</span>회원으로서 품위손상이나 본회의 명예를 실추시키는 일을 일으켰을 경우</div>
+      </div>
+    </div>
+    <div class="article">
+      <div class="article-title"><span class="article-num">제20조</span>회칙개정</div>
+      <div class="article-body">회칙개정의결은 등록회원 3분의 2 이상 출석과 3분의 2 이상 찬성으로 한다.</div>
+    </div>
+  </div>
+
+  <!-- 부칙 -->
+  <div class="addendum" id="addendum">
+    <div class="addendum-title">📌 부칙</div>
+    <div class="sub-list">
+      <div class="sub-item"><span class="sub-num" style="color:var(--gray2);">제1조</span><span><b>시행</b> — 이 규칙은 회장의 승인을 얻는 날부터 시행한다.</span></div>
+      <div class="sub-item"><span class="sub-num" style="color:var(--gray2);">제2조</span><span><b>경과조치</b> — 이 규칙 시행 전에 처리된 사항은 이 규칙에 의하여 처리된 것으로 본다.</span></div>
+    </div>
+  </div>
+
+</div>
+
+<footer>
+  <div>
+    <a href="index.html" class="footer-logo" style="text-decoration:none;display:block;margin-bottom:4px;">⚽ 중흥FC</a>
+    <div>광주광역시 북구 중흥동 | 매주 일요일 AM 06:30 | 전남대학교 부설중학교 운동장</div>
+    <div style="margin-top:4px;">가입문의: 총무 010-4686-9320 | <a href="https://open.kakao.com/o/pFIIRBAi" target="_blank" style="color:#9ca3af;">💬 카카오톡 채널</a></div>
+    <div style="margin-top:4px;">회비계좌: <span onclick="copyAccount(event)" style="cursor:pointer;color:#d1d5db;border-bottom:1px dashed #6b7280;" title="클릭하면 복사됩니다">카카오뱅크 7942&#8209;2614&#8209;9821 나성균</span> <span id="copy-toast" style="display:none;font-size:11px;color:#23a852;font-weight:700;">✅ 복사 완료!</span></div>
+  </div>
+  <div style="text-align:right;">
+    <div style="font-size:12px;color:#4b5563;">© 2026 중흥FC. All rights reserved.</div>
+  </div>
+</footer>
+<script>
+function copyAccount(e){
+  if(e) e.preventDefault();
+  navigator.clipboard.writeText('79422614982').then(()=>{
+    const t=document.getElementById('copy-toast');
+    t.style.display='inline'; setTimeout(()=>t.style.display='none',2000);
+  });
+}
+</script>
+</body>
+</html>
