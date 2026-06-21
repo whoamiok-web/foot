@@ -103,30 +103,29 @@
   <ul class="nav-links">
     <li class="nav-item-drop">
       <a href="intro.html" class="nav-active">소개 <span class="nav-arrow">▾</span></a>
-      <div class="nav-dropdown">
-        <a href="intro.html">팀 소개</a>
-        <a href="members.html">회원명단</a>
-      </div>
+      <div class="nav-dropdown"><a href="intro.html">팀 소개</a><a href="members.html">회원명단</a></div>
     </li>
     <li><a href="notice.html" class="">공지사항</a></li>
     <li><a href="schedule.html" class="">경기일정</a></li>
+    <li><a href="record.html" class="">경기기록</a></li>
     <li><a href="gallery.html" class="">갤러리</a></li>
   </ul>
 </nav>
 <style>
   nav{position:sticky;top:0;z-index:100;background:#111827;display:flex;align-items:center;justify-content:space-between;flex-wrap:nowrap;gap:16px;padding:0 24px;height:60px;box-shadow:0 2px 12px rgba(0,0,0,.3);}
   .nav-logo{display:flex;align-items:center;gap:10px;font-size:20px;font-weight:900;color:#fff;text-decoration:none;white-space:nowrap;}
-  .nav-links{display:flex;gap:18px;list-style:none;flex-wrap:nowrap;align-items:center;}
+  .nav-links{display:flex;gap:6px;list-style:none;flex-wrap:nowrap;align-items:center;}
   .nav-links li{position:relative;}
-  .nav-links a{color:#9ca3af;font-size:14px;font-weight:500;text-decoration:none;white-space:nowrap;transition:all .2s;display:inline-flex;align-items:center;gap:4px;padding:4px 10px;border-radius:6px;}
+  .nav-links a{color:#9ca3af;font-size:13px;font-weight:500;text-decoration:none;white-space:nowrap;display:inline-flex;align-items:center;gap:3px;padding:5px 11px;border-radius:6px;transition:color .2s,background .2s;}
   .nav-links a:hover{color:#fff;}
   .nav-active{color:#fff!important;background:#1a7f3c!important;}
-  .nav-arrow{font-size:9px;opacity:.7;}
+  .nav-arrow{font-size:9px;opacity:.6;}
+  .nav-item-drop:hover .nav-active,.nav-item-drop:hover>a:not(.nav-active){color:#fff;}
   .nav-dropdown{position:absolute;top:calc(100% + 10px);left:50%;transform:translateX(-50%) translateY(-4px);background:#1f2937;border-radius:10px;padding:6px 0;min-width:120px;box-shadow:0 8px 24px rgba(0,0,0,.3);opacity:0;pointer-events:none;transition:opacity .18s,transform .18s;z-index:200;}
   .nav-dropdown::before{content:'';position:absolute;top:-5px;left:50%;transform:translateX(-50%);border:5px solid transparent;border-bottom-color:#1f2937;border-top:none;}
   .nav-item-drop:hover .nav-dropdown{opacity:1;pointer-events:auto;transform:translateX(-50%) translateY(0);}
-  .nav-dropdown a{display:block;padding:9px 18px;color:#d1d5db;font-size:13px;font-weight:500;white-space:nowrap;text-decoration:none;border-radius:0;background:none;transition:background .15s,color .15s;}
-  .nav-dropdown a:hover{background:#374151;color:#fff;}
+  .nav-dropdown a{display:block;padding:9px 18px;color:#d1d5db;font-size:13px;font-weight:500;white-space:nowrap;text-decoration:none;background:none;border-radius:0;transition:background .15s,color .15s;}
+  .nav-dropdown a:hover{background:#374151!important;color:#fff!important;}
 </style>
 <div class="page-header">
   <div class="page-header-inner">
