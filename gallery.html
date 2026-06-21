@@ -25,14 +25,24 @@
 </head>
 <body>
 <nav>
-  <div class="nav-logo" onclick="location.href='index.html'">⚽ 중흥FC <span class="badge">조기축구</span></div>
-  <ul class="nav-links">
-    <li><a onclick="location.href='notice.html'">공지사항</a></li>
-    <li><a onclick="location.href='schedule.html'">경기일정</a></li>
-    <li><a onclick="location.href='members.html'" >회원명단</a></li>
-    <li><a onclick="location.href='gallery.html'" style="color:#fff;">갤러리</a></li>
+  <a style="display:flex;align-items:center;gap:10px;font-size:20px;font-weight:900;color:#fff;text-decoration:none;white-space:nowrap;cursor:pointer;" href="index.html">⚽ 중흥FC</a>
+  <ul style="display:flex;gap:18px;list-style:none;flex-wrap:nowrap;align-items:center;">
+    <li style="position:relative;">
+      <a href="intro.html" style="display:flex;align-items:center;gap:3px;">소개 <span style="font-size:10px;opacity:.7;">▾</span></a>
+      <div style="position:absolute;top:calc(100% + 14px);left:50%;transform:translateX(-50%);background:#1f2937;border-radius:10px;padding:6px 0;min-width:120px;box-shadow:0 8px 24px rgba(0,0,0,.3);opacity:0;pointer-events:none;transition:opacity .2s,transform .2s;" class="ddmenu">
+        <a href="intro.html" style="display:block;padding:9px 18px;color:#d1d5db;font-size:13px;font-weight:500;white-space:nowrap;">팀 소개</a>
+        <a href="members.html" style="display:block;padding:9px 18px;color:#d1d5db;font-size:13px;font-weight:500;white-space:nowrap;">회원명단</a>
+      </div>
+    </li>
+    <li><a href="notice.html">공지사항</a></li>
+    <li><a href="schedule.html">경기일정</a></li>
+    <li><a href="gallery.html" class="active">갤러리</a></li>
   </ul>
 </nav>
+<style>
+  nav li:hover .ddmenu{opacity:1!important;pointer-events:auto!important;}
+  nav a:hover{color:#fff!important;}
+</style>
 <div class="wrap">
   <div class="icon">📸</div>
   <h1>갤러리 준비 중</h1>
