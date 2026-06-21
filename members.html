@@ -402,7 +402,9 @@ function renderMembers(){
     else posOk=(m.pos===curPos);
     return posOk && (!curSearch || m.name.includes(curSearch));
   });
-  if(curPos==='집행부'){
+  if(curPos==='전체'){
+    filtered = filtered.slice().sort((a,b)=>a.name.localeCompare(b.name,'ko'));
+  } else if(curPos==='집행부'){
     filtered = filtered.sort((a,b)=>(EXEC_ORDER.indexOf(a.role)===-1?99:EXEC_ORDER.indexOf(a.role))-(EXEC_ORDER.indexOf(b.role)===-1?99:EXEC_ORDER.indexOf(b.role)));
   }
   if(filtered.length===0){ grid.innerHTML='<div class="empty">👤 등록된 회원이 없습니다.</div>'; setAdminUI(); return; }
