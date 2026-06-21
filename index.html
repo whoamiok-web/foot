@@ -74,25 +74,25 @@
     display: flex; gap: 0;
     background: rgba(255,255,255,.06);
     border: 1px solid rgba(255,255,255,.12);
-    border-radius: 18px; padding: 18px 0;
+    border-radius: 18px; padding: 20px 0;
     backdrop-filter: blur(8px);
-    width: 100%; max-width: 560px;
+    width: 100%; max-width: 580px;
   }
   .stat-item {
     text-align: center; flex: 1;
-    padding: 6px 8px;
-    border-right: 1px solid rgba(255,255,255,.1);
-    min-width: 0;
+    padding: 0 10px;
+    border-right: 1px solid rgba(255,255,255,.12);
+    min-width: 0; display: flex; flex-direction: column;
+    align-items: center; justify-content: center; gap: 6px;
   }
   .stat-item:last-child { border-right: none; }
   .stat-num {
-    font-size: clamp(13px, 3.5vw, 20px);
-    font-weight: 900; color: var(--green2);
-    line-height: 1.2; white-space: nowrap;
+    font-size: 16px; font-weight: 900; color: var(--green2);
+    line-height: 1; white-space: nowrap;
   }
   .stat-label {
-    font-size: clamp(10px, 2vw, 12px);
-    color: #9ca3af; margin-top: 5px; white-space: nowrap;
+    font-size: 11px; color: #9ca3af;
+    white-space: nowrap; line-height: 1;
   }
 
   /* ── SECTION ── */
