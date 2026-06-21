@@ -296,109 +296,16 @@
 <div class="section" id="schedule">
   <div class="section-header">
     <div class="section-title"><span>🗓</span> 경기 일정 · 결과</div>
-    <a href="#" class="more-btn">전체보기 →</a>
+    <a href="schedule.html" class="more-btn">전체보기 →</a>
   </div>
   <div class="tab-bar">
-    <button class="tab-btn active" onclick="switchTab('result', this)">최근 결과</button>
-    <button class="tab-btn" onclick="switchTab('upcoming', this)">예정 경기</button>
+    <button class="tab-btn active" onclick="homeScheduleTab('result',this)">최근 결과</button>
+    <button class="tab-btn" onclick="homeScheduleTab('upcoming',this)">예정 경기</button>
   </div>
-
-  <div id="tab-result" class="tab-content active">
-    <div class="schedule-grid">
-      <!-- 경기 1 -->
-      <div class="match-card">
-        <div class="match-meta">
-          <span class="match-date-badge">2026.06.14 토</span>
-          <span class="match-type">홈</span>
-        </div>
-        <div class="match-teams">
-          <div class="team">
-            <div class="team-name us">중흥FC</div>
-          </div>
-          <div class="score-box">
-            <span class="score-win">3</span>
-            <span class="score-sep">:</span>
-            <span class="score-lose">1</span>
-          </div>
-          <div class="team">
-            <div class="team-name">동천FC</div>
-          </div>
-        </div>
-        <div class="match-location">📍 일곡 생활체육공원</div>
-      </div>
-      <!-- 경기 2 -->
-      <div class="match-card">
-        <div class="match-meta">
-          <span class="match-date-badge">2026.06.07 토</span>
-          <span class="match-type away">원정</span>
-        </div>
-        <div class="match-teams">
-          <div class="team">
-            <div class="team-name us">중흥FC</div>
-          </div>
-          <div class="score-box">
-            <span class="score-win">2</span>
-            <span class="score-sep">:</span>
-            <span class="score-win">2</span>
-          </div>
-          <div class="team">
-            <div class="team-name">빛고을FC</div>
-          </div>
-        </div>
-        <div class="match-location">📍 북구 문화체육관 잔디구장</div>
-      </div>
-      <!-- 경기 3 -->
-      <div class="match-card">
-        <div class="match-meta">
-          <span class="match-date-badge">2026.05.31 토</span>
-          <span class="match-type">홈</span>
-        </div>
-        <div class="match-teams">
-          <div class="team">
-            <div class="team-name us">중흥FC</div>
-          </div>
-          <div class="score-box">
-            <span class="score-lose">1</span>
-            <span class="score-sep">:</span>
-            <span class="score-win">4</span>
-          </div>
-          <div class="team">
-            <div class="team-name">상무FC</div>
-          </div>
-        </div>
-        <div class="match-location">📍 일곡 생활체육공원</div>
-      </div>
-    </div>
-  </div>
-
-  <div id="tab-upcoming" class="tab-content">
-    <div class="schedule-grid">
-      <div class="match-card">
-        <div class="match-meta">
-          <span class="match-date-badge">2026.06.28 토</span>
-          <span class="match-type">홈</span>
-        </div>
-        <div class="match-teams">
-          <div class="team"><div class="team-name us">중흥FC</div></div>
-          <div class="score-box" style="font-size:18px;color:#9ca3af;">VS</div>
-          <div class="team"><div class="team-name">상무동FC</div></div>
-        </div>
-        <div class="upcoming-label">⏰ AM 7:00 킥오프</div>
-        <div class="match-location">📍 일곡 생활체육공원</div>
-      </div>
-      <div class="match-card">
-        <div class="match-meta">
-          <span class="match-date-badge">2026.07.05 토</span>
-          <span class="match-type away">원정</span>
-        </div>
-        <div class="match-teams">
-          <div class="team"><div class="team-name us">중흥FC</div></div>
-          <div class="score-box" style="font-size:18px;color:#9ca3af;">VS</div>
-          <div class="team"><div class="team-name">용봉FC</div></div>
-        </div>
-        <div class="upcoming-label">⏰ AM 7:00 킥오프</div>
-        <div class="match-location">📍 용봉동 체육공원</div>
-      </div>
+  <div id="home-schedule-list">
+    <div style="text-align:center;padding:32px;color:#9ca3af;font-size:14px;">
+      <div style="width:22px;height:22px;border:2px solid #e5e7eb;border-top-color:#1a7f3c;border-radius:50%;animation:spin .7s linear infinite;margin:0 auto 8px;"></div>
+      불러오는 중...
     </div>
   </div>
 </div>
@@ -535,12 +442,7 @@
 </footer>
 
 <script>
-  function switchTab(name, btn) {
-    document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
-    document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
-    document.getElementById('tab-' + name).classList.add('active');
-    btn.classList.add('active');
-  }
+
 
   // Smooth scroll for nav
   document.querySelectorAll('a[href^="#"]').forEach(a => {
@@ -607,6 +509,102 @@ function badgeClass(cat){ return cat==='NEW'?'badge-new':cat==='이벤트'?'badg
     console.error(e);
   }
 })();
+</script>
+
+
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+import { getDatabase, ref, query, orderByKey, limitToLast, get } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-database.js";
+
+const app2 = initializeApp({
+  apiKey:"AIzaSyDZjopLNSgnaqMOt4vml-GG-kha2OT8JEU",
+  authDomain:"joonghung-9a14c.firebaseapp.com",
+  databaseURL:"https://joonghung-9a14c-default-rtdb.asia-southeast1.firebasedatabase.app",
+  projectId:"joonghung-9a14c",
+  storageBucket:"joonghung-9a14c.firebasestorage.app",
+  messagingSenderId:"172884273870",
+  appId:"1:172884273870:web:32f594b0c8121a29a5be9f"
+}, "app2");
+const db2 = getDatabase(app2);
+
+let allMatches = [];
+let homeTab = 'result';
+
+async function loadHomeSchedule(){
+  try {
+    const snap = await get(ref(db2,'matches'));
+    allMatches = [];
+    if(snap.exists()) snap.forEach(c => allMatches.push({id:c.key,...c.val()}));
+    allMatches.sort((a,b) => b.date.localeCompare(a.date));
+    renderHomeSchedule();
+  } catch(e) {
+    document.getElementById('home-schedule-list').innerHTML =
+      '<div style="text-align:center;padding:24px;color:#9ca3af;">경기 정보를 불러올 수 없습니다.</div>';
+  }
+}
+
+function renderHomeSchedule(){
+  const list = document.getElementById('home-schedule-list');
+  const hasResult = m => m.games && m.games.some(g => g.us!==''&&g.us!==null&&g.us!==undefined);
+  const filtered = allMatches.filter(m => homeTab==='result' ? hasResult(m) : !hasResult(m));
+  const top = filtered.slice(0,3);
+
+  if(top.length===0){
+    list.innerHTML = '<div style="text-align:center;padding:32px;color:#9ca3af;font-size:14px;">등록된 경기가 없습니다.</div>';
+    return;
+  }
+
+  const days=['일','월','화','수','목','금','토'];
+  list.innerHTML = '<div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:14px;">' +
+    top.map(m => {
+      const d = m.date||'';
+      const dateDisp = d.replace(/-/g,'.');
+      const dateObj = d ? new Date(d) : null;
+      const dayStr = dateObj ? `(${days[dateObj.getDay()]})` : '';
+      const typeLabel = m.homeaway||'홈';
+      const typeCls = typeLabel==='홈'?'match-type':'match-type away';
+
+      const gamesHTML = (m.games||[]).map((g,i) => {
+        const hasScore = g.us!==''&&g.us!==null&&g.us!==undefined&&g.opp!==''&&g.opp!==null&&g.opp!==undefined;
+        const us = parseInt(g.us), opp = parseInt(g.opp);
+        let scoreHTML = '';
+        if(hasScore && !isNaN(us) && !isNaN(opp)){
+          const wc = us>opp?'score-win':us===opp?'score-win':'score-lose';
+          const oc = opp>us?'score-lose':opp===us?'score-win':'score-win';
+          scoreHTML = `<div class="score-box" style="font-size:20px;">
+            <span class="${us>opp?'score-win':us<opp?'score-lose':''}">${us}</span>
+            <span class="score-sep">:</span>
+            <span class="${opp>us?'score-lose':opp<us?'score-win':''}">${opp}</span>
+          </div>`;
+        } else {
+          scoreHTML = `<div class="score-box" style="font-size:15px;color:#9ca3af;">VS</div>`;
+        }
+        return `<div style="display:flex;align-items:center;gap:8px;padding:5px 0;border-bottom:1px solid #f3f4f6;font-size:12px;color:#6b7280;">${i+1}게임&nbsp;
+          <span style="font-size:13px;font-weight:800;color:#1a7f3c;">중흥FC</span>
+          ${scoreHTML}
+          <span style="font-size:13px;font-weight:700;">${g.opp_name||'상대팀'}</span>
+        </div>`;
+      }).join('');
+
+      return `<div class="match-card" onclick="location.href='schedule.html'" style="cursor:pointer;flex-direction:column;gap:10px;padding:18px 20px;">
+        <div class="match-meta">
+          <span class="match-date-badge">${dateDisp} ${dayStr}</span>
+          <span class="${typeCls}">${typeLabel}</span>
+        </div>
+        <div>${gamesHTML||'<div style="font-size:13px;color:#9ca3af;">게임 정보 없음</div>'}</div>
+        ${m.location?`<div class="match-location">📍 ${m.location}</div>`:''}
+      </div>`;
+    }).join('') + '</div>';
+}
+
+window.homeScheduleTab = function(tab, btn){
+  homeTab = tab;
+  document.querySelectorAll('.tab-btn').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+  renderHomeSchedule();
+};
+
+loadHomeSchedule();
 </script>
 
 </body>
