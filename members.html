@@ -174,6 +174,7 @@ document.querySelectorAll('.nav-links a').forEach(a=>{
         <button class="pos-btn" data-pos="GK">GK</button>
         <button class="pos-btn" data-pos="고문">고문</button>
         <button class="pos-btn" data-pos="집행부">집행부</button>
+        <button class="pos-btn" data-pos="준회원">준회원</button>
       </div>
       <div class="search-box">🔍<input type="text" id="search-input" placeholder="이름 검색..."></div>
       <span id="admin-ui"></span>
@@ -211,6 +212,7 @@ document.querySelectorAll('.nav-links a').forEach(a=>{
         <option value="수석">수석코치</option>
         <option value="코치">코치</option>
         <option value="대외">대외</option>
+        <option value="준회원">준회원</option>
       </select>
     </div>
     <div class="fg"><label>휴대번호</label><input type="tel" id="f-phone" placeholder="010-0000-0000"></div>
@@ -399,6 +401,7 @@ function renderMembers(){
     if(curPos==='전체') posOk=true;
     else if(curPos==='고문') posOk=(m.role==='고문');
     else if(curPos==='집행부') posOk=EXEC_ROLES.includes(m.role);
+    else if(curPos==='준회원') posOk=(m.role==='준회원');
     else posOk=(m.pos===curPos);
     return posOk && (!curSearch || m.name.includes(curSearch));
   });
