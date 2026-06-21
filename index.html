@@ -33,22 +33,24 @@
     position: sticky; top: 0; z-index: 100;
     background: var(--dark);
     display: flex; align-items: center; justify-content: space-between;
-    padding: 0 40px; height: 60px;
+    flex-wrap: nowrap; gap: 16px;
+    padding: 0 24px; height: 60px;
     box-shadow: 0 2px 12px rgba(0,0,0,.3);
   }
   .nav-logo {
     display: flex; align-items: center; gap: 10px;
     font-size: 20px; font-weight: 900; color: var(--white); text-decoration: none;
+    white-space: nowrap;
   }
   .nav-logo .badge {
     background: var(--green); color: #fff;
     font-size: 11px; font-weight: 700;
     padding: 2px 7px; border-radius: 6px; letter-spacing: .5px;
   }
-  .nav-links { display: flex; gap: 28px; list-style: none; }
+  .nav-links { display: flex; gap: 18px; list-style: none; flex-wrap: nowrap; }
   .nav-links a {
-    color: #9ca3af; font-size: 14px; font-weight: 500;
-    text-decoration: none; transition: color .2s;
+    color: #9ca3af; font-size: 13px; font-weight: 500;
+    text-decoration: none; transition: color .2s; white-space: nowrap;
   }
   .nav-links a:hover, .nav-links a.active { color: var(--white); }
 
@@ -279,12 +281,33 @@
 <div class="section" id="notice">
   <div class="section-header">
     <div class="section-title"><span>📢</span> 공지사항</div>
-    <a href="notice.html" class="more-btn">전체보기 →</a>
+    <a href="joonghung_fc_notice.html" class="more-btn">전체보기 →</a>
   </div>
-  <div class="notice-list" id="home-notice-list">
-    <div style="text-align:center;padding:24px;color:#9ca3af;font-size:14px;">
-      <div style="width:24px;height:24px;border:2px solid #e5e7eb;border-top-color:#1a7f3c;border-radius:50%;animation:spin .7s linear infinite;margin:0 auto 8px;"></div>
-      불러오는 중...
+  <div class="notice-list">
+    <div class="notice-item" onclick="location.href='joonghung_fc_notice.html'">
+      <span class="notice-badge badge-new">NEW</span>
+      <span class="notice-title">7월 정기 친선경기 일정 안내 – 상무동FC 초청전</span>
+      <span class="notice-date">2026.06.20</span>
+    </div>
+    <div class="notice-item" onclick="location.href='joonghung_fc_notice.html'">
+      <span class="notice-badge badge-event">이벤트</span>
+      <span class="notice-title">2026 하반기 회비 납부 안내 (7월 1일~15일)</span>
+      <span class="notice-date">2026.06.18</span>
+    </div>
+    <div class="notice-item" onclick="location.href='joonghung_fc_notice.html'">
+      <span class="notice-badge badge-info">안내</span>
+      <span class="notice-title">6월 22일(월) 우천으로 인한 훈련 취소 공지</span>
+      <span class="notice-date">2026.06.15</span>
+    </div>
+    <div class="notice-item" onclick="location.href='joonghung_fc_notice.html'">
+      <span class="notice-badge badge-info">안내</span>
+      <span class="notice-title">신입 회원 모집 안내 – 누구나 환영합니다 🙌</span>
+      <span class="notice-date">2026.06.10</span>
+    </div>
+    <div class="notice-item" onclick="location.href='joonghung_fc_notice.html'">
+      <span class="notice-badge badge-event">이벤트</span>
+      <span class="notice-title">창단 9주년 기념 MT 사진 공유 및 후기</span>
+      <span class="notice-date">2026.06.01</span>
     </div>
   </div>
 </div>
@@ -564,45 +587,5 @@
     });
   });
 </script>
-
-<script type="module">
-import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
-import { getDatabase, ref, get } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-database.js";
-
-const app = initializeApp({
-  apiKey: "AIzaSyDZjopLNSgnaqMOt4vml-GG-kha2OT8JEU",
-  authDomain: "joonghung-9a14c.firebaseapp.com",
-  databaseURL: "https://joonghung-9a14c-default-rtdb.asia-southeast1.firebasedatabase.app",
-  projectId: "joonghung-9a14c",
-  storageBucket: "joonghung-9a14c.firebasestorage.app",
-  messagingSenderId: "172884273870",
-  appId: "1:172884273870:web:32f594b0c8121a29a5be9f"
-});
-const db = getDatabase(app);
-
-function badgeClass(cat){ return cat==='NEW'?'badge-new':cat==='이벤트'?'badge-event':'badge-info'; }
-
-async function loadHomeNotice(){
-  const list = document.getElementById('home-notice-list');
-  try {
-    const snap = await get(ref(db,'posts'));
-    if(!snap.exists()){ list.innerHTML='<div style="text-align:center;padding:24px;color:#9ca3af;">등록된 공지사항이 없습니다.</div>'; return; }
-    let posts=[];
-    snap.forEach(c=>posts.push({id:c.key,...c.val()}));
-    posts.sort((a,b)=>(b.createdAt||0)-(a.createdAt||0));
-    const top=posts.slice(0,5);
-    list.innerHTML=top.map(p=>`
-      <div class="notice-item" onclick="location.href='notice.html?id=${p.id}'" style="cursor:pointer;">
-        <span class="notice-badge ${badgeClass(p.cat)}">${p.cat}</span>
-        <span class="notice-title">${p.title}</span>
-        <span class="notice-date">${p.date}</span>
-      </div>`).join('');
-  } catch(e){
-    list.innerHTML='<div style="text-align:center;padding:24px;color:#9ca3af;">공지사항을 불러올 수 없습니다.</div>';
-  }
-}
-loadHomeNotice();
-</script>
-
 </body>
 </html>
