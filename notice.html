@@ -131,6 +131,22 @@
   footer { background:var(--dark);color:#6b7280;padding:28px 40px;font-size:13px;display:flex;align-items:center;justify-content:space-between; }
   .footer-logo { font-size:17px;font-weight:900;color:#fff;margin-bottom:4px; }
 
+
+  /* ── 관리자 모달 ── */
+  .modal-overlay { position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:200;display:flex;align-items:center;justify-content:center;backdrop-filter:blur(4px); }
+  .modal-box { background:#fff;border-radius:16px;padding:32px;width:320px;box-shadow:0 8px 40px rgba(0,0,0,.2); }
+  .modal-title { font-size:18px;font-weight:800;margin-bottom:6px; }
+  .modal-sub { font-size:13px;color:var(--gray2);margin-bottom:20px; }
+  .modal-input { width:100%;padding:11px 16px;border:1.5px solid var(--gray3);border-radius:9px;font-size:15px;font-family:inherit;outline:none;letter-spacing:3px;margin-bottom:8px; }
+  .modal-input:focus { border-color:var(--green);box-shadow:0 0 0 3px rgba(26,127,60,.1); }
+  .modal-error { font-size:12px;color:#ef4444;margin-bottom:12px;min-height:18px; }
+  .modal-btns { display:flex;gap:8px; }
+  .modal-confirm { flex:1;padding:11px;border-radius:9px;background:var(--green);color:#fff;border:none;font-size:14px;font-weight:700;cursor:pointer;font-family:inherit; }
+  .modal-confirm:hover { background:#155f2e; }
+  .modal-cancel { padding:11px 18px;border-radius:9px;border:1.5px solid var(--gray3);background:#fff;font-size:14px;font-weight:600;color:var(--gray2);cursor:pointer;font-family:inherit; }
+  .admin-badge { display:inline-flex;align-items:center;gap:5px;background:#ecfdf5;color:var(--green);border:1px solid #a7f3d0;font-size:12px;font-weight:700;padding:4px 10px;border-radius:6px;cursor:pointer; }
+  .admin-badge:hover { background:#d1fae5; }
+
   @media(max-width:640px){
     .main-wrap{padding:24px 16px 48px;} nav{padding:0 16px;} .page-header{padding:28px 20px;}
     .notice-table-header,.notice-row{grid-template-columns:44px 68px 1fr 68px;}
@@ -180,7 +196,8 @@
           <input type="text" id="search-input" placeholder="제목 검색..." oninput="onSearch()">
         </div>
       </div>
-      <button class="write-btn" onclick="showWrite()">✏️ 글쓰기</button>
+      <div id="admin-status"></div>
+        <button class="write-btn" onclick="checkAdmin()">✏️ 글쓰기</button>
     </div>
     <div class="notice-table">
       <div class="notice-table-header">
@@ -213,7 +230,7 @@
     <div class="detail-nav" id="d-nav"></div>
     <div class="detail-actions">
       <button class="btn-back" onclick="showList()">← 목록으로</button>
-      <div class="detail-edit-btns">
+      <div class="detail-edit-btns" id="edit-btns" style="display:none;">
         <button class="btn-edit" onclick="editPost()">✏️ 수정</button>
         <button class="btn-delete" onclick="deletePost()">🗑 삭제</button>
       </div>
@@ -272,6 +289,22 @@
   </div>
 
 </div>
+
+<!-- 관리자 비밀번호 모달 -->
+<div class="modal-overlay" id="admin-modal" style="display:none;">
+  <div class="modal-box">
+    <div class="modal-title">🔐 관리자 확인</div>
+    <div class="modal-sub">글쓰기는 관리자만 가능합니다.</div>
+    <input class="modal-input" type="password" id="admin-pw-input" placeholder="비밀번호" maxlength="20"
+      onkeydown="if(event.key==='Enter') confirmAdmin()">
+    <div class="modal-error" id="admin-pw-error"></div>
+    <div class="modal-btns">
+      <button class="modal-cancel" onclick="closeAdminModal()">취소</button>
+      <button class="modal-confirm" onclick="confirmAdmin()">확인</button>
+    </div>
+  </div>
+</div>
+
 
 <footer>
   <div>
@@ -438,6 +471,7 @@ window.showDetail = async function(id) {
   if(next) nav+=`<div class="detail-nav-row" onclick="showDetail('${next.id}')"><span class="nav-label">다음</span><span>${next.title}</span></div>`;
   document.getElementById('d-nav').innerHTML = nav || '<div style="padding:14px 24px;font-size:13px;color:#9ca3af;">이전/다음 글이 없습니다.</div>';
 
+  setAdminStatus();
   switchView('detail');
 }
 
@@ -456,6 +490,7 @@ window.showWrite = function(isEdit=false) {
 }
 
 window.editPost = function(){
+  if(!isAdmin()){ checkAdmin(()=>editPost()); return; }
   const p=allPosts.find(x=>x.id===currentDetailId); if(!p) return;
   editingId=p.id;
   document.getElementById('form-title').textContent='글 수정';
@@ -468,6 +503,7 @@ window.editPost = function(){
 }
 
 window.deletePost = async function(){
+  if(!isAdmin()){ checkAdmin(()=>deletePost()); return; }
   if(!confirm('정말 삭제하시겠습니까?')) return;
   await remove(ref(db,'posts/'+currentDetailId));
   allPosts = allPosts.filter(p=>p.id!==currentDetailId);
@@ -476,6 +512,7 @@ window.deletePost = async function(){
 }
 
 window.submitPost = async function(){
+  if(!isAdmin()){ checkAdmin(()=>submitPost()); return; }
   const title  = document.getElementById('f-title').value.trim();
   const body   = document.getElementById('f-body').value.trim();
   const author = document.getElementById('f-author').value.trim();
@@ -574,7 +611,71 @@ function switchView(v){
 function showToast(msg){ const t=document.getElementById('toast');t.textContent=msg;t.classList.add('show');setTimeout(()=>t.classList.remove('show'),2500); }
 
 // URL 파라미터로 특정 글 바로 열기
+
+/* ── 관리자 권한 ── */
+const ADMIN_PW = 'joonghung2015'; // ← 비밀번호 변경 가능
+const ADMIN_KEY = 'jfc_admin';
+let adminCallback = null;
+
+function isAdmin(){ return sessionStorage.getItem(ADMIN_KEY) === '1'; }
+
+function setAdminStatus(){
+  const el = document.getElementById('admin-status');
+  if(!el) return;
+  if(isAdmin()){
+    el.innerHTML = '<span class="admin-badge" onclick="logoutAdmin()">✅ 관리자 · 로그아웃</span>';
+  } else {
+    el.innerHTML = '';
+  }
+  // 수정/삭제 버튼 표시 제어
+  const editBtns = document.getElementById('edit-btns');
+  if(editBtns) editBtns.style.display = isAdmin() ? 'flex' : 'none';
+}
+
+function checkAdmin(cb){
+  if(isAdmin()){
+    if(cb) cb(); else showWrite();
+    return;
+  }
+  adminCallback = cb || null;
+  document.getElementById('admin-pw-input').value='';
+  document.getElementById('admin-pw-error').textContent='';
+  document.getElementById('admin-modal').style.display='flex';
+  setTimeout(()=>document.getElementById('admin-pw-input').focus(), 100);
+}
+
+function confirmAdmin(){
+  const pw = document.getElementById('admin-pw-input').value;
+  if(pw === ADMIN_PW){
+    sessionStorage.setItem(ADMIN_KEY, '1');
+    document.getElementById('admin-modal').style.display='none';
+    setAdminStatus();
+    if(adminCallback) adminCallback();
+    else showWrite();
+  } else {
+    document.getElementById('admin-pw-error').textContent='❌ 비밀번호가 틀렸습니다.';
+    document.getElementById('admin-pw-input').value='';
+    document.getElementById('admin-pw-input').focus();
+  }
+}
+
+function closeAdminModal(){
+  document.getElementById('admin-modal').style.display='none';
+}
+
+function logoutAdmin(){
+  sessionStorage.removeItem(ADMIN_KEY);
+  setAdminStatus();
+  showToast('로그아웃 되었습니다.');
+}
+
+window.checkAdmin   = checkAdmin;
+window.confirmAdmin = confirmAdmin;
+window.closeAdminModal = closeAdminModal;
+window.logoutAdmin  = logoutAdmin;
+
 async function init() {
+  setAdminStatus();
   await loadPosts();
   const urlId = new URLSearchParams(location.search).get('id');
   if(urlId) {
