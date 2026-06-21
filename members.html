@@ -170,6 +170,8 @@
         <button class="pos-btn" data-pos="MF">MF</button>
         <button class="pos-btn" data-pos="DF">DF</button>
         <button class="pos-btn" data-pos="GK">GK</button>
+        <button class="pos-btn" data-pos="고문">고문</button>
+        <button class="pos-btn" data-pos="집행부">집행부</button>
       </div>
       <div class="search-box">🔍<input type="text" id="search-input" placeholder="이름 검색..."></div>
       <span id="admin-ui"></span>
@@ -195,6 +197,18 @@
         <option value="MF">MF (미드필더)</option>
         <option value="DF">DF (수비수)</option>
         <option value="GK">GK (골키퍼)</option>
+      </select>
+    </div>
+    <div class="fg"><label>역할 <span style="font-size:11px;color:var(--gray2);">(선택 – 이름 옆에 표시)</span></label>
+      <select id="f-role">
+        <option value="">없음</option>
+        <option value="고문">고문</option>
+        <option value="회장">회장</option>
+        <option value="감독">감독</option>
+        <option value="총무">총무</option>
+        <option value="수석">수석코치</option>
+        <option value="코치">코치</option>
+        <option value="대외">대외</option>
       </select>
     </div>
     <div class="fg"><label>휴대번호 <span style="font-size:11px;color:var(--gray2);">(비밀번호로 잠금)</span></label>
@@ -309,6 +323,7 @@ function openModal(m){
   document.getElementById('f-num').value  = m ? (m.num||'') : '';
   document.getElementById('f-pos').value  = m ? (m.pos||'MF') : 'MF';
   document.getElementById('f-phone').value = m ? (m.phone||'') : '';
+  document.getElementById('f-role').value  = m ? (m.role||'') : '';
   document.getElementById('member-modal').style.display='flex';
   setTimeout(()=>document.getElementById('f-name').focus(),100);
 }
@@ -329,7 +344,7 @@ function loadMembers(){
 function saveMember(){
   const name = document.getElementById('f-name').value.trim();
   if(!name){ showToast('⚠️ 이름을 입력해 주세요.'); return; }
-  const data = { name, num: document.getElementById('f-num').value, pos: document.getElementById('f-pos').value, phone: document.getElementById('f-phone').value.trim() };
+  const data = { name, num: document.getElementById('f-num').value, pos: document.getElementById('f-pos').value, role: document.getElementById('f-role').value, phone: document.getElementById('f-phone').value.trim() };
   const btn = document.getElementById('btn-submit');
   btn.disabled=true; btn.textContent='저장 중...';
   const reset = () => { btn.disabled=false; btn.textContent=editId?'수정하기':'추가하기'; };
@@ -358,10 +373,15 @@ function renderSummary(){
   ['FW','MF','DF','GK'].forEach(p=>{ document.getElementById('s-'+p.toLowerCase()).textContent = allMembers.filter(m=>m.pos===p).length; });
 }
 
+const EXEC_ROLES = ['회장','감독','총무','수석','코치','대외'];
 function renderMembers(){
   const grid = document.getElementById('members-grid');
   const filtered = allMembers.filter(m=>{
-    const posOk = curPos==='전체' || m.pos===curPos;
+    let posOk = false;
+    if(curPos==='전체') posOk=true;
+    else if(curPos==='고문') posOk=(m.role==='고문');
+    else if(curPos==='집행부') posOk=EXEC_ROLES.includes(m.role);
+    else posOk=(m.pos===curPos);
     const srchOk = !curSearch || m.name.includes(curSearch);
     return posOk && srchOk;
   });
@@ -374,7 +394,7 @@ function renderMembers(){
       </div>
       <div class="member-num">${m.num||'-'}</div>
       <div class="avatar" style="background:${posColor[m.pos]||'#f3f4f6'};">${posEmoji[m.pos]||'⚽'}</div>
-      <div class="member-name">${m.name}</div>
+      <div class="member-name">${m.name}${m.role?` <span style="font-size:10px;font-weight:700;color:#6b7280;">(${m.role})</span>`:''}</div>
       <span class="pos-badge ${posCls[m.pos]||''}">${m.pos||'?'}</span>
       ${m.phone ? `<span class="phone-btn" data-id="${m.id}" data-phone="${m.phone}" data-name="${m.name}">📱 휴대번호</span>` : ''}
       <div class="phone-reveal" id="ph-${m.id}"></div>
