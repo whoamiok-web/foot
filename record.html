@@ -88,15 +88,16 @@
     <li><a href="notice.html" class="">공지사항</a></li>
     <li><a href="schedule.html" class="">경기일정</a></li>
     <li><a href="record.html" class="nav-active">경기기록</a></li>
+    <li><a href="attendance.html" class="">참여율</a></li>
     <li><a href="gallery.html" class="">갤러리</a></li>
   </ul>
 </nav>
 <style>
-  nav{position:sticky;top:0;z-index:100;background:#111827;display:flex;align-items:center;justify-content:space-between;flex-wrap:nowrap;gap:12px;padding:0 20px;height:60px;box-shadow:0 2px 12px rgba(0,0,0,.3);}
-  .nav-logo{font-size:18px;font-weight:900;color:#fff;text-decoration:none;white-space:nowrap;flex-shrink:0;}
-  .nav-links{display:flex;gap:2px;list-style:none;flex-wrap:nowrap;align-items:center;flex-shrink:0;}
+  nav{position:sticky;top:0;z-index:100;background:#111827;display:flex;align-items:center;justify-content:space-between;flex-wrap:nowrap;gap:10px;padding:0 16px;height:60px;box-shadow:0 2px 12px rgba(0,0,0,.3);}
+  .nav-logo{font-size:17px;font-weight:900;color:#fff;text-decoration:none;white-space:nowrap;flex-shrink:0;}
+  .nav-links{display:flex;gap:1px;list-style:none;flex-wrap:nowrap;align-items:center;flex-shrink:0;}
   .nav-links li{position:relative;}
-  .nav-links a{color:#9ca3af;font-size:12px;font-weight:500;text-decoration:none;white-space:nowrap;display:inline-flex;align-items:center;gap:2px;padding:4px 8px;border-radius:6px;transition:color .2s,background .2s;}
+  .nav-links a{color:#9ca3af;font-size:12px;font-weight:500;text-decoration:none;white-space:nowrap;display:inline-flex;align-items:center;gap:2px;padding:4px 7px;border-radius:6px;transition:color .2s,background .2s;}
   .nav-links a:hover{color:#fff;}
   .nav-active{color:#fff!important;background:#1a7f3c!important;}
   .nav-arrow{font-size:8px;opacity:.6;}
@@ -105,11 +106,7 @@
   .nav-item-drop:hover .nav-dropdown{opacity:1;pointer-events:auto;transform:translateX(-50%) translateY(0);}
   .nav-dropdown a{display:block;padding:8px 16px;color:#d1d5db;font-size:13px;font-weight:500;white-space:nowrap;text-decoration:none;background:none;border-radius:0;transition:background .15s,color .15s;}
   .nav-dropdown a:hover{background:#374151!important;color:#fff!important;}
-  @media(max-width:480px){
-    .nav-logo{font-size:16px;}
-    .nav-links{gap:1px;}
-    .nav-links a{font-size:13px;padding:4px 7px;}
-  }
+  @media(max-width:480px){.nav-logo{font-size:15px;}.nav-links a{font-size:11px;padding:3px 5px;}}
 </style>
 <div class="page-header">
   <div class="page-header-inner">
