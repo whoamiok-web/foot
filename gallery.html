@@ -4,23 +4,74 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>갤러리 – 중흥FC</title>
-<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;700;900&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700;900&display=swap" rel="stylesheet">
 <style>
-  *{box-sizing:border-box;margin:0;padding:0;}
-  body{font-family:'Noto Sans KR',sans-serif;background:#f4f6f8;min-height:100vh;display:flex;flex-direction:column;}
-  nav{background:#111827;display:flex;align-items:center;justify-content:space-between;padding:0 24px;height:60px;}
-  .nav-logo{font-size:20px;font-weight:900;color:#fff;cursor:pointer;display:flex;align-items:center;gap:8px;}
-  .badge{background:#1a7f3c;color:#fff;font-size:11px;padding:2px 7px;border-radius:6px;}
-  .nav-links{display:flex;gap:18px;list-style:none;}
-  .nav-links a{color:#9ca3af;font-size:13px;text-decoration:none;cursor:pointer;}
-  .nav-links a:hover{color:#fff;}
-  .wrap{flex:1;display:flex;align-items:center;justify-content:center;flex-direction:column;gap:20px;padding:60px 20px;}
-  .icon{font-size:72px;}
-  h1{font-size:24px;font-weight:900;color:#111827;}
-  p{font-size:15px;color:#6b7280;text-align:center;line-height:1.7;}
-  .back-btn{margin-top:8px;padding:12px 28px;background:#1a7f3c;color:#fff;border:none;border-radius:10px;font-size:15px;font-weight:700;cursor:pointer;font-family:inherit;}
-  .back-btn:hover{background:#155f2e;}
-  footer{background:#111827;color:#6b7280;padding:24px 40px;font-size:13px;text-align:center;}
+  *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+  :root{--green:#1a7f3c;--green2:#23a852;--dark:#111827;--gray1:#374151;--gray2:#6b7280;--gray3:#d1d5db;--bg:#f4f6f8;--white:#fff;--shadow:0 2px 16px rgba(0,0,0,.07);--radius:14px;}
+  body{font-family:'Noto Sans KR','Apple SD Gothic Neo','Malgun Gothic',sans-serif;background:var(--bg);color:var(--dark);min-height:100vh;}
+
+  .page-header{background:linear-gradient(135deg,#0f2027 0%,#1a4a2e 60%,#203a43 100%);padding:40px 40px 36px;}
+  .page-header-inner{max-width:900px;margin:0 auto;}
+  .breadcrumb{font-size:12px;color:#6b7280;margin-bottom:10px;display:flex;align-items:center;gap:6px;}
+  .breadcrumb .cur{color:var(--green2);font-weight:600;}
+  .page-header h1{font-size:28px;font-weight:900;color:#fff;}
+  .page-header p{font-size:14px;color:#9ca3af;margin-top:6px;}
+
+  .main-wrap{max-width:900px;margin:0 auto;padding:32px 40px 60px;}
+
+  /* 메인 앨범 카드 */
+  .album-hero{background:#fff;border-radius:var(--radius);box-shadow:var(--shadow);overflow:hidden;margin-bottom:24px;}
+  .album-hero-top{background:linear-gradient(135deg,#0f2027,#1a4a2e);padding:40px;text-align:center;position:relative;}
+  .album-icon{font-size:64px;margin-bottom:16px;}
+  .album-hero-title{font-size:22px;font-weight:900;color:#fff;margin-bottom:8px;}
+  .album-hero-sub{font-size:14px;color:#9ca3af;}
+  .album-hero-body{padding:28px 32px;}
+  .album-desc{font-size:15px;color:var(--gray1);line-height:1.8;margin-bottom:24px;}
+  .album-open-btn{display:inline-flex;align-items:center;gap:10px;background:var(--green);color:#fff;border:none;border-radius:12px;padding:14px 32px;font-size:16px;font-weight:700;cursor:pointer;font-family:inherit;text-decoration:none;transition:background .2s;}
+  .album-open-btn:hover{background:#155f2e;}
+  .album-open-btn .btn-icon{font-size:20px;}
+
+  /* 추가 앨범 목록 */
+  .section-title{font-size:18px;font-weight:800;margin-bottom:16px;display:flex;align-items:center;gap:8px;}
+  .album-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:14px;}
+  .album-card{background:#fff;border-radius:var(--radius);box-shadow:var(--shadow);overflow:hidden;cursor:pointer;transition:transform .15s;}
+  .album-card:hover{transform:translateY(-3px);}
+  .album-thumb{height:140px;display:flex;align-items:center;justify-content:center;font-size:48px;}
+  .album-card-body{padding:14px 16px;}
+  .album-card-title{font-size:14px;font-weight:700;margin-bottom:4px;}
+  .album-card-sub{font-size:12px;color:var(--gray2);}
+  .album-card-link{display:inline-flex;align-items:center;gap:5px;margin-top:10px;font-size:13px;font-weight:600;color:var(--green);text-decoration:none;}
+  .album-card-link:hover{text-decoration:underline;}
+
+  /* 관리자 섹션 */
+  .admin-section{background:#fff;border-radius:var(--radius);box-shadow:var(--shadow);padding:24px 28px;margin-bottom:24px;display:none;}
+  .admin-section.show{display:block;}
+  .admin-section-title{font-size:15px;font-weight:700;margin-bottom:14px;color:var(--dark);}
+  .album-form{display:flex;flex-direction:column;gap:10px;}
+  .album-form input{padding:10px 13px;border:1.5px solid var(--gray3);border-radius:8px;font-size:14px;font-family:inherit;outline:none;}
+  .album-form input:focus{border-color:var(--green);}
+  .album-form-row{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
+  .btn-add-album{background:var(--green);color:#fff;border:none;border-radius:8px;padding:10px 20px;font-size:14px;font-weight:700;cursor:pointer;font-family:inherit;align-self:flex-start;}
+
+  .top-bar{display:flex;align-items:center;justify-content:space-between;margin-bottom:20px;}
+  .admin-badge{display:inline-flex;align-items:center;gap:5px;background:#ecfdf5;color:var(--green);border:1px solid #a7f3d0;font-size:12px;font-weight:700;padding:4px 10px;border-radius:6px;cursor:pointer;}
+  .admin-btn{background:var(--green);color:#fff;border:none;border-radius:8px;padding:8px 16px;font-size:13px;font-weight:700;cursor:pointer;font-family:inherit;}
+
+  /* 비번 모달 */
+  .overlay{position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:200;display:flex;align-items:center;justify-content:center;backdrop-filter:blur(4px);}
+  .mbox{background:#fff;border-radius:16px;padding:28px;width:320px;max-width:95vw;box-shadow:0 8px 40px rgba(0,0,0,.2);}
+  .mbox h3{font-size:18px;font-weight:800;margin-bottom:16px;}
+  .pw-input{width:100%;padding:11px 16px;border:1.5px solid var(--gray3);border-radius:9px;font-size:15px;font-family:inherit;outline:none;letter-spacing:3px;margin-bottom:6px;}
+  .pw-err{font-size:12px;color:#ef4444;min-height:18px;margin-bottom:10px;}
+  .mbtns{display:flex;gap:8px;justify-content:flex-end;}
+  .mbtn-ok{padding:10px 22px;border-radius:9px;background:var(--green);color:#fff;border:none;font-size:14px;font-weight:700;cursor:pointer;font-family:inherit;}
+  .mbtn-cancel{padding:10px 16px;border-radius:9px;border:1.5px solid var(--gray3);background:#fff;font-size:14px;font-weight:600;color:var(--gray2);cursor:pointer;font-family:inherit;}
+
+  .toast{position:fixed;bottom:30px;left:50%;transform:translateX(-50%) translateY(20px);background:var(--dark);color:#fff;padding:12px 24px;border-radius:10px;font-size:14px;font-weight:600;opacity:0;transition:all .3s;pointer-events:none;z-index:999;}
+  .toast.show{opacity:1;transform:translateX(-50%) translateY(0);}
+  footer{background:var(--dark);color:#6b7280;padding:28px 40px;font-size:13px;display:flex;align-items:center;justify-content:space-between;}
+  .footer-logo{font-size:17px;font-weight:900;color:#fff;margin-bottom:4px;}
+  @media(max-width:640px){.main-wrap{padding:24px 16px 48px;}.page-header{padding:28px 20px;}.album-hero-body{padding:20px;}.album-form-row{grid-template-columns:1fr;}footer{flex-direction:column;gap:12px;}}
 </style>
 </head>
 <body>
@@ -51,18 +102,190 @@
   .nav-item-drop:hover .nav-dropdown{opacity:1;pointer-events:auto;transform:translateX(-50%) translateY(0);}
   .nav-dropdown a{display:block;padding:8px 16px;color:#d1d5db;font-size:13px;font-weight:500;white-space:nowrap;text-decoration:none;background:none;border-radius:0;transition:background .15s,color .15s;}
   .nav-dropdown a:hover{background:#374151!important;color:#fff!important;}
-  @media(max-width:480px){
-    .nav-logo{font-size:16px;}
-    .nav-links{gap:1px;}
-    .nav-links a{font-size:13px;padding:4px 7px;}
-  }
+  @media(max-width:480px){.nav-logo{font-size:16px;}.nav-links{gap:1px;}.nav-links a{font-size:13px;padding:4px 7px;}}
 </style>
-<div class="wrap">
-  <div class="icon">📸</div>
-  <h1>갤러리 준비 중</h1>
-  <p>현재 페이지를 열심히 준비하고 있습니다.<br>조금만 기다려 주세요! 🙏</p>
-  <button class="back-btn" onclick="location.href='index.html'">← 홈으로 돌아가기</button>
+
+
+<div class="page-header">
+  <div class="page-header-inner">
+    <div class="breadcrumb"><span onclick="location.href='index.html'" style="cursor:pointer;">홈</span><span>›</span><span class="cur">갤러리</span></div>
+    <h1>📸 갤러리</h1>
+    <p>중흥FC의 소중한 순간들을 담았습니다.</p>
+  </div>
 </div>
-<footer>© 2026 중흥FC. All rights reserved.</footer>
+
+<div class="main-wrap">
+
+  <div class="top-bar">
+    <span id="admin-ui"></span>
+    <button class="admin-btn" id="btn-admin-toggle" style="display:none;">+ 앨범 추가</button>
+  </div>
+
+  <!-- 관리자 앨범 추가 폼 -->
+  <div class="admin-section" id="admin-section">
+    <div class="admin-section-title">📁 Google Photos 앨범 추가</div>
+    <div class="album-form">
+      <div class="album-form-row">
+        <input type="text" id="f-album-title" placeholder="앨범 이름 (예: 2026 봄 리그)">
+        <input type="text" id="f-album-date" placeholder="날짜 (예: 2026.06)">
+      </div>
+      <input type="text" id="f-album-url" placeholder="Google Photos 공유 링크">
+      <input type="text" id="f-album-emoji" placeholder="대표 이모지 (예: 🏆)">
+      <button class="btn-add-album" id="btn-save-album">앨범 저장</button>
+    </div>
+  </div>
+
+  <!-- 메인 앨범 (고정) -->
+  <div class="album-hero">
+    <div class="album-hero-top">
+      <div class="album-icon">📸</div>
+      <div class="album-hero-title">중흥FC 전체 앨범</div>
+      <div class="album-hero-sub">모든 경기·훈련·행사 사진</div>
+    </div>
+    <div class="album-hero-body">
+      <div class="album-desc">
+        중흥FC의 땀과 열정이 담긴 순간들을 Google Photos에서 만나보세요.<br>
+        경기 사진, 훈련 풍경, MT 및 행사 기록이 모두 담겨 있습니다. 📷
+      </div>
+      <a class="album-open-btn" href="https://photos.app.goo.gl/63H6pSw5gnFGcLZR7" target="_blank">
+        <span class="btn-icon">🔗</span> Google Photos에서 열기
+      </a>
+    </div>
+  </div>
+
+  <!-- 추가 앨범 목록 -->
+  <div id="extra-albums-wrap" style="display:none;">
+    <div class="section-title">📁 분류별 앨범</div>
+    <div class="album-grid" id="album-grid"></div>
+  </div>
+
+</div>
+
+<!-- 비번 모달 -->
+<div class="overlay" id="pw-modal" style="display:none;">
+  <div class="mbox">
+    <h3>🔐 관리자 확인</h3>
+    <p style="font-size:13px;color:var(--gray2);margin-bottom:16px;">관리자만 앨범을 추가할 수 있습니다.</p>
+    <input class="pw-input" type="password" id="pw-input" placeholder="비밀번호" maxlength="20">
+    <div class="pw-err" id="pw-err"></div>
+    <div class="mbtns">
+      <button class="mbtn-cancel" id="btn-pw-cancel">취소</button>
+      <button class="mbtn-ok" id="btn-pw-ok">확인</button>
+    </div>
+  </div>
+</div>
+
+<footer>
+  <div><div class="footer-logo">⚽ 중흥FC</div><div>광주광역시 북구 일곡동 | 매주 화·목 AM 6:00</div></div>
+  <div>© 2026 중흥FC. All rights reserved.</div>
+</footer>
+<div class="toast" id="toast"></div>
+
+<script>
+const DB = 'https://joonghung-9a14c-default-rtdb.asia-southeast1.firebasedatabase.app';
+const ADMIN_PW = 'joonghung2015';
+const ADMIN_KEY = 'jfc_admin';
+let albums = [];
+let pwCb = null;
+
+const isAdmin = () => sessionStorage.getItem(ADMIN_KEY) === '1';
+
+function setAdminUI(){
+  const el = document.getElementById('admin-ui');
+  const btn = document.getElementById('btn-admin-toggle');
+  if(isAdmin()){
+    el.innerHTML = '<span class="admin-badge" id="logout-btn">✅ 관리자 · 로그아웃</span>';
+    document.getElementById('logout-btn').onclick = () => { sessionStorage.removeItem(ADMIN_KEY); setAdminUI(); };
+    btn.style.display = 'inline-flex';
+  } else {
+    el.innerHTML = '';
+    btn.style.display = 'none';
+    document.getElementById('admin-section').classList.remove('show');
+  }
+}
+
+function openPw(cb){ pwCb=cb; document.getElementById('pw-input').value=''; document.getElementById('pw-err').textContent=''; document.getElementById('pw-modal').style.display='flex'; setTimeout(()=>document.getElementById('pw-input').focus(),100); }
+function closePw(){ document.getElementById('pw-modal').style.display='none'; }
+function checkPw(){
+  if(document.getElementById('pw-input').value===ADMIN_PW){ sessionStorage.setItem(ADMIN_KEY,'1'); closePw(); setAdminUI(); if(pwCb){pwCb();pwCb=null;} }
+  else{ document.getElementById('pw-err').textContent='❌ 비밀번호가 틀렸습니다.'; document.getElementById('pw-input').value=''; }
+}
+
+/* 추가 앨범 로드 */
+function loadAlbums(){
+  fetch(DB+'/albums.json').then(r=>r.json()).then(data=>{
+    albums=[];
+    if(data&&typeof data==='object') Object.entries(data).forEach(([k,v])=>{ if(v) albums.push({id:k,...v}); });
+    albums.sort((a,b)=>(b.createdAt||0)-(a.createdAt||0));
+    renderAlbums();
+  }).catch(()=>{});
+}
+
+function renderAlbums(){
+  const wrap = document.getElementById('extra-albums-wrap');
+  const grid = document.getElementById('album-grid');
+  if(albums.length===0){ wrap.style.display='none'; return; }
+  wrap.style.display='block';
+  grid.innerHTML = albums.map(a=>`
+    <div class="album-card" onclick="window.open('${a.url}','_blank')">
+      <div class="album-thumb" style="background:linear-gradient(135deg,#0f2027,#1a4a2e);">
+        <span>${a.emoji||'📸'}</span>
+      </div>
+      <div class="album-card-body">
+        <div class="album-card-title">${a.title||'앨범'}</div>
+        <div class="album-card-sub">${a.date||''}</div>
+        <a class="album-card-link" href="${a.url}" target="_blank" onclick="event.stopPropagation()">
+          🔗 Google Photos에서 열기
+        </a>
+        ${isAdmin()?`<div style="margin-top:8px;"><button onclick="event.stopPropagation();delAlbum('${a.id}')" style="padding:4px 10px;border-radius:6px;border:1.5px solid #fee2e2;background:#fff5f5;color:#ef4444;font-size:11px;font-weight:600;cursor:pointer;font-family:inherit;">🗑 삭제</button></div>`:''}
+      </div>
+    </div>`).join('');
+}
+
+function saveAlbum(){
+  const title = document.getElementById('f-album-title').value.trim();
+  const url   = document.getElementById('f-album-url').value.trim();
+  if(!title||!url){ showToast('⚠️ 앨범 이름과 링크를 입력해 주세요.'); return; }
+  const data = { title, date:document.getElementById('f-album-date').value.trim(), url, emoji:document.getElementById('f-album-emoji').value.trim()||'📸', createdAt:Date.now() };
+  fetch(DB+'/albums.json',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(data)})
+    .then(r=>r.json()).then(res=>{
+      albums.unshift({id:res.name,...data});
+      renderAlbums();
+      document.getElementById('f-album-title').value='';
+      document.getElementById('f-album-date').value='';
+      document.getElementById('f-album-url').value='';
+      document.getElementById('f-album-emoji').value='';
+      showToast('✅ 앨범이 추가되었습니다.');
+    }).catch(e=>showToast('❌ 실패: '+e.message));
+}
+
+function delAlbum(id){
+  if(!confirm('이 앨범을 삭제하시겠습니까?')) return;
+  fetch(DB+'/albums/'+id+'.json',{method:'DELETE'}).then(()=>{
+    albums=albums.filter(a=>a.id!==id); renderAlbums(); showToast('✅ 삭제되었습니다.');
+  }).catch(e=>showToast('❌ 실패: '+e.message));
+}
+
+document.getElementById('btn-admin-toggle').onclick = () => {
+  const s = document.getElementById('admin-section');
+  s.classList.toggle('show');
+};
+document.getElementById('btn-save-album').onclick = saveAlbum;
+document.getElementById('btn-pw-cancel').onclick = closePw;
+document.getElementById('btn-pw-ok').onclick = checkPw;
+document.getElementById('pw-input').onkeydown = e=>{ if(e.key==='Enter') checkPw(); };
+
+// 로고 클릭 시 관리자 모드 (5회)
+let clickCount = 0;
+document.querySelector('.footer-logo').onclick = () => {
+  clickCount++;
+  if(clickCount>=5){ if(!isAdmin()) openPw(()=>{}); clickCount=0; }
+};
+
+function showToast(msg){ const t=document.getElementById('toast'); t.textContent=msg; t.classList.add('show'); setTimeout(()=>t.classList.remove('show'),2500); }
+
+setAdminUI();
+loadAlbums();
+</script>
 </body>
 </html>
