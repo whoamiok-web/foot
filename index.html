@@ -594,7 +594,11 @@ function badgeClass(cat){ return cat==='NEW'?'badge-new':cat==='이벤트'?'badg
     }
     let posts=[];
     snap.forEach(c => posts.push({id:c.key, ...c.val()}));
-    posts.sort((a,b)=>{ const ta=(b.createdAt||0)-(a.createdAt||0); return ta!==0?ta:(b.date||'').localeCompare(a.date||''); });
+    // Firebase push key는 시간순 → 내림차순 정렬 (최신=마지막 키)
+posts.sort((a,b)=>{
+      if(b.createdAt && a.createdAt) return b.createdAt - a.createdAt;
+      return b.id.localeCompare(a.id);
+    });
     const top = posts.slice(0,1);
     list.innerHTML = top.map(p=>`
       <div class="notice-item" onclick="location.href='notice.html?id=${p.id}'" style="cursor:pointer;">
