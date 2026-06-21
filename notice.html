@@ -194,35 +194,28 @@ document.querySelectorAll('.nav-links a').forEach(a=>{
   .hamburger.active span:nth-child(1){transform:translateY(7px) rotate(45deg);}
   .hamburger.active span:nth-child(2){opacity:0;}
   .hamburger.active span:nth-child(3){transform:translateY(-7px) rotate(-45deg);}
-  /* 데스크탑 */
   .nav-links{display:flex;gap:2px;list-style:none;flex-wrap:nowrap;align-items:center;}
   .nav-links li{position:relative;}
   .nav-links a{color:#9ca3af;font-size:14px;font-weight:500;text-decoration:none;white-space:nowrap;display:inline-flex;align-items:center;gap:2px;padding:5px 9px;border-radius:6px;transition:color .2s,background .2s;}
   .nav-links a:hover{color:#fff;}
   .nav-active{color:#fff!important;background:#1a7f3c!important;}
   .nav-arrow{font-size:9px;opacity:.6;}
-  /* 드롭다운 - hover 영역 확장으로 사라짐 방지 */
-  .nav-item-drop{padding-bottom:10px;}
-  .nav-dropdown{position:absolute;top:100%;left:50%;transform:translateX(-50%);background:#1f2937;border-radius:10px;padding:6px 0;min-width:120px;box-shadow:0 8px 24px rgba(0,0,0,.3);opacity:0;pointer-events:none;transition:opacity .15s;z-index:200;}
+  /* 드롭다운 - li에 padding으로 hover 영역 확보 */
+  .nav-item-drop{padding-bottom:12px;margin-bottom:-12px;}
+  .nav-dropdown{position:absolute;top:calc(100% - 12px);left:50%;transform:translateX(-50%);background:#1f2937;border-radius:10px;padding:6px 0;min-width:120px;box-shadow:0 8px 24px rgba(0,0,0,.3);opacity:0;visibility:hidden;transition:opacity .15s,visibility .15s;z-index:200;}
   .nav-dropdown::before{content:'';position:absolute;top:-5px;left:50%;transform:translateX(-50%);border:5px solid transparent;border-bottom-color:#1f2937;border-top:none;}
-  .nav-item-drop:hover .nav-dropdown{opacity:1;pointer-events:auto;}
+  .nav-item-drop:hover .nav-dropdown{opacity:1;visibility:visible;}
   .nav-dropdown a{display:block;padding:9px 18px;color:#d1d5db;font-size:13px;font-weight:500;white-space:nowrap;text-decoration:none;background:none;border-radius:0;transition:background .15s,color .15s;}
   .nav-dropdown a:hover{background:#374151!important;color:#fff!important;}
-  /* 모바일 */
   @media(max-width:640px){
     .hamburger{display:flex;}
-    .nav-links{
-      display:none;flex-direction:column;align-items:stretch;gap:0;
-      position:absolute;top:60px;left:0;right:0;width:100%;
-      background:#1f2937;padding:8px 0;
-      box-shadow:0 8px 24px rgba(0,0,0,.3);z-index:99;
-    }
+    .nav-links{display:none;flex-direction:column;align-items:stretch;gap:0;position:absolute;top:60px;left:0;right:0;width:100%;background:#1f2937;padding:8px 0;box-shadow:0 8px 24px rgba(0,0,0,.3);z-index:99;}
     .nav-links.open{display:flex;}
-    .nav-links li{width:100%;position:static;padding-bottom:0;}
+    .nav-links li{width:100%;position:static;padding-bottom:0;margin-bottom:0;}
     .nav-links>li>a{display:block;width:100%;padding:13px 20px;border-radius:0;font-size:15px;color:#d1d5db;box-sizing:border-box;}
     .nav-links>li>a:hover,.nav-links>li>a.nav-active{background:#1a7f3c;color:#fff;}
     .nav-arrow{display:none;}
-    .nav-item-drop .nav-dropdown{position:static!important;transform:none!important;opacity:1!important;pointer-events:auto!important;box-shadow:none;border-radius:0;padding:0;background:#111827;width:100%;}
+    .nav-item-drop .nav-dropdown{position:static!important;transform:none!important;opacity:1!important;visibility:visible!important;box-shadow:none;border-radius:0;padding:0;background:#111827;width:100%;}
     .nav-dropdown::before{display:none;}
     .nav-dropdown a{display:block;width:100%;padding:12px 20px 12px 40px;font-size:14px;color:#9ca3af;box-sizing:border-box;border-left:3px solid #1a7f3c;}
     .nav-dropdown a:hover{background:#1f2937!important;color:#fff!important;}
@@ -367,31 +360,25 @@ document.querySelectorAll('.nav-links a').forEach(a=>{
 
 
 <footer>
-  <div>
-    <a href="index.html" class="footer-logo" style="text-decoration:none;">⚽ 중흥FC</a>
-    <div style="margin-top:6px;">광주광역시 북구 중흥동 | 매주 일요일 AM 06:30 | 전남대학교 부설중학교 운동장</div>
-    <div style="margin-top:4px;">가입문의: 총무 010-4686-9320 | <a href="https://open.kakao.com/o/pFIIRBAi" target="_blank" style="color:#9ca3af;">💬 카카오톡 채널</a></div>
-    <div style="margin-top:4px;">회비계좌:
-    <span onclick="copyAccount(event)" style="cursor:pointer;color:#d1d5db;border-bottom:1px dashed #6b7280;padding-bottom:1px;" title="클릭하면 복사됩니다">
-      카카오뱅크 7942&#8209;2614&#8209;9821 나성균
-    </span>
-    <span id="copy-toast" style="display:none;margin-left:6px;font-size:11px;color:#23a852;font-weight:700;">✅ 복사 완료!</span>
-  </div>
-  <script>
-  function copyAccount(e){
-    if(e) e.preventDefault();
-    navigator.clipboard.writeText('79422614982').then(()=>{
-      const t=document.getElementById('copy-toast');
-      t.style.display='inline';
-      setTimeout(()=>t.style.display='none',2000);
-    });
-  }
-  </script>
-  </div>
-  <div style="text-align:right;">
+  <div style="max-width:1200px;margin:0 auto;width:100%;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:16px;">
+    <div>
+      <a href="index.html" class="footer-logo" style="text-decoration:none;display:block;margin-bottom:4px;">⚽ 중흥FC</a>
+      <div>광주광역시 북구 중흥동 | 매주 일요일 AM 06:30 | 전남대학교 부설중학교 운동장</div>
+      <div style="margin-top:4px;">가입문의: 총무 010-4686-9320 | <a href="https://open.kakao.com/o/pFIIRBAi" target="_blank" style="color:#9ca3af;">💬 카카오톡 채널</a></div>
+      <div style="margin-top:4px;">회비계좌: <span onclick="copyAccount(event)" style="cursor:pointer;color:#d1d5db;border-bottom:1px dashed #6b7280;" title="클릭하면 복사됩니다">카카오뱅크 7942&#8209;2614&#8209;9821 나성균</span> <span id="copy-toast" style="display:none;font-size:11px;color:#23a852;font-weight:700;">✅ 복사 완료!</span></div>
+    </div>
     <div style="font-size:12px;color:#4b5563;">© 2026 중흥FC. All rights reserved.</div>
   </div>
 </footer>
+<script>
+function copyAccount(e){
+  if(e) e.preventDefault();
+  navigator.clipboard.writeText('79422614982').then(()=>{
+    const t=document.getElementById('copy-toast');
+    t.style.display='inline'; setTimeout(()=>t.style.display='none',2000);
+  });
+}
+</script>
 <div class="toast" id="toast"></div>
 
 <!-- Firebase SDK -->
