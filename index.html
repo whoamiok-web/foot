@@ -317,66 +317,10 @@
     <div class="section-title"><span>👥</span> 회원 명단</div>
     <a href="members.html" class="more-btn">전체보기 →</a>
   </div>
-  <div class="members-grid">
-    <div class="member-card">
-      <div class="member-num">01</div>
-      <div class="avatar" style="background:#ecfdf5;">🧤</div>
-      <div class="member-name">김철수</div>
-      <span class="member-pos pos-gk">GK</span>
-    </div>
-    <div class="member-card">
-      <div class="member-num">07</div>
-      <div class="avatar" style="background:#eff6ff;">⚽</div>
-      <div class="member-name">이민준</div>
-      <span class="member-pos pos-mf">MF</span>
-    </div>
-    <div class="member-card">
-      <div class="member-num">10</div>
-      <div class="avatar" style="background:#fff7ed;">🔥</div>
-      <div class="member-name">박성우</div>
-      <span class="member-pos pos-fw">FW</span>
-    </div>
-    <div class="member-card">
-      <div class="member-num">05</div>
-      <div class="avatar" style="background:#ecfdf5;">🛡</div>
-      <div class="member-name">최동현</div>
-      <span class="member-pos pos-df">DF</span>
-    </div>
-    <div class="member-card">
-      <div class="member-num">11</div>
-      <div class="avatar" style="background:#fff7ed;">⚡</div>
-      <div class="member-name">정재훈</div>
-      <span class="member-pos pos-fw">FW</span>
-    </div>
-    <div class="member-card">
-      <div class="member-num">08</div>
-      <div class="avatar" style="background:#eff6ff;">🌟</div>
-      <div class="member-name">한승민</div>
-      <span class="member-pos pos-mf">MF</span>
-    </div>
-    <div class="member-card">
-      <div class="member-num">03</div>
-      <div class="avatar" style="background:#ecfdf5;">💪</div>
-      <div class="member-name">윤지호</div>
-      <span class="member-pos pos-df">DF</span>
-    </div>
-    <div class="member-card">
-      <div class="member-num">06</div>
-      <div class="avatar" style="background:#ecfdf5;">🏃</div>
-      <div class="member-name">강민석</div>
-      <span class="member-pos pos-df">DF</span>
-    </div>
-    <div class="member-card">
-      <div class="member-num">09</div>
-      <div class="avatar" style="background:#fff7ed;">🎯</div>
-      <div class="member-name">신동우</div>
-      <span class="member-pos pos-fw">FW</span>
-    </div>
-    <div class="member-card">
-      <div class="member-num">04</div>
-      <div class="avatar" style="background:#eff6ff;">🦵</div>
-      <div class="member-name">오현수</div>
-      <span class="member-pos pos-mf">MF</span>
+  <div class="members-grid" id="home-members-grid">
+    <div style="grid-column:1/-1;text-align:center;padding:24px;color:#9ca3af;font-size:14px;">
+      <div style="width:22px;height:22px;border:2px solid #e5e7eb;border-top-color:#1a7f3c;border-radius:50%;animation:spin .7s linear infinite;margin:0 auto 8px;"></div>
+      불러오는 중...
     </div>
   </div>
 </div>
@@ -572,8 +516,34 @@ function homeScheduleTab(tab, btn){
   renderHomeSchedule();
 }
 
+/* ── 회원명단 ── */
+const posEmoji = {FW:'🔥',MF:'⚡',DF:'🛡',GK:'🧤'};
+const posColor  = {FW:'#fff7ed',MF:'#eff6ff',DF:'#ecfdf5',GK:'#fdf4ff'};
+const posCls    = {FW:'pos-fw',MF:'pos-mf',DF:'pos-df',GK:'pos-gk'};
+
+function loadHomeMembers(){
+  fetch(DB+'/members.json')
+    .then(r=>r.json())
+    .then(data=>{
+      let members=[];
+      if(data&&typeof data==='object') Object.entries(data).forEach(([k,v])=>{ if(v) members.push({id:k,...v}); });
+      members.sort((a,b)=>(parseInt(a.num)||999)-(parseInt(b.num)||999)||a.name.localeCompare(b.name,'ko'));
+      const grid = document.getElementById('home-members-grid');
+      if(!grid) return;
+      if(members.length===0){ grid.innerHTML='<div style="grid-column:1/-1;text-align:center;padding:24px;color:#9ca3af;">등록된 회원이 없습니다.</div>'; return; }
+      grid.innerHTML = members.map(m=>`
+        <div class="member-card">
+          <div class="member-num">${m.num||'-'}</div>
+          <div class="avatar" style="background:${posColor[m.pos]||'#f3f4f6'};">${posEmoji[m.pos]||'⚽'}</div>
+          <div class="member-name">${m.name}</div>
+          <span class="member-pos ${posCls[m.pos]||''}">${m.pos||'?'}</span>
+        </div>`).join('');
+    }).catch(()=>{});
+}
+
 loadHomeNotice();
 loadHomeSchedule();
+loadHomeMembers();
 </script>
 
 </body>
