@@ -569,7 +569,7 @@
 
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
-import { getDatabase, ref, get } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-database.js";
+import { getDatabase, ref, query, orderByKey, limitToLast, get } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-database.js";
 
 const app = initializeApp({
   apiKey: "AIzaSyDZjopLNSgnaqMOt4vml-GG-kha2OT8JEU",
@@ -587,19 +587,15 @@ function badgeClass(cat){ return cat==='NEW'?'badge-new':cat==='이벤트'?'badg
 (async function loadHomeNotice(){
   const list = document.getElementById('home-notice-list');
   try {
-    const snap = await get(ref(db,'posts'));
+    // orderByKey + limitToLast(1) → Firebase가 직접 최신 1개만 반환
+    const q = query(ref(db,'posts'), orderByKey(), limitToLast(1));
+    const snap = await get(q);
     if(!snap.exists()){
       list.innerHTML='<div style="text-align:center;padding:24px;color:#9ca3af;">등록된 공지사항이 없습니다.</div>';
       return;
     }
-    let posts=[];
-    snap.forEach(c => posts.push({id:c.key, ...c.val()}));
-    // Firebase push key는 시간순 → 내림차순 정렬 (최신=마지막 키)
-posts.sort((a,b)=>{
-      if(b.createdAt && a.createdAt) return b.createdAt - a.createdAt;
-      return b.id.localeCompare(a.id);
-    });
-    const top = posts.slice(0,1);
+    let top=[];
+    snap.forEach(c => top.push({id:c.key, ...c.val()}));
     list.innerHTML = top.map(p=>`
       <div class="notice-item" onclick="location.href='notice.html?id=${p.id}'" style="cursor:pointer;">
         <span class="notice-badge ${badgeClass(p.cat)}">${p.cat}</span>
