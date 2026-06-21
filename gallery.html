@@ -9,69 +9,77 @@
   *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
   :root{--green:#1a7f3c;--green2:#23a852;--dark:#111827;--gray1:#374151;--gray2:#6b7280;--gray3:#d1d5db;--bg:#f4f6f8;--white:#fff;--shadow:0 2px 16px rgba(0,0,0,.07);--radius:14px;}
   body{font-family:'Noto Sans KR','Apple SD Gothic Neo','Malgun Gothic',sans-serif;background:var(--bg);color:var(--dark);min-height:100vh;}
-
   .page-header{background:linear-gradient(135deg,#0f2027 0%,#1a4a2e 60%,#203a43 100%);padding:40px 40px 36px;}
-  .page-header-inner{max-width:900px;margin:0 auto;}
+  .page-header-inner{max-width:1100px;margin:0 auto;}
   .breadcrumb{font-size:12px;color:#6b7280;margin-bottom:10px;display:flex;align-items:center;gap:6px;}
   .breadcrumb .cur{color:var(--green2);font-weight:600;}
   .page-header h1{font-size:28px;font-weight:900;color:#fff;}
   .page-header p{font-size:14px;color:#9ca3af;margin-top:6px;}
 
-  .main-wrap{max-width:900px;margin:0 auto;padding:32px 40px 60px;}
-
-  /* 메인 앨범 카드 */
-  .album-hero{background:#fff;border-radius:var(--radius);box-shadow:var(--shadow);overflow:hidden;margin-bottom:24px;}
-  .album-hero-top{background:linear-gradient(135deg,#0f2027,#1a4a2e);padding:40px;text-align:center;position:relative;}
-  .album-icon{font-size:64px;margin-bottom:16px;}
-  .album-hero-title{font-size:22px;font-weight:900;color:#fff;margin-bottom:8px;}
-  .album-hero-sub{font-size:14px;color:#9ca3af;}
-  .album-hero-body{padding:28px 32px;}
-  .album-desc{font-size:15px;color:var(--gray1);line-height:1.8;margin-bottom:24px;}
-  .album-open-btn{display:inline-flex;align-items:center;gap:10px;background:var(--green);color:#fff;border:none;border-radius:12px;padding:14px 32px;font-size:16px;font-weight:700;cursor:pointer;font-family:inherit;text-decoration:none;transition:background .2s;}
-  .album-open-btn:hover{background:#155f2e;}
-  .album-open-btn .btn-icon{font-size:20px;}
-
-  /* 추가 앨범 목록 */
-  .section-title{font-size:18px;font-weight:800;margin-bottom:16px;display:flex;align-items:center;gap:8px;}
-  .album-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:14px;}
-  .album-card{background:#fff;border-radius:var(--radius);box-shadow:var(--shadow);overflow:hidden;cursor:pointer;transition:transform .15s;}
-  .album-card:hover{transform:translateY(-3px);}
-  .album-thumb{height:140px;display:flex;align-items:center;justify-content:center;font-size:48px;}
-  .album-card-body{padding:14px 16px;}
-  .album-card-title{font-size:14px;font-weight:700;margin-bottom:4px;}
-  .album-card-sub{font-size:12px;color:var(--gray2);}
-  .album-card-link{display:inline-flex;align-items:center;gap:5px;margin-top:10px;font-size:13px;font-weight:600;color:var(--green);text-decoration:none;}
-  .album-card-link:hover{text-decoration:underline;}
-
-  /* 관리자 섹션 */
-  .admin-section{background:#fff;border-radius:var(--radius);box-shadow:var(--shadow);padding:24px 28px;margin-bottom:24px;display:none;}
-  .admin-section.show{display:block;}
-  .admin-section-title{font-size:15px;font-weight:700;margin-bottom:14px;color:var(--dark);}
-  .album-form{display:flex;flex-direction:column;gap:10px;}
-  .album-form input{padding:10px 13px;border:1.5px solid var(--gray3);border-radius:8px;font-size:14px;font-family:inherit;outline:none;}
-  .album-form input:focus{border-color:var(--green);}
-  .album-form-row{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
-  .btn-add-album{background:var(--green);color:#fff;border:none;border-radius:8px;padding:10px 20px;font-size:14px;font-weight:700;cursor:pointer;font-family:inherit;align-self:flex-start;}
-
-  .top-bar{display:flex;align-items:center;justify-content:space-between;margin-bottom:20px;}
+  .main-wrap{max-width:1100px;margin:0 auto;padding:28px 40px 60px;}
+  .top-bar{display:flex;align-items:center;justify-content:space-between;margin-bottom:20px;flex-wrap:wrap;gap:10px;}
+  .left-bar{display:flex;align-items:center;gap:10px;flex-wrap:wrap;}
   .admin-badge{display:inline-flex;align-items:center;gap:5px;background:#ecfdf5;color:var(--green);border:1px solid #a7f3d0;font-size:12px;font-weight:700;padding:4px 10px;border-radius:6px;cursor:pointer;}
-  .admin-btn{background:var(--green);color:#fff;border:none;border-radius:8px;padding:8px 16px;font-size:13px;font-weight:700;cursor:pointer;font-family:inherit;}
+  .add-btn{background:var(--green);color:#fff;border:none;border-radius:9px;padding:9px 18px;font-size:14px;font-weight:700;cursor:pointer;font-family:inherit;}
 
-  /* 비번 모달 */
+  /* 갤러리 그리드 */
+  .gallery-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:12px;}
+  .gallery-item{border-radius:12px;overflow:hidden;aspect-ratio:1;background:#1a2535;position:relative;cursor:pointer;}
+  .gallery-item img{width:100%;height:100%;object-fit:cover;display:block;transition:transform .25s;}
+  .gallery-item:hover img{transform:scale(1.06);}
+  .gallery-overlay{position:absolute;inset:0;background:rgba(0,0,0,.45);display:flex;flex-direction:column;align-items:flex-end;justify-content:flex-start;padding:8px;opacity:0;transition:opacity .2s;}
+  .gallery-item:hover .gallery-overlay{opacity:1;}
+  .gallery-del-btn{background:rgba(239,68,68,.85);color:#fff;border:none;border-radius:6px;padding:4px 8px;font-size:11px;font-weight:700;cursor:pointer;font-family:inherit;display:none;}
+  .gallery-del-btn.show{display:block;}
+  .gallery-caption-bar{position:absolute;bottom:0;left:0;right:0;background:linear-gradient(transparent,rgba(0,0,0,.7));padding:20px 10px 8px;opacity:0;transition:opacity .2s;}
+  .gallery-item:hover .gallery-caption-bar{opacity:1;}
+  .gallery-caption{font-size:12px;font-weight:600;color:#fff;}
+
+  /* 사진 없을 때 */
+  .empty{text-align:center;padding:60px;color:var(--gray2);font-size:15px;}
+  .empty-icon{font-size:48px;margin-bottom:12px;}
+  .loading{text-align:center;padding:48px;color:var(--gray2);}
+  .spinner{width:32px;height:32px;border:3px solid #e5e7eb;border-top-color:var(--green);border-radius:50%;animation:spin .7s linear infinite;margin:0 auto 12px;}
+  @keyframes spin{to{transform:rotate(360deg);}}
+
+  /* 라이트박스 */
+  .lightbox{position:fixed;inset:0;background:rgba(0,0,0,.92);z-index:300;display:flex;align-items:center;justify-content:center;}
+  .lightbox img{max-width:92vw;max-height:88vh;object-fit:contain;border-radius:8px;}
+  .lb-close{position:absolute;top:20px;right:24px;color:#fff;font-size:32px;cursor:pointer;font-weight:300;line-height:1;}
+  .lb-prev,.lb-next{position:absolute;top:50%;transform:translateY(-50%);color:#fff;font-size:36px;cursor:pointer;padding:10px;background:rgba(255,255,255,.1);border-radius:8px;user-select:none;}
+  .lb-prev{left:16px;} .lb-next{right:16px;}
+  .lb-caption{position:absolute;bottom:20px;left:50%;transform:translateX(-50%);color:#fff;font-size:14px;font-weight:600;background:rgba(0,0,0,.5);padding:6px 16px;border-radius:8px;white-space:nowrap;}
+
+  /* 모달 */
   .overlay{position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:200;display:flex;align-items:center;justify-content:center;backdrop-filter:blur(4px);}
-  .mbox{background:#fff;border-radius:16px;padding:28px;width:320px;max-width:95vw;box-shadow:0 8px 40px rgba(0,0,0,.2);}
-  .mbox h3{font-size:18px;font-weight:800;margin-bottom:16px;}
+  .mbox{background:#fff;border-radius:16px;padding:28px;width:480px;max-width:95vw;box-shadow:0 8px 40px rgba(0,0,0,.2);max-height:90vh;overflow-y:auto;}
+  .mbox h3{font-size:18px;font-weight:800;margin-bottom:18px;}
+  .fg{margin-bottom:14px;}
+  .fg label{font-size:13px;font-weight:700;color:var(--gray1);margin-bottom:5px;display:block;}
+  .fg input{width:100%;padding:10px 13px;border:1.5px solid var(--gray3);border-radius:8px;font-size:14px;font-family:inherit;outline:none;}
+  .fg input:focus{border-color:var(--green);}
+  .drive-help{font-size:11px;color:var(--gray2);line-height:1.7;margin-top:6px;background:#f0fdf4;border-radius:7px;padding:8px 10px;}
+  .img-input-list{display:flex;flex-direction:column;gap:8px;margin-bottom:8px;}
+  .img-row{display:flex;gap:6px;align-items:center;}
+  .img-row input{flex:1;padding:9px 12px;border:1.5px solid var(--gray3);border-radius:7px;font-size:13px;font-family:inherit;outline:none;}
+  .img-row input:focus{border-color:var(--green);}
+  .btn-del-row{padding:6px 9px;border-radius:6px;background:#fee2e2;color:#ef4444;border:none;cursor:pointer;font-size:13px;}
+  .btn-add-row{padding:7px 14px;border-radius:7px;background:var(--green);color:#fff;border:none;font-size:12px;font-weight:700;cursor:pointer;font-family:inherit;}
+  .mbtns{display:flex;gap:8px;justify-content:flex-end;margin-top:18px;}
+  .mbtn-ok{padding:10px 24px;border-radius:9px;background:var(--green);color:#fff;border:none;font-size:14px;font-weight:700;cursor:pointer;font-family:inherit;}
+  .mbtn-cancel{padding:10px 18px;border-radius:9px;border:1.5px solid var(--gray3);background:#fff;font-size:14px;font-weight:600;color:var(--gray2);cursor:pointer;font-family:inherit;}
   .pw-input{width:100%;padding:11px 16px;border:1.5px solid var(--gray3);border-radius:9px;font-size:15px;font-family:inherit;outline:none;letter-spacing:3px;margin-bottom:6px;}
   .pw-err{font-size:12px;color:#ef4444;min-height:18px;margin-bottom:10px;}
-  .mbtns{display:flex;gap:8px;justify-content:flex-end;}
-  .mbtn-ok{padding:10px 22px;border-radius:9px;background:var(--green);color:#fff;border:none;font-size:14px;font-weight:700;cursor:pointer;font-family:inherit;}
-  .mbtn-cancel{padding:10px 16px;border-radius:9px;border:1.5px solid var(--gray3);background:#fff;font-size:14px;font-weight:600;color:var(--gray2);cursor:pointer;font-family:inherit;}
 
   .toast{position:fixed;bottom:30px;left:50%;transform:translateX(-50%) translateY(20px);background:var(--dark);color:#fff;padding:12px 24px;border-radius:10px;font-size:14px;font-weight:600;opacity:0;transition:all .3s;pointer-events:none;z-index:999;}
   .toast.show{opacity:1;transform:translateX(-50%) translateY(0);}
   footer{background:var(--dark);color:#6b7280;padding:28px 40px;font-size:13px;display:flex;align-items:center;justify-content:space-between;}
   .footer-logo{font-size:17px;font-weight:900;color:#fff;margin-bottom:4px;}
-  @media(max-width:640px){.main-wrap{padding:24px 16px 48px;}.page-header{padding:28px 20px;}.album-hero-body{padding:20px;}.album-form-row{grid-template-columns:1fr;}footer{flex-direction:column;gap:12px;}}
+  @media(max-width:640px){
+    .main-wrap{padding:24px 16px 48px;} .page-header{padding:28px 20px;}
+    .gallery-grid{grid-template-columns:repeat(2,1fr);gap:8px;}
+    footer{flex-direction:column;gap:12px;}
+  }
 </style>
 </head>
 <body>
@@ -79,12 +87,12 @@
   <a class="nav-logo" href="index.html">⚽ 중흥FC</a>
   <ul class="nav-links">
     <li class="nav-item-drop">
-      <a href="intro.html" class="">소개 <span class="nav-arrow">▾</span></a>
+      <a href="intro.html">소개 <span class="nav-arrow">▾</span></a>
       <div class="nav-dropdown"><a href="intro.html">팀 소개</a><a href="members.html">회원명단</a></div>
     </li>
-    <li><a href="notice.html" class="">공지사항</a></li>
-    <li><a href="schedule.html" class="">경기일정</a></li>
-    <li><a href="record.html" class="">경기기록</a></li>
+    <li><a href="notice.html">공지사항</a></li>
+    <li><a href="schedule.html">경기일정</a></li>
+    <li><a href="record.html">경기기록</a></li>
     <li><a href="gallery.html" class="nav-active">갤러리</a></li>
   </ul>
 </nav>
@@ -115,57 +123,47 @@
 </div>
 
 <div class="main-wrap">
-
   <div class="top-bar">
-    <span id="admin-ui"></span>
-    <button class="admin-btn" id="btn-admin-toggle" style="display:none;">+ 앨범 추가</button>
+    <div class="left-bar">
+      <span id="admin-ui"></span>
+    </div>
+    <button class="add-btn" id="btn-add">+ 사진 추가</button>
   </div>
+  <div class="gallery-grid" id="gallery-grid">
+    <div class="loading" style="grid-column:1/-1;"><div class="spinner"></div>불러오는 중...</div>
+  </div>
+</div>
 
-  <!-- 관리자 앨범 추가 폼 -->
-  <div class="admin-section" id="admin-section">
-    <div class="admin-section-title">📁 Google Photos 앨범 추가</div>
-    <div class="album-form">
-      <div class="album-form-row">
-        <input type="text" id="f-album-title" placeholder="앨범 이름 (예: 2026 봄 리그)">
-        <input type="text" id="f-album-date" placeholder="날짜 (예: 2026.06)">
+<!-- 사진 추가 모달 -->
+<div class="overlay" id="photo-modal" style="display:none;">
+  <div class="mbox">
+    <h3>📸 사진 추가</h3>
+    <div class="fg">
+      <label>Google Drive 공유 링크</label>
+      <div class="img-input-list" id="img-input-list"></div>
+      <button class="btn-add-row" id="btn-add-row">+ 링크 추가</button>
+      <div class="drive-help">
+        ① Google Drive에서 사진 우클릭 → <b>공유</b> → <b>링크 복사</b><br>
+        ② 권한: <b>"링크가 있는 모든 사용자 - 뷰어"</b> 로 설정<br>
+        ③ 위 입력칸에 링크 붙여넣기
       </div>
-      <input type="text" id="f-album-url" placeholder="Google Photos 공유 링크">
-      <input type="text" id="f-album-emoji" placeholder="대표 이모지 (예: 🏆)">
-      <button class="btn-add-album" id="btn-save-album">앨범 저장</button>
+    </div>
+    <div class="fg">
+      <label>캡션 (선택)</label>
+      <input type="text" id="f-caption" placeholder="예) 2026 봄 리그 우승 기념">
+    </div>
+    <div class="mbtns">
+      <button class="mbtn-cancel" id="btn-modal-cancel">취소</button>
+      <button class="mbtn-ok" id="btn-submit">추가하기</button>
     </div>
   </div>
-
-  <!-- 메인 앨범 (고정) -->
-  <div class="album-hero">
-    <div class="album-hero-top">
-      <div class="album-icon">📸</div>
-      <div class="album-hero-title">중흥FC 전체 앨범</div>
-      <div class="album-hero-sub">모든 경기·훈련·행사 사진</div>
-    </div>
-    <div class="album-hero-body">
-      <div class="album-desc">
-        중흥FC의 땀과 열정이 담긴 순간들을 Google Photos에서 만나보세요.<br>
-        경기 사진, 훈련 풍경, MT 및 행사 기록이 모두 담겨 있습니다. 📷
-      </div>
-      <a class="album-open-btn" href="https://photos.app.goo.gl/63H6pSw5gnFGcLZR7" target="_blank">
-        <span class="btn-icon">🔗</span> Google Photos에서 열기
-      </a>
-    </div>
-  </div>
-
-  <!-- 추가 앨범 목록 -->
-  <div id="extra-albums-wrap" style="display:none;">
-    <div class="section-title">📁 분류별 앨범</div>
-    <div class="album-grid" id="album-grid"></div>
-  </div>
-
 </div>
 
 <!-- 비번 모달 -->
 <div class="overlay" id="pw-modal" style="display:none;">
-  <div class="mbox">
+  <div class="mbox" style="width:320px;">
     <h3>🔐 관리자 확인</h3>
-    <p style="font-size:13px;color:var(--gray2);margin-bottom:16px;">관리자만 앨범을 추가할 수 있습니다.</p>
+    <p style="font-size:13px;color:var(--gray2);margin-bottom:16px;">관리자만 사진을 추가할 수 있습니다.</p>
     <input class="pw-input" type="password" id="pw-input" placeholder="비밀번호" maxlength="20">
     <div class="pw-err" id="pw-err"></div>
     <div class="mbtns">
@@ -173,6 +171,15 @@
       <button class="mbtn-ok" id="btn-pw-ok">확인</button>
     </div>
   </div>
+</div>
+
+<!-- 라이트박스 -->
+<div class="lightbox" id="lightbox" style="display:none;">
+  <span class="lb-close" id="lb-close">✕</span>
+  <span class="lb-prev" id="lb-prev">‹</span>
+  <img id="lb-img" src="" alt="">
+  <span class="lb-next" id="lb-next">›</span>
+  <div class="lb-caption" id="lb-caption"></div>
 </div>
 
 <footer>
@@ -185,25 +192,31 @@
 const DB = 'https://joonghung-9a14c-default-rtdb.asia-southeast1.firebasedatabase.app';
 const ADMIN_PW = 'joonghung2015';
 const ADMIN_KEY = 'jfc_admin';
-let albums = [];
+let allPhotos = [];
+let lbIdx = 0;
 let pwCb = null;
 
 const isAdmin = () => sessionStorage.getItem(ADMIN_KEY) === '1';
 
+/* Drive URL → 썸네일/원본 */
+function driveId(url){
+  const m = url.match(/\/file\/d\/([^\/\?]+)/) || url.match(/[?&]id=([^&]+)/);
+  return m ? m[1] : null;
+}
+function thumbUrl(url){ const id=driveId(url); return id?`https://drive.google.com/thumbnail?id=${id}&sz=w600`:url; }
+function viewUrl(url) { const id=driveId(url); return id?`https://drive.google.com/file/d/${id}/view`:url; }
+
+/* 관리자 */
 function setAdminUI(){
   const el = document.getElementById('admin-ui');
-  const btn = document.getElementById('btn-admin-toggle');
   if(isAdmin()){
-    el.innerHTML = '<span class="admin-badge" id="logout-btn">✅ 관리자 · 로그아웃</span>';
-    document.getElementById('logout-btn').onclick = () => { sessionStorage.removeItem(ADMIN_KEY); setAdminUI(); };
-    btn.style.display = 'inline-flex';
-  } else {
-    el.innerHTML = '';
-    btn.style.display = 'none';
-    document.getElementById('admin-section').classList.remove('show');
-  }
+    el.innerHTML='<span class="admin-badge" id="logout-btn">✅ 관리자 · 로그아웃</span>';
+    document.getElementById('logout-btn').onclick=()=>{ sessionStorage.removeItem(ADMIN_KEY); setAdminUI(); renderGallery(); };
+  } else el.innerHTML='';
+  document.querySelectorAll('.gallery-del-btn').forEach(b=>b.classList.toggle('show',isAdmin()));
 }
 
+/* 비번 */
 function openPw(cb){ pwCb=cb; document.getElementById('pw-input').value=''; document.getElementById('pw-err').textContent=''; document.getElementById('pw-modal').style.display='flex'; setTimeout(()=>document.getElementById('pw-input').focus(),100); }
 function closePw(){ document.getElementById('pw-modal').style.display='none'; }
 function checkPw(){
@@ -211,81 +224,116 @@ function checkPw(){
   else{ document.getElementById('pw-err').textContent='❌ 비밀번호가 틀렸습니다.'; document.getElementById('pw-input').value=''; }
 }
 
-/* 추가 앨범 로드 */
-function loadAlbums(){
-  fetch(DB+'/albums.json').then(r=>r.json()).then(data=>{
-    albums=[];
-    if(data&&typeof data==='object') Object.entries(data).forEach(([k,v])=>{ if(v) albums.push({id:k,...v}); });
-    albums.sort((a,b)=>(b.createdAt||0)-(a.createdAt||0));
-    renderAlbums();
-  }).catch(()=>{});
+/* 링크 입력 */
+function buildInputRows(vals=[]){
+  const c=document.getElementById('img-input-list'); c.innerHTML='';
+  if(vals.length===0) addInputRow();
+  else vals.forEach(v=>addInputRow(v));
+}
+function addInputRow(val=''){
+  const c=document.getElementById('img-input-list');
+  const div=document.createElement('div'); div.className='img-row';
+  div.innerHTML=`<input type="text" placeholder="Google Drive 공유 링크" value="${val}"><button class="btn-del-row">✕</button>`;
+  div.querySelector('.btn-del-row').onclick=()=>{ div.remove(); if(!document.getElementById('img-input-list').children.length) addInputRow(); };
+  c.appendChild(div);
+}
+function getLinkValues(){ return Array.from(document.querySelectorAll('#img-input-list input')).map(i=>i.value.trim()).filter(Boolean); }
+
+/* REST API */
+const api=(path,opt={})=>fetch(DB+path+'.json',opt).then(r=>{ if(!r.ok) throw new Error('HTTP '+r.status); return r.json(); });
+
+function loadGallery(){
+  document.getElementById('gallery-grid').innerHTML='<div class="loading" style="grid-column:1/-1;"><div class="spinner"></div>불러오는 중...</div>';
+  api('/gallery').then(data=>{
+    allPhotos=[];
+    if(data&&typeof data==='object') Object.entries(data).forEach(([k,v])=>{ if(v) allPhotos.push({id:k,...v}); });
+    allPhotos.sort((a,b)=>(b.createdAt||0)-(a.createdAt||0));
+    renderGallery();
+  }).catch(e=>{ document.getElementById('gallery-grid').innerHTML=`<div class="empty" style="grid-column:1/-1;"><div class="empty-icon">⚠️</div>불러오기 실패: ${e.message}</div>`; });
 }
 
-function renderAlbums(){
-  const wrap = document.getElementById('extra-albums-wrap');
-  const grid = document.getElementById('album-grid');
-  if(albums.length===0){ wrap.style.display='none'; return; }
-  wrap.style.display='block';
-  grid.innerHTML = albums.map(a=>`
-    <div class="album-card" onclick="window.open('${a.url}','_blank')">
-      <div class="album-thumb" style="background:linear-gradient(135deg,#0f2027,#1a4a2e);">
-        <span>${a.emoji||'📸'}</span>
+function renderGallery(){
+  const grid=document.getElementById('gallery-grid');
+  if(allPhotos.length===0){ grid.innerHTML='<div class="empty" style="grid-column:1/-1;"><div class="empty-icon">📭</div>등록된 사진이 없습니다.</div>'; setAdminUI(); return; }
+  grid.innerHTML=allPhotos.map((p,i)=>`
+    <div class="gallery-item" data-idx="${i}">
+      <img src="${thumbUrl(p.url)}" loading="lazy" alt="${p.caption||''}"
+           onerror="this.parentElement.innerHTML='<div style=\'width:100%;height:100%;display:flex;align-items:center;justify-content:center;color:#6b7280;font-size:13px;\'>❌ 로드 실패</div>'">
+      <div class="gallery-overlay">
+        <button class="gallery-del-btn${isAdmin()?' show':''}" data-id="${p.id}">🗑 삭제</button>
       </div>
-      <div class="album-card-body">
-        <div class="album-card-title">${a.title||'앨범'}</div>
-        <div class="album-card-sub">${a.date||''}</div>
-        <a class="album-card-link" href="${a.url}" target="_blank" onclick="event.stopPropagation()">
-          🔗 Google Photos에서 열기
-        </a>
-        ${isAdmin()?`<div style="margin-top:8px;"><button onclick="event.stopPropagation();delAlbum('${a.id}')" style="padding:4px 10px;border-radius:6px;border:1.5px solid #fee2e2;background:#fff5f5;color:#ef4444;font-size:11px;font-weight:600;cursor:pointer;font-family:inherit;">🗑 삭제</button></div>`:''}
-      </div>
+      ${p.caption?`<div class="gallery-caption-bar"><div class="gallery-caption">${p.caption}</div></div>`:''}
     </div>`).join('');
+
+  grid.querySelectorAll('.gallery-item').forEach(el=>{
+    el.onclick=e=>{ if(e.target.classList.contains('gallery-del-btn')) return; openLightbox(parseInt(el.dataset.idx)); };
+  });
+  grid.querySelectorAll('.gallery-del-btn').forEach(b=>{
+    b.onclick=e=>{ e.stopPropagation(); delPhoto(b.dataset.id); };
+  });
+  setAdminUI();
 }
 
-function saveAlbum(){
-  const title = document.getElementById('f-album-title').value.trim();
-  const url   = document.getElementById('f-album-url').value.trim();
-  if(!title||!url){ showToast('⚠️ 앨범 이름과 링크를 입력해 주세요.'); return; }
-  const data = { title, date:document.getElementById('f-album-date').value.trim(), url, emoji:document.getElementById('f-album-emoji').value.trim()||'📸', createdAt:Date.now() };
-  fetch(DB+'/albums.json',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(data)})
-    .then(r=>r.json()).then(res=>{
-      albums.unshift({id:res.name,...data});
-      renderAlbums();
-      document.getElementById('f-album-title').value='';
-      document.getElementById('f-album-date').value='';
-      document.getElementById('f-album-url').value='';
-      document.getElementById('f-album-emoji').value='';
-      showToast('✅ 앨범이 추가되었습니다.');
-    }).catch(e=>showToast('❌ 실패: '+e.message));
+function savePhotos(){
+  const links=getLinkValues();
+  const caption=document.getElementById('f-caption').value.trim();
+  if(links.length===0){ showToast('⚠️ 링크를 입력해 주세요.'); return; }
+  const btn=document.getElementById('btn-submit');
+  btn.disabled=true; btn.textContent='추가 중...';
+  const reset=()=>{ btn.disabled=false; btn.textContent='추가하기'; };
+
+  Promise.all(links.map(url=>
+    api('/gallery',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({url,caption,createdAt:Date.now()})})
+  )).then(results=>{
+    results.forEach((res,i)=>allPhotos.unshift({id:res.name,url:links[i],caption,createdAt:Date.now()}));
+    allPhotos.sort((a,b)=>(b.createdAt||0)-(a.createdAt||0));
+    renderGallery();
+    document.getElementById('photo-modal').style.display='none';
+    showToast(`✅ ${links.length}장 추가되었습니다.`);
+    reset();
+  }).catch(e=>{ showToast('❌ 실패: '+e.message); reset(); });
 }
 
-function delAlbum(id){
-  if(!confirm('이 앨범을 삭제하시겠습니까?')) return;
-  fetch(DB+'/albums/'+id+'.json',{method:'DELETE'}).then(()=>{
-    albums=albums.filter(a=>a.id!==id); renderAlbums(); showToast('✅ 삭제되었습니다.');
+function delPhoto(id){
+  if(!confirm('이 사진을 삭제하시겠습니까?')) return;
+  api('/gallery/'+id,{method:'DELETE'}).then(()=>{
+    allPhotos=allPhotos.filter(p=>p.id!==id); renderGallery(); showToast('✅ 삭제되었습니다.');
   }).catch(e=>showToast('❌ 실패: '+e.message));
 }
 
-document.getElementById('btn-admin-toggle').onclick = () => {
-  const s = document.getElementById('admin-section');
-  s.classList.toggle('show');
-};
-document.getElementById('btn-save-album').onclick = saveAlbum;
-document.getElementById('btn-pw-cancel').onclick = closePw;
-document.getElementById('btn-pw-ok').onclick = checkPw;
-document.getElementById('pw-input').onkeydown = e=>{ if(e.key==='Enter') checkPw(); };
+/* 라이트박스 */
+function openLightbox(idx){
+  lbIdx=idx;
+  const p=allPhotos[lbIdx];
+  document.getElementById('lb-img').src=thumbUrl(p.url);
+  document.getElementById('lb-caption').textContent=p.caption||`${lbIdx+1} / ${allPhotos.length}`;
+  document.getElementById('lightbox').style.display='flex';
+}
+function moveLb(dir){
+  lbIdx=(lbIdx+dir+allPhotos.length)%allPhotos.length;
+  const p=allPhotos[lbIdx];
+  document.getElementById('lb-img').src=thumbUrl(p.url);
+  document.getElementById('lb-caption').textContent=p.caption||`${lbIdx+1} / ${allPhotos.length}`;
+}
+document.getElementById('lb-close').onclick=()=>document.getElementById('lightbox').style.display='none';
+document.getElementById('lb-prev').onclick=()=>moveLb(-1);
+document.getElementById('lb-next').onclick=()=>moveLb(1);
+document.getElementById('lightbox').onclick=e=>{ if(e.target===document.getElementById('lightbox')) document.getElementById('lightbox').style.display='none'; };
+document.addEventListener('keydown',e=>{ if(document.getElementById('lightbox').style.display!=='none'){ if(e.key==='ArrowLeft') moveLb(-1); if(e.key==='ArrowRight') moveLb(1); if(e.key==='Escape') document.getElementById('lightbox').style.display='none'; }});
 
-// 로고 클릭 시 관리자 모드 (5회)
-let clickCount = 0;
-document.querySelector('.footer-logo').onclick = () => {
-  clickCount++;
-  if(clickCount>=5){ if(!isAdmin()) openPw(()=>{}); clickCount=0; }
-};
+/* 버튼 */
+document.getElementById('btn-add').onclick=()=>{ if(isAdmin()){ buildInputRows(); document.getElementById('f-caption').value=''; document.getElementById('photo-modal').style.display='flex'; } else openPw(()=>{ buildInputRows(); document.getElementById('f-caption').value=''; document.getElementById('photo-modal').style.display='flex'; }); };
+document.getElementById('btn-modal-cancel').onclick=()=>document.getElementById('photo-modal').style.display='none';
+document.getElementById('btn-submit').onclick=savePhotos;
+document.getElementById('btn-add-row').onclick=()=>addInputRow();
+document.getElementById('btn-pw-cancel').onclick=closePw;
+document.getElementById('btn-pw-ok').onclick=checkPw;
+document.getElementById('pw-input').onkeydown=e=>{ if(e.key==='Enter') checkPw(); };
 
 function showToast(msg){ const t=document.getElementById('toast'); t.textContent=msg; t.classList.add('show'); setTimeout(()=>t.classList.remove('show'),2500); }
 
 setAdminUI();
-loadAlbums();
+loadGallery();
 </script>
 </body>
 </html>
