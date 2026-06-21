@@ -90,9 +90,9 @@
   footer{background:var(--dark);color:#6b7280;padding:28px 40px;font-size:13px;display:flex;align-items:center;justify-content:space-between;}
   .footer-logo{font-size:17px;font-weight:900;color:#fff;margin-bottom:4px;}
   /* 전화번호 */
-  .phone-btn{display:inline-flex;align-items:center;gap:4px;margin-top:6px;font-size:11px;font-weight:600;color:var(--green);background:#ecfdf5;border:1px solid #a7f3d0;border-radius:5px;padding:3px 8px;cursor:pointer;transition:all .2s;}
+  .phone-btn{display:inline-flex;align-items:center;gap:4px;margin-left:4px;font-size:11px;font-weight:600;color:var(--green);background:#ecfdf5;border:1px solid #a7f3d0;border-radius:5px;padding:3px 8px;cursor:pointer;transition:all .2s;}
   .phone-btn:hover{background:#d1fae5;}
-  .phone-reveal{display:none;margin-top:4px;font-size:12px;font-weight:700;color:var(--dark);letter-spacing:.5px;}
+  .phone-reveal{display:none;font-size:12px;font-weight:700;color:var(--dark);letter-spacing:.5px;width:100%;padding-left:70px;margin-top:2px;}
   .phone-reveal.show{display:block;}
   /* 전화번호 확인 모달 */
   .phone-overlay{position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:300;display:flex;align-items:center;justify-content:center;backdrop-filter:blur(4px);}
@@ -367,7 +367,7 @@ function renderMembers(){
   });
   if(filtered.length===0){ grid.innerHTML='<div class="empty" style="grid-column:1/-1;">👤 등록된 회원이 없습니다.</div>'; return; }
   grid.innerHTML = filtered.map(m=>`
-    <div class="member-card">
+    <div class="member-card" style="flex-wrap:wrap;">
       <div class="card-actions${isAdmin()?' show':''}">
         <button class="btn-icon btn-icon-edit" data-id="${m.id}">✏️</button>
         <button class="btn-icon btn-icon-del" data-id="${m.id}">🗑</button>
@@ -376,6 +376,8 @@ function renderMembers(){
       <div class="avatar" style="background:${posColor[m.pos]||'#f3f4f6'};">${posEmoji[m.pos]||'⚽'}</div>
       <div class="member-name">${m.name}</div>
       <span class="pos-badge ${posCls[m.pos]||''}">${m.pos||'?'}</span>
+      ${m.phone ? `<span class="phone-btn" data-id="${m.id}" data-phone="${m.phone}" data-name="${m.name}">📱 휴대번호</span>` : ''}
+      <div class="phone-reveal" id="ph-${m.id}"></div>
     </div>`).join('');
 
   grid.querySelectorAll('.btn-icon-edit').forEach(b=>b.onclick=()=>{ const m=allMembers.find(x=>x.id===b.dataset.id); if(m) openModal(m); });
@@ -407,19 +409,17 @@ function showToast(msg){ const t=document.getElementById('toast'); t.textContent
 const PHONE_PW = '2026';
 let phoneCb = null;
 
-function openPhoneModal(name, phone, btn){
+function openPhoneModal(name, phone, memberId){
   document.getElementById('phone-modal-name').textContent = name + '님의 휴대번호를 확인하려면 비밀번호를 입력하세요.';
   document.getElementById('phone-pw-input').value='';
   document.getElementById('phone-pw-err').textContent='';
   document.getElementById('phone-modal').style.display='flex';
   phoneCb = () => {
-    // 카드 내 phone-reveal 표시
-    const revealEl = btn.nextElementSibling;
-    if(revealEl && revealEl.classList.contains('phone-reveal')){
-      revealEl.textContent = '📞 ' + phone;
-      revealEl.classList.add('show');
-      btn.style.display='none';
-    }
+    const revealEl = document.getElementById('ph-' + memberId);
+    if(revealEl){ revealEl.textContent = '📞 ' + phone; revealEl.style.display='block'; }
+    // 버튼 숨기기
+    const btn = document.querySelector(`.phone-btn[data-id="${memberId}"]`);
+    if(btn) btn.style.display='none';
   };
   setTimeout(()=>document.getElementById('phone-pw-input').focus(),100);
 }
