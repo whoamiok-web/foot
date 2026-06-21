@@ -341,9 +341,11 @@ async function loadPosts() {
       allPosts.sort((a,b) => (b.createdAt||0) - (a.createdAt||0));
     }
     renderList();
+    return true;
   } catch(e) {
     document.getElementById('notice-body').innerHTML =
       '<div class="empty-state"><div class="empty-icon">⚠️</div>데이터를 불러올 수 없습니다.<br><small>'+e.message+'</small></div>';
+    return false;
   }
 }
 
@@ -571,7 +573,11 @@ function switchView(v){
 }
 function showToast(msg){ const t=document.getElementById('toast');t.textContent=msg;t.classList.add('show');setTimeout(()=>t.classList.remove('show'),2500); }
 
-loadPosts();
+// URL 파라미터로 특정 글 바로 열기
+const urlId = new URLSearchParams(location.search).get('id');
+loadPosts().then(() => {
+  if(urlId) showDetail(urlId);
+});
 </script>
 </body>
 </html>
