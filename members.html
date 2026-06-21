@@ -4,23 +4,97 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>회원명단 – 중흥FC</title>
-<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;700;900&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700;900&display=swap" rel="stylesheet">
 <style>
-  *{box-sizing:border-box;margin:0;padding:0;}
-  body{font-family:'Noto Sans KR',sans-serif;background:#f4f6f8;min-height:100vh;display:flex;flex-direction:column;}
-  nav{background:#111827;display:flex;align-items:center;justify-content:space-between;padding:0 24px;height:60px;}
-  .nav-logo{font-size:20px;font-weight:900;color:#fff;cursor:pointer;display:flex;align-items:center;gap:8px;}
-  .badge{background:#1a7f3c;color:#fff;font-size:11px;padding:2px 7px;border-radius:6px;}
-  .nav-links{display:flex;gap:18px;list-style:none;}
-  .nav-links a{color:#9ca3af;font-size:13px;text-decoration:none;cursor:pointer;}
-  .nav-links a:hover{color:#fff;}
-  .wrap{flex:1;display:flex;align-items:center;justify-content:center;flex-direction:column;gap:20px;padding:60px 20px;}
-  .icon{font-size:72px;}
-  h1{font-size:24px;font-weight:900;color:#111827;}
-  p{font-size:15px;color:#6b7280;text-align:center;line-height:1.7;}
-  .back-btn{margin-top:8px;padding:12px 28px;background:#1a7f3c;color:#fff;border:none;border-radius:10px;font-size:15px;font-weight:700;cursor:pointer;font-family:inherit;}
-  .back-btn:hover{background:#155f2e;}
-  footer{background:#111827;color:#6b7280;padding:24px 40px;font-size:13px;text-align:center;}
+  *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+  :root{--green:#1a7f3c;--green2:#23a852;--dark:#111827;--gray1:#374151;--gray2:#6b7280;--gray3:#d1d5db;--bg:#f4f6f8;--white:#fff;--shadow:0 2px 16px rgba(0,0,0,.07);--radius:14px;}
+  body{font-family:'Noto Sans KR','Apple SD Gothic Neo','Malgun Gothic',sans-serif;background:var(--bg);color:var(--dark);min-height:100vh;}
+  nav{position:sticky;top:0;z-index:100;background:var(--dark);display:flex;align-items:center;justify-content:space-between;flex-wrap:nowrap;gap:16px;padding:0 24px;height:60px;box-shadow:0 2px 12px rgba(0,0,0,.3);}
+  .nav-logo{display:flex;align-items:center;gap:10px;font-size:20px;font-weight:900;color:#fff;cursor:pointer;white-space:nowrap;}
+  .nav-logo .badge{background:var(--green);color:#fff;font-size:11px;font-weight:700;padding:2px 7px;border-radius:6px;}
+  .nav-links{display:flex;gap:18px;list-style:none;flex-wrap:nowrap;}
+  .nav-links a{color:#9ca3af;font-size:13px;font-weight:500;text-decoration:none;cursor:pointer;transition:color .2s;white-space:nowrap;}
+  .nav-links a:hover,.nav-links a.active{color:#fff;}
+
+  .page-header{background:linear-gradient(135deg,#0f2027 0%,#1a4a2e 60%,#203a43 100%);padding:40px 40px 36px;}
+  .page-header-inner{max-width:1100px;margin:0 auto;}
+  .breadcrumb{font-size:12px;color:#6b7280;margin-bottom:10px;display:flex;align-items:center;gap:6px;}
+  .breadcrumb .cur{color:var(--green2);font-weight:600;}
+  .page-header h1{font-size:28px;font-weight:900;color:#fff;}
+  .page-header p{font-size:14px;color:#9ca3af;margin-top:6px;}
+
+  /* 요약 */
+  .summary-bar{max-width:1100px;margin:0 auto;padding:24px 40px 0;}
+  .sum-cards{display:flex;gap:12px;flex-wrap:wrap;}
+  .sum-card{background:#fff;border-radius:12px;padding:14px 20px;box-shadow:var(--shadow);display:flex;align-items:center;gap:12px;}
+  .sum-icon{font-size:22px;}
+  .sum-num{font-size:22px;font-weight:900;color:var(--dark);}
+  .sum-label{font-size:12px;color:var(--gray2);}
+
+  .main-wrap{max-width:1100px;margin:0 auto;padding:24px 40px 60px;}
+  .top-bar{display:flex;align-items:center;justify-content:space-between;margin-bottom:20px;flex-wrap:wrap;gap:12px;}
+  .left-bar{display:flex;align-items:center;gap:10px;flex-wrap:wrap;}
+
+  /* 포지션 필터 */
+  .pos-tabs{display:flex;gap:6px;flex-wrap:wrap;}
+  .pos-btn{padding:6px 14px;border-radius:8px;border:1.5px solid var(--gray3);background:#fff;font-size:13px;font-weight:600;color:var(--gray2);cursor:pointer;font-family:inherit;transition:all .2s;}
+  .pos-btn.active{background:var(--green);color:#fff;border-color:var(--green);}
+
+  /* 검색 */
+  .search-box{display:flex;align-items:center;gap:6px;background:#fff;border:1.5px solid var(--gray3);border-radius:8px;padding:6px 12px;}
+  .search-box input{border:none;outline:none;font-size:13px;font-family:inherit;width:120px;color:var(--dark);}
+
+  .add-btn{background:var(--green);color:#fff;border:none;border-radius:9px;padding:9px 18px;font-size:14px;font-weight:700;cursor:pointer;font-family:inherit;white-space:nowrap;}
+  .admin-badge{display:inline-flex;align-items:center;gap:5px;background:#ecfdf5;color:var(--green);border:1px solid #a7f3d0;font-size:12px;font-weight:700;padding:4px 10px;border-radius:6px;cursor:pointer;white-space:nowrap;}
+
+  /* 회원 그리드 */
+  .members-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:14px;}
+  .member-card{background:#fff;border-radius:var(--radius);box-shadow:var(--shadow);padding:20px 14px;text-align:center;transition:transform .15s;position:relative;}
+  .member-card:hover{transform:translateY(-3px);}
+  .member-num{font-size:22px;font-weight:900;color:var(--gray3);margin-bottom:8px;}
+  .avatar{width:54px;height:54px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:22px;margin:0 auto 10px;}
+  .member-name{font-size:15px;font-weight:700;margin-bottom:6px;}
+  .pos-badge{font-size:11px;font-weight:700;padding:3px 10px;border-radius:6px;display:inline-block;}
+  .pos-fw{background:#fff7ed;color:#ea580c;border:1px solid #fed7aa;}
+  .pos-mf{background:#eff6ff;color:#2563eb;border:1px solid #bfdbfe;}
+  .pos-df{background:#ecfdf5;color:var(--green);border:1px solid #a7f3d0;}
+  .pos-gk{background:#fdf4ff;color:#9333ea;border:1px solid #e9d5ff;}
+  .card-actions{display:none;gap:4px;position:absolute;top:8px;right:8px;}
+  .card-actions.show{display:flex;}
+  .btn-icon{width:26px;height:26px;border-radius:6px;border:none;font-size:12px;cursor:pointer;display:flex;align-items:center;justify-content:center;}
+  .btn-icon-edit{background:#f0fdf4;color:var(--green);}
+  .btn-icon-del{background:#fef2f2;color:#ef4444;}
+
+  .empty{text-align:center;padding:60px;color:var(--gray2);font-size:14px;}
+  .loading{text-align:center;padding:48px;color:var(--gray2);}
+  .spinner{width:32px;height:32px;border:3px solid #e5e7eb;border-top-color:var(--green);border-radius:50%;animation:spin .7s linear infinite;margin:0 auto 12px;}
+  @keyframes spin{to{transform:rotate(360deg);}}
+
+  /* 모달 */
+  .overlay{position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:200;display:flex;align-items:center;justify-content:center;backdrop-filter:blur(4px);}
+  .mbox{background:#fff;border-radius:16px;padding:28px;width:360px;max-width:95vw;box-shadow:0 8px 40px rgba(0,0,0,.2);}
+  .mbox h3{font-size:18px;font-weight:800;margin-bottom:18px;}
+  .fg{margin-bottom:14px;}
+  .fg label{font-size:13px;font-weight:700;color:var(--gray1);margin-bottom:5px;display:block;}
+  .fg input,.fg select{width:100%;padding:10px 13px;border:1.5px solid var(--gray3);border-radius:8px;font-size:14px;font-family:inherit;outline:none;}
+  .fg input:focus,.fg select:focus{border-color:var(--green);}
+  .frow2{display:grid;grid-template-columns:1fr 1fr;gap:12px;}
+  .mbtns{display:flex;gap:8px;justify-content:flex-end;margin-top:18px;}
+  .mbtn-ok{padding:10px 24px;border-radius:9px;background:var(--green);color:#fff;border:none;font-size:14px;font-weight:700;cursor:pointer;font-family:inherit;}
+  .mbtn-cancel{padding:10px 18px;border-radius:9px;border:1.5px solid var(--gray3);background:#fff;font-size:14px;font-weight:600;color:var(--gray2);cursor:pointer;font-family:inherit;}
+  .pw-input{width:100%;padding:11px 16px;border:1.5px solid var(--gray3);border-radius:9px;font-size:15px;font-family:inherit;outline:none;letter-spacing:3px;margin-bottom:6px;}
+  .pw-err{font-size:12px;color:#ef4444;min-height:18px;margin-bottom:10px;}
+
+  .toast{position:fixed;bottom:30px;left:50%;transform:translateX(-50%) translateY(20px);background:var(--dark);color:#fff;padding:12px 24px;border-radius:10px;font-size:14px;font-weight:600;opacity:0;transition:all .3s;pointer-events:none;z-index:999;}
+  .toast.show{opacity:1;transform:translateX(-50%) translateY(0);}
+  footer{background:var(--dark);color:#6b7280;padding:28px 40px;font-size:13px;display:flex;align-items:center;justify-content:space-between;}
+  .footer-logo{font-size:17px;font-weight:900;color:#fff;margin-bottom:4px;}
+  @media(max-width:640px){
+    .main-wrap,.summary-bar{padding-left:16px;padding-right:16px;}
+    .page-header{padding:28px 20px;} nav{padding:0 16px;}
+    .members-grid{grid-template-columns:repeat(auto-fill,minmax(130px,1fr));}
+    footer{flex-direction:column;gap:12px;}
+  }
 </style>
 </head>
 <body>
@@ -29,16 +103,230 @@
   <ul class="nav-links">
     <li><a onclick="location.href='notice.html'">공지사항</a></li>
     <li><a onclick="location.href='schedule.html'">경기일정</a></li>
-    <li><a onclick="location.href='members.html'" style="color:#fff;">회원명단</a></li>
-    <li><a onclick="location.href='gallery.html'" >갤러리</a></li>
+    <li><a class="active">회원명단</a></li>
+    <li><a onclick="location.href='gallery.html'">갤러리</a></li>
   </ul>
 </nav>
-<div class="wrap">
-  <div class="icon">👥</div>
-  <h1>회원명단 준비 중</h1>
-  <p>현재 페이지를 열심히 준비하고 있습니다.<br>조금만 기다려 주세요! 🙏</p>
-  <button class="back-btn" onclick="location.href='index.html'">← 홈으로 돌아가기</button>
+
+<div class="page-header">
+  <div class="page-header-inner">
+    <div class="breadcrumb"><span onclick="location.href='index.html'" style="cursor:pointer;">홈</span><span>›</span><span class="cur">회원명단</span></div>
+    <h1>👥 회원 명단</h1>
+    <p>중흥FC 활동 회원을 소개합니다.</p>
+  </div>
 </div>
-<footer>© 2026 중흥FC. All rights reserved.</footer>
+
+<div class="summary-bar">
+  <div class="sum-cards">
+    <div class="sum-card"><span class="sum-icon">👥</span><div><div class="sum-num" id="s-total">-</div><div class="sum-label">전체 회원</div></div></div>
+    <div class="sum-card"><span class="sum-icon" style="color:#ef4444;">🔥</span><div><div class="sum-num" id="s-fw">-</div><div class="sum-label">FW</div></div></div>
+    <div class="sum-card"><span class="sum-icon" style="color:#2563eb;">⚡</span><div><div class="sum-num" id="s-mf">-</div><div class="sum-label">MF</div></div></div>
+    <div class="sum-card"><span class="sum-icon" style="color:var(--green);">🛡</span><div><div class="sum-num" id="s-df">-</div><div class="sum-label">DF</div></div></div>
+    <div class="sum-card"><span class="sum-icon" style="color:#9333ea;">🧤</span><div><div class="sum-num" id="s-gk">-</div><div class="sum-label">GK</div></div></div>
+  </div>
+</div>
+
+<div class="main-wrap">
+  <div class="top-bar">
+    <div class="left-bar">
+      <div class="pos-tabs">
+        <button class="pos-btn active" data-pos="전체">전체</button>
+        <button class="pos-btn" data-pos="FW">FW</button>
+        <button class="pos-btn" data-pos="MF">MF</button>
+        <button class="pos-btn" data-pos="DF">DF</button>
+        <button class="pos-btn" data-pos="GK">GK</button>
+      </div>
+      <div class="search-box">🔍<input type="text" id="search-input" placeholder="이름 검색..."></div>
+      <span id="admin-ui"></span>
+    </div>
+    <button class="add-btn" id="btn-add">+ 회원 추가</button>
+  </div>
+  <div class="members-grid" id="members-grid">
+    <div class="loading" style="grid-column:1/-1;"><div class="spinner"></div>불러오는 중...</div>
+  </div>
+</div>
+
+<!-- 회원 등록/수정 모달 -->
+<div class="overlay" id="member-modal" style="display:none;">
+  <div class="mbox">
+    <h3 id="modal-title">회원 추가</h3>
+    <div class="frow2">
+      <div class="fg"><label>이름 *</label><input type="text" id="f-name" placeholder="홍길동"></div>
+      <div class="fg"><label>등번호</label><input type="number" id="f-num" placeholder="10" min="1" max="99"></div>
+    </div>
+    <div class="fg"><label>포지션</label>
+      <select id="f-pos">
+        <option value="FW">FW (공격수)</option>
+        <option value="MF">MF (미드필더)</option>
+        <option value="DF">DF (수비수)</option>
+        <option value="GK">GK (골키퍼)</option>
+      </select>
+    </div>
+    <div class="mbtns">
+      <button class="mbtn-cancel" id="btn-modal-cancel">취소</button>
+      <button class="mbtn-ok" id="btn-submit">추가하기</button>
+    </div>
+  </div>
+</div>
+
+<!-- 비번 모달 -->
+<div class="overlay" id="pw-modal" style="display:none;">
+  <div class="mbox" style="width:320px;">
+    <h3>🔐 관리자 확인</h3>
+    <p style="font-size:13px;color:var(--gray2);margin-bottom:16px;">관리자만 회원을 추가할 수 있습니다.</p>
+    <input class="pw-input" type="password" id="pw-input" placeholder="비밀번호" maxlength="20">
+    <div class="pw-err" id="pw-err"></div>
+    <div class="mbtns">
+      <button class="mbtn-cancel" id="btn-pw-cancel">취소</button>
+      <button class="mbtn-ok" id="btn-pw-ok">확인</button>
+    </div>
+  </div>
+</div>
+
+<footer>
+  <div><div class="footer-logo">⚽ 중흥FC</div><div>광주광역시 북구 일곡동 | 매주 화·목 AM 6:00</div></div>
+  <div>© 2026 중흥FC. All rights reserved.</div>
+</footer>
+<div class="toast" id="toast"></div>
+
+<script>
+const DB = 'https://joonghung-9a14c-default-rtdb.asia-southeast1.firebasedatabase.app';
+const ADMIN_PW = 'joonghung2015';
+const ADMIN_KEY = 'jfc_admin';
+
+let allMembers = [];
+let curPos = '전체';
+let curSearch = '';
+let editId = null;
+let pwCb = null;
+
+const posEmoji = {FW:'🔥',MF:'⚡',DF:'🛡',GK:'🧤'};
+const posColor  = {FW:'#fff7ed',MF:'#eff6ff',DF:'#ecfdf5',GK:'#fdf4ff'};
+const posCls    = {FW:'pos-fw',MF:'pos-mf',DF:'pos-df',GK:'pos-gk'};
+
+/* 관리자 */
+const isAdmin = () => sessionStorage.getItem(ADMIN_KEY) === '1';
+function setAdminUI(){
+  const el = document.getElementById('admin-ui');
+  if(isAdmin()){
+    el.innerHTML = '<span class="admin-badge" id="logout-btn">✅ 관리자 · 로그아웃</span>';
+    document.getElementById('logout-btn').onclick = () => { sessionStorage.removeItem(ADMIN_KEY); setAdminUI(); renderMembers(); };
+  } else el.innerHTML='';
+  document.querySelectorAll('.card-actions').forEach(b=>b.classList.toggle('show', isAdmin()));
+}
+
+/* 비번 모달 */
+function openPw(cb){ pwCb=cb; document.getElementById('pw-input').value=''; document.getElementById('pw-err').textContent=''; document.getElementById('pw-modal').style.display='flex'; setTimeout(()=>document.getElementById('pw-input').focus(),100); }
+function closePw(){ document.getElementById('pw-modal').style.display='none'; }
+function checkPw(){
+  if(document.getElementById('pw-input').value===ADMIN_PW){
+    sessionStorage.setItem(ADMIN_KEY,'1'); closePw(); setAdminUI();
+    if(pwCb){ pwCb(); pwCb=null; }
+  } else { document.getElementById('pw-err').textContent='❌ 비밀번호가 틀렸습니다.'; document.getElementById('pw-input').value=''; }
+}
+
+/* 회원 모달 */
+function openModal(m){
+  editId = m ? m.id : null;
+  document.getElementById('modal-title').textContent = m ? '회원 수정' : '회원 추가';
+  document.getElementById('btn-submit').textContent  = m ? '수정하기' : '추가하기';
+  document.getElementById('f-name').value = m ? m.name : '';
+  document.getElementById('f-num').value  = m ? (m.num||'') : '';
+  document.getElementById('f-pos').value  = m ? (m.pos||'MF') : 'MF';
+  document.getElementById('member-modal').style.display='flex';
+  setTimeout(()=>document.getElementById('f-name').focus(),100);
+}
+function closeModal(){ document.getElementById('member-modal').style.display='none'; }
+
+/* REST API */
+const api = (path, opt={}) => fetch(DB+path+'.json', opt).then(r=>{ if(!r.ok) throw new Error('HTTP '+r.status); return r.json(); });
+
+function loadMembers(){
+  api('/members').then(data=>{
+    allMembers=[];
+    if(data&&typeof data==='object') Object.entries(data).forEach(([k,v])=>{ if(v) allMembers.push({id:k,...v}); });
+    allMembers.sort((a,b)=> (parseInt(a.num)||999)-(parseInt(b.num)||999) || a.name.localeCompare(b.name,'ko'));
+    renderSummary(); renderMembers();
+  }).catch(e=>{ document.getElementById('members-grid').innerHTML=`<div class="empty" style="grid-column:1/-1;">⚠️ 불러오기 실패: ${e.message}</div>`; });
+}
+
+function saveMember(){
+  const name = document.getElementById('f-name').value.trim();
+  if(!name){ showToast('⚠️ 이름을 입력해 주세요.'); return; }
+  const data = { name, num: document.getElementById('f-num').value, pos: document.getElementById('f-pos').value };
+  const btn = document.getElementById('btn-submit');
+  btn.disabled=true; btn.textContent='저장 중...';
+  const reset = () => { btn.disabled=false; btn.textContent=editId?'수정하기':'추가하기'; };
+
+  if(editId){
+    api('/members/'+editId, {method:'PATCH',headers:{'Content-Type':'application/json'},body:JSON.stringify(data)})
+      .then(()=>{ const i=allMembers.findIndex(m=>m.id===editId); if(i>-1) allMembers[i]={...allMembers[i],...data}; allMembers.sort((a,b)=>(parseInt(a.num)||999)-(parseInt(b.num)||999)||a.name.localeCompare(b.name,'ko')); renderSummary(); renderMembers(); closeModal(); showToast('✅ 수정되었습니다.'); reset(); })
+      .catch(e=>{ showToast('❌ 실패: '+e.message); reset(); });
+  } else {
+    api('/members', {method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({...data,createdAt:Date.now()})})
+      .then(res=>{ allMembers.push({id:res.name,...data}); allMembers.sort((a,b)=>(parseInt(a.num)||999)-(parseInt(b.num)||999)||a.name.localeCompare(b.name,'ko')); renderSummary(); renderMembers(); closeModal(); showToast('✅ 추가되었습니다.'); reset(); })
+      .catch(e=>{ showToast('❌ 실패: '+e.message); reset(); });
+  }
+}
+
+function delMember(id){
+  if(!confirm('이 회원을 삭제하시겠습니까?')) return;
+  api('/members/'+id, {method:'DELETE'})
+    .then(()=>{ allMembers=allMembers.filter(m=>m.id!==id); renderSummary(); renderMembers(); showToast('✅ 삭제되었습니다.'); })
+    .catch(e=>showToast('❌ 실패: '+e.message));
+}
+
+/* 렌더 */
+function renderSummary(){
+  document.getElementById('s-total').textContent = allMembers.length;
+  ['FW','MF','DF','GK'].forEach(p=>{ document.getElementById('s-'+p.toLowerCase()).textContent = allMembers.filter(m=>m.pos===p).length; });
+}
+
+function renderMembers(){
+  const grid = document.getElementById('members-grid');
+  const filtered = allMembers.filter(m=>{
+    const posOk = curPos==='전체' || m.pos===curPos;
+    const srchOk = !curSearch || m.name.includes(curSearch);
+    return posOk && srchOk;
+  });
+  if(filtered.length===0){ grid.innerHTML='<div class="empty" style="grid-column:1/-1;">👤 등록된 회원이 없습니다.</div>'; return; }
+  grid.innerHTML = filtered.map(m=>`
+    <div class="member-card">
+      <div class="card-actions${isAdmin()?' show':''}">
+        <button class="btn-icon btn-icon-edit" data-id="${m.id}">✏️</button>
+        <button class="btn-icon btn-icon-del" data-id="${m.id}">🗑</button>
+      </div>
+      <div class="member-num">${m.num||'-'}</div>
+      <div class="avatar" style="background:${posColor[m.pos]||'#f3f4f6'};">${posEmoji[m.pos]||'⚽'}</div>
+      <div class="member-name">${m.name}</div>
+      <span class="pos-badge ${posCls[m.pos]||''}">${m.pos||'?'}</span>
+    </div>`).join('');
+
+  grid.querySelectorAll('.btn-icon-edit').forEach(b=>b.onclick=()=>{ const m=allMembers.find(x=>x.id===b.dataset.id); if(m) openModal(m); });
+  grid.querySelectorAll('.btn-icon-del').forEach(b=>b.onclick=()=>delMember(b.dataset.id));
+}
+
+/* 필터·검색 */
+document.querySelectorAll('.pos-btn').forEach(b=>b.onclick=function(){
+  curPos=this.dataset.pos;
+  document.querySelectorAll('.pos-btn').forEach(x=>x.classList.remove('active'));
+  this.classList.add('active'); renderMembers();
+});
+document.getElementById('search-input').oninput=function(){ curSearch=this.value.trim(); renderMembers(); };
+
+/* 버튼 */
+document.getElementById('btn-add').onclick=()=>{ if(isAdmin()) openModal(); else openPw(()=>openModal()); };
+document.getElementById('btn-modal-cancel').onclick=closeModal;
+document.getElementById('btn-submit').onclick=saveMember;
+document.getElementById('btn-pw-cancel').onclick=closePw;
+document.getElementById('btn-pw-ok').onclick=checkPw;
+document.getElementById('pw-input').onkeydown=e=>{ if(e.key==='Enter') checkPw(); };
+document.getElementById('f-name').onkeydown=e=>{ if(e.key==='Enter') saveMember(); };
+
+function showToast(msg){ const t=document.getElementById('toast'); t.textContent=msg; t.classList.add('show'); setTimeout(()=>t.classList.remove('show'),2500); }
+
+setAdminUI();
+loadMembers();
+</script>
 </body>
 </html>
