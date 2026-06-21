@@ -574,10 +574,15 @@ function switchView(v){
 function showToast(msg){ const t=document.getElementById('toast');t.textContent=msg;t.classList.add('show');setTimeout(()=>t.classList.remove('show'),2500); }
 
 // URL 파라미터로 특정 글 바로 열기
-const urlId = new URLSearchParams(location.search).get('id');
-loadPosts().then(() => {
-  if(urlId) showDetail(urlId);
-});
+async function init() {
+  await loadPosts();
+  const urlId = new URLSearchParams(location.search).get('id');
+  if(urlId) {
+    const found = allPosts.find(p => p.id === urlId);
+    if(found) await showDetail(urlId);
+  }
+}
+init();
 </script>
 </body>
 </html>
