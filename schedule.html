@@ -25,9 +25,7 @@
   .summary-cards{display:grid;grid-template-columns:repeat(5,1fr);gap:12px;}
   .sum-card{background:#fff;border-radius:12px;padding:16px;text-align:center;box-shadow:var(--shadow);}
   .sum-num{font-size:28px;font-weight:900;line-height:1;}
-  .sum-num.win{color:var(--green);}
-  .sum-num.draw{color:#f59e0b;}
-  .sum-num.lose{color:#ef4444;}
+  .sum-num.win{color:var(--green);} .sum-num.draw{color:#f59e0b;} .sum-num.lose{color:#ef4444;}
   .sum-label{font-size:12px;color:var(--gray2);margin-top:4px;}
   .main-wrap{max-width:960px;margin:0 auto;padding:24px 40px 60px;}
   .top-bar{display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;flex-wrap:wrap;gap:12px;}
@@ -35,30 +33,25 @@
   .tab-btn{padding:7px 18px;border-radius:8px;border:1.5px solid var(--gray3);background:#fff;font-size:13px;font-weight:600;color:var(--gray2);cursor:pointer;font-family:inherit;transition:all .2s;}
   .tab-btn.active{background:var(--green);color:#fff;border-color:var(--green);}
   .add-btn{background:var(--green);color:#fff;border:none;border-radius:9px;padding:9px 20px;font-size:14px;font-weight:700;cursor:pointer;font-family:inherit;}
-  .add-btn:hover{background:#155f2e;}
   .admin-badge{display:inline-flex;align-items:center;gap:5px;background:#ecfdf5;color:var(--green);border:1px solid #a7f3d0;font-size:12px;font-weight:700;padding:4px 10px;border-radius:6px;cursor:pointer;}
   .match-list{display:flex;flex-direction:column;gap:10px;}
   .match-card{background:#fff;border-radius:var(--radius);box-shadow:var(--shadow);padding:20px 24px;}
-  .match-head{display:flex;align-items:center;gap:12px;margin-bottom:12px;}
+  .match-head{display:flex;align-items:center;gap:12px;margin-bottom:12px;flex-wrap:wrap;}
   .match-date-badge{font-size:13px;font-weight:700;background:var(--dark);color:#fff;padding:4px 10px;border-radius:6px;}
   .home-badge{font-size:11px;font-weight:700;padding:3px 8px;border-radius:5px;}
   .hb-home{background:#ecfdf5;color:var(--green);border:1px solid #a7f3d0;}
   .hb-away{background:#eff6ff;color:#2563eb;border:1px solid #bfdbfe;}
-  .match-loc{font-size:12px;color:var(--gray2);margin-left:auto;}
+  .match-loc{font-size:12px;color:var(--gray2);}
   .game-row{display:flex;align-items:center;gap:10px;padding:7px 0;border-bottom:1px solid #f3f4f6;font-size:13px;}
   .game-row:last-child{border-bottom:none;}
   .game-num{font-size:11px;font-weight:700;color:var(--gray2);width:44px;flex-shrink:0;}
   .team-us{font-weight:800;color:var(--green);}
   .team-opp{font-weight:700;}
   .score-wrap{display:flex;align-items:center;gap:4px;font-size:18px;font-weight:900;margin:0 6px;}
-  .sw{color:var(--green);}
-  .sd{color:#f59e0b;}
-  .sl{color:#ef4444;}
+  .sw{color:var(--green);} .sd{color:#f59e0b;} .sl{color:#ef4444;}
   .vs-txt{font-size:13px;font-weight:700;color:#9ca3af;margin:0 8px;}
   .r-badge{font-size:10px;font-weight:800;padding:2px 5px;border-radius:4px;}
-  .rb-w{background:#ecfdf5;color:var(--green);}
-  .rb-d{background:#fffbeb;color:#d97706;}
-  .rb-l{background:#fef2f2;color:#ef4444;}
+  .rb-w{background:#ecfdf5;color:var(--green);} .rb-d{background:#fffbeb;color:#d97706;} .rb-l{background:#fef2f2;color:#ef4444;}
   .match-admin-btns{display:none;gap:6px;margin-top:10px;justify-content:flex-end;}
   .match-admin-btns.show{display:flex;}
   .btn-sm{padding:5px 12px;border-radius:6px;font-size:12px;font-weight:600;cursor:pointer;font-family:inherit;border:1.5px solid;}
@@ -72,7 +65,6 @@
   .page-btn{width:36px;height:36px;border-radius:9px;border:1.5px solid var(--gray3);background:#fff;font-size:13px;font-weight:600;color:var(--gray2);cursor:pointer;display:flex;align-items:center;justify-content:center;font-family:inherit;transition:all .2s;}
   .page-btn:hover{border-color:var(--green);color:var(--green);}
   .page-btn.active{background:var(--green);color:#fff;border-color:var(--green);}
-  /* 모달 */
   .overlay{position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:200;display:flex;align-items:center;justify-content:center;backdrop-filter:blur(4px);}
   .mbox{background:#fff;border-radius:16px;padding:28px;width:480px;max-width:95vw;box-shadow:0 8px 40px rgba(0,0,0,.2);max-height:90vh;overflow-y:auto;}
   .mbox h3{font-size:18px;font-weight:800;margin-bottom:18px;}
@@ -93,10 +85,8 @@
   .btn-del-gi{padding:5px 8px;border-radius:6px;background:#fee2e2;color:#ef4444;border:none;cursor:pointer;font-size:13px;}
   .mbtns{display:flex;gap:8px;justify-content:flex-end;margin-top:18px;}
   .mbtn-ok{padding:10px 24px;border-radius:9px;background:var(--green);color:#fff;border:none;font-size:14px;font-weight:700;cursor:pointer;font-family:inherit;}
-  .mbtn-ok:hover{background:#155f2e;}
   .mbtn-cancel{padding:10px 18px;border-radius:9px;border:1.5px solid var(--gray3);background:#fff;font-size:14px;font-weight:600;color:var(--gray2);cursor:pointer;font-family:inherit;}
   .pw-input{width:100%;padding:11px 16px;border:1.5px solid var(--gray3);border-radius:9px;font-size:15px;font-family:inherit;outline:none;letter-spacing:3px;margin-bottom:6px;}
-  .pw-input:focus{border-color:var(--green);}
   .pw-err{font-size:12px;color:#ef4444;min-height:18px;margin-bottom:10px;}
   footer{background:var(--dark);color:#6b7280;padding:28px 40px;font-size:13px;display:flex;align-items:center;justify-content:space-between;}
   .footer-logo{font-size:17px;font-weight:900;color:#fff;margin-bottom:4px;}
@@ -106,34 +96,27 @@
     .summary-cards{grid-template-columns:repeat(3,1fr);}
     .main-wrap,.summary-bar{padding-left:16px;padding-right:16px;}
     .page-header{padding:28px 20px;} nav{padding:0 16px;}
-    .gi-row{grid-template-columns:44px 1fr 36px 10px 36px 30px;gap:4px;}
     footer{flex-direction:column;gap:12px;}
   }
 </style>
 </head>
 <body>
-
 <nav>
   <div class="nav-logo" onclick="location.href='index.html'">⚽ 중흥FC <span class="badge">조기축구</span></div>
   <ul class="nav-links">
-    <li><a onclick="location.href='index.html'">공지사항</a></li>
+    <li><a onclick="location.href='notice.html'">공지사항</a></li>
     <li><a class="active">경기일정</a></li>
-    <li><a onclick="location.href='index.html'">회원명단</a></li>
-    <li><a onclick="location.href='index.html'">갤러리</a></li>
+    <li><a onclick="location.href='members.html'">회원명단</a></li>
+    <li><a onclick="location.href='gallery.html'">갤러리</a></li>
   </ul>
 </nav>
-
 <div class="page-header">
   <div class="page-header-inner">
-    <div class="breadcrumb">
-      <span onclick="location.href='index.html'" style="cursor:pointer;">홈</span>
-      <span>›</span><span class="cur">경기일정·결과</span>
-    </div>
+    <div class="breadcrumb"><span onclick="location.href='index.html'" style="cursor:pointer;">홈</span><span>›</span><span class="cur">경기일정·결과</span></div>
     <h1>🏆 경기일정 · 결과</h1>
     <p>중흥FC의 모든 경기 기록을 확인하세요.</p>
   </div>
 </div>
-
 <div class="summary-bar">
   <div class="summary-cards">
     <div class="sum-card"><div class="sum-num" id="s-total">-</div><div class="sum-label">총 경기</div></div>
@@ -143,7 +126,6 @@
     <div class="sum-card"><div class="sum-num" id="s-goal">-</div><div class="sum-label">총 득점</div></div>
   </div>
 </div>
-
 <div class="main-wrap">
   <div class="top-bar">
     <div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap;">
@@ -156,21 +138,17 @@
     </div>
     <button class="add-btn" id="btn-open">+ 경기 등록</button>
   </div>
-  <div class="match-list" id="match-list">
-    <div class="loading"><div class="spinner"></div>불러오는 중...</div>
-  </div>
+  <div class="match-list" id="match-list"><div class="loading"><div class="spinner"></div>불러오는 중...</div></div>
   <div class="pagination" id="pagination"></div>
 </div>
 
-<!-- 경기 등록/수정 모달 -->
+<!-- 경기 모달 -->
 <div class="overlay" id="match-modal" style="display:none;">
   <div class="mbox">
     <h3 id="modal-title">경기 등록</h3>
     <div class="frow">
       <div class="fg"><label>경기일 *</label><input type="date" id="f-date"></div>
-      <div class="fg"><label>홈/원정</label>
-        <select id="f-ha"><option value="홈">홈</option><option value="원정">원정</option></select>
-      </div>
+      <div class="fg"><label>홈/원정</label><select id="f-ha"><option value="홈">홈</option><option value="원정">원정</option></select></div>
     </div>
     <div class="fg"><label>장소</label><input type="text" id="f-loc" placeholder="예) 일곡 생활체육공원"></div>
     <div class="fg"><label>메모</label><input type="text" id="f-note" placeholder="예) 정기 친선경기"></div>
@@ -178,8 +156,7 @@
       <div class="games-box-title">⚽ 게임 결과 입력</div>
       <div class="gi-row" style="margin-bottom:4px;">
         <div class="gi-lbl">게임</div><div class="gi-lbl">상대팀</div>
-        <div class="gi-lbl">우리</div><div></div>
-        <div class="gi-lbl">상대</div><div></div>
+        <div class="gi-lbl">우리</div><div></div><div class="gi-lbl">상대</div><div></div>
       </div>
       <div id="gi-container"></div>
       <button class="btn-add-gi" id="btn-add-gi">+ 게임 추가</button>
@@ -192,7 +169,7 @@
   </div>
 </div>
 
-<!-- 관리자 비번 모달 -->
+<!-- 비번 모달 -->
 <div class="overlay" id="pw-modal" style="display:none;">
   <div class="mbox" style="width:320px;">
     <h3>🔐 관리자 확인</h3>
@@ -212,285 +189,213 @@
 </footer>
 <div class="toast" id="toast"></div>
 
-<!-- Firebase compat (일반 스크립트, window 전역) -->
 <script>
-
-
-/* ── 상태 ── */
-const ADMIN_PW  = 'joonghung2015';
+const DB = 'https://joonghung-9a14c-default-rtdb.asia-southeast1.firebasedatabase.app';
+const ADMIN_PW = 'joonghung2015';
 const ADMIN_KEY = 'jfc_admin';
-let allMatches  = [];
-let curTab      = 'all';
-let curPage     = 1;
-const PAGE_SIZE = 10;
-let editingId   = null;
-let pwCallback  = null;
 
-/* ── 관리자 ── */
-function isAdmin(){ return sessionStorage.getItem(ADMIN_KEY)==='1'; }
+let allMatches = [];
+let curTab = 'all';
+let curPage = 1;
+const PAGE = 10;
+let editId = null;
+let pwCb = null;
+
+/* 관리자 */
+const isAdmin = () => sessionStorage.getItem(ADMIN_KEY) === '1';
 function setAdminUI(){
   const el = document.getElementById('admin-ui');
   if(isAdmin()){
-    el.innerHTML = '<span class="admin-badge" id="logout-span">✅ 관리자 · 로그아웃</span>';
-    document.getElementById('logout-span').onclick = () => {
+    el.innerHTML = '<span class="admin-badge" id="logout-btn">✅ 관리자 · 로그아웃</span>';
+    document.getElementById('logout-btn').onclick = () => {
       sessionStorage.removeItem(ADMIN_KEY); setAdminUI(); renderList();
     };
-  } else { el.innerHTML = ''; }
-  document.querySelectorAll('.match-admin-btns').forEach(b => {
-    b.classList.toggle('show', isAdmin());
-  });
+  } else { el.innerHTML=''; }
+  document.querySelectorAll('.match-admin-btns').forEach(b => b.classList.toggle('show', isAdmin()));
 }
 
-/* ── 비밀번호 모달 ── */
-function openPwModal(cb){
-  pwCallback = cb;
-  document.getElementById('pw-input').value = '';
-  document.getElementById('pw-err').textContent = '';
-  document.getElementById('pw-modal').style.display = 'flex';
-  setTimeout(() => document.getElementById('pw-input').focus(), 100);
-}
-function closePwModal(){ document.getElementById('pw-modal').style.display='none'; }
+/* 비번 모달 */
+function openPw(cb){ pwCb=cb; document.getElementById('pw-input').value=''; document.getElementById('pw-err').textContent=''; document.getElementById('pw-modal').style.display='flex'; setTimeout(()=>document.getElementById('pw-input').focus(),100); }
+function closePw(){ document.getElementById('pw-modal').style.display='none'; }
 function checkPw(){
-  const v = document.getElementById('pw-input').value;
-  if(v === ADMIN_PW){
-    sessionStorage.setItem(ADMIN_KEY,'1');
-    closePwModal(); setAdminUI();
-    if(pwCallback){ pwCallback(); pwCallback=null; }
-  } else {
-    document.getElementById('pw-err').textContent = '❌ 비밀번호가 틀렸습니다.';
-    document.getElementById('pw-input').value = '';
-  }
+  if(document.getElementById('pw-input').value === ADMIN_PW){
+    sessionStorage.setItem(ADMIN_KEY,'1'); closePw(); setAdminUI();
+    if(pwCb){ pwCb(); pwCb=null; }
+  } else { document.getElementById('pw-err').textContent='❌ 비밀번호가 틀렸습니다.'; document.getElementById('pw-input').value=''; }
 }
 
-/* ── 경기 모달 ── */
-function openMatchModal(m){
-  editingId = m ? m.id : null;
+/* 경기 모달 */
+function openModal(m){
+  editId = m ? m.id : null;
   document.getElementById('modal-title').textContent = m ? '경기 수정' : '경기 등록';
   document.getElementById('btn-submit').textContent  = m ? '수정하기' : '등록하기';
-  document.getElementById('f-date').value = m ? m.date  : '';
+  document.getElementById('f-date').value = m ? m.date : '';
   document.getElementById('f-ha').value   = m ? (m.homeaway||'홈') : '홈';
-  document.getElementById('f-loc').value  = m ? (m.location||'')   : '';
-  document.getElementById('f-note').value = m ? (m.note||'')       : '';
-  buildGameInputs(m ? (m.games||[]) : [{opp_name:'',us:'',opp:''}]);
-  document.getElementById('match-modal').style.display = 'flex';
+  document.getElementById('f-loc').value  = m ? (m.location||'') : '';
+  document.getElementById('f-note').value = m ? (m.note||'') : '';
+  buildGames(m ? (m.games||[]) : [{opp_name:'',us:'',opp:''}]);
+  document.getElementById('match-modal').style.display='flex';
 }
-function closeMatchModal(){ document.getElementById('match-modal').style.display='none'; }
+function closeModal(){ document.getElementById('match-modal').style.display='none'; }
 
-function buildGameInputs(games){
-  const c = document.getElementById('gi-container');
-  c.innerHTML = '';
-  games.forEach((g,i) => appendGameRow(g, i+1));
-}
-function appendGameRow(g, num){
-  const c   = document.getElementById('gi-container');
-  const div = document.createElement('div');
-  div.className = 'gi-row';
-  div.innerHTML = `
-    <span style="font-size:12px;font-weight:700;color:var(--gray2);text-align:center;">${num||c.children.length+1}게임</span>
-    <input type="text"   class="opp-name" placeholder="상대팀" value="${g.opp_name||''}">
-    <input type="number" class="g-us"     placeholder="0"      value="${g.us!==undefined&&g.us!==''?g.us:''}" min="0" max="99">
+function buildGames(list){ const c=document.getElementById('gi-container'); c.innerHTML=''; list.forEach((g,i)=>addGameRow(g,i+1)); }
+function addGameRow(g, num){
+  const c=document.getElementById('gi-container');
+  const n=num||c.children.length+1;
+  const d=document.createElement('div'); d.className='gi-row';
+  d.innerHTML=`<span style="font-size:12px;font-weight:700;color:var(--gray2);text-align:center;">${n}게임</span>
+    <input type="text" class="opp-name" placeholder="상대팀" value="${g.opp_name||''}">
+    <input type="number" class="g-us" placeholder="0" value="${(g.us!==undefined&&g.us!=='')?g.us:''}" min="0" max="99">
     <span class="gi-sep">:</span>
-    <input type="number" class="g-opp"    placeholder="0"      value="${g.opp!==undefined&&g.opp!==''?g.opp:''}" min="0" max="99">
+    <input type="number" class="g-opp" placeholder="0" value="${(g.opp!==undefined&&g.opp!=='')?g.opp:''}" min="0" max="99">
     <button class="btn-del-gi">✕</button>`;
-  div.querySelector('.btn-del-gi').onclick = () => { div.remove(); renumGames(); };
-  c.appendChild(div);
+  d.querySelector('.btn-del-gi').onclick=()=>{ d.remove(); renum(); };
+  c.appendChild(d);
 }
-function renumGames(){
-  document.querySelectorAll('#gi-container .gi-row').forEach((r,i) => {
-    r.querySelector('span').textContent = `${i+1}게임`;
-  });
-}
-function getGames(){
-  return Array.from(document.querySelectorAll('#gi-container .gi-row')).map(r => ({
-    opp_name: r.querySelector('.opp-name').value.trim(),
-    us:       r.querySelector('.g-us').value,
-    opp:      r.querySelector('.g-opp').value
-  }));
-}
+function renum(){ document.querySelectorAll('#gi-container .gi-row').forEach((r,i)=>{ r.querySelector('span').textContent=`${i+1}게임`; }); }
+function getGames(){ return Array.from(document.querySelectorAll('#gi-container .gi-row')).map(r=>({ opp_name:r.querySelector('.opp-name').value.trim(), us:r.querySelector('.g-us').value, opp:r.querySelector('.g-opp').value })); }
 
-/* ── Firebase CRUD ── */
+/* Firebase REST */
+function apiGet(path){ return fetch(DB+path+'.json').then(r=>{ if(!r.ok) throw new Error('HTTP '+r.status); return r.json(); }); }
+function apiPost(path,data){ return fetch(DB+path+'.json',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(data)}).then(r=>{ if(!r.ok) throw new Error('HTTP '+r.status); return r.json(); }); }
+function apiPatch(path,data){ return fetch(DB+path+'.json',{method:'PATCH',headers:{'Content-Type':'application/json'},body:JSON.stringify(data)}).then(r=>{ if(!r.ok) throw new Error('HTTP '+r.status); return r.json(); }); }
+function apiDel(path){ return fetch(DB+path+'.json',{method:'DELETE'}).then(r=>{ if(!r.ok) throw new Error('HTTP '+r.status); }); }
+
 function loadMatches(){
-  document.getElementById('match-list').innerHTML =
-    '<div class="loading"><div class="spinner"></div>불러오는 중...</div>';
-  dbRef.ref('matches').once('value').then(snap => {
-    allMatches = [];
-    if(snap.exists()) snap.forEach(c => allMatches.push({id:c.key, ...c.val()}));
-    allMatches.sort((a,b) => b.date.localeCompare(a.date));
-    renderSummary();
-    renderList();
-  }).catch(e => {
-    document.getElementById('match-list').innerHTML =
-      `<div class="empty">⚠️ 데이터를 불러올 수 없습니다.<br><small>${e.message}</small></div>`;
+  document.getElementById('match-list').innerHTML='<div class="loading"><div class="spinner"></div>불러오는 중...</div>';
+  apiGet('/matches').then(data=>{
+    allMatches=[];
+    if(data && typeof data==='object'){
+      Object.entries(data).forEach(([k,v])=>{ if(v) allMatches.push({id:k,...v}); });
+    }
+    allMatches.sort((a,b)=>(b.date||'').localeCompare(a.date||''));
+    renderSummary(); renderList();
+  }).catch(e=>{
+    document.getElementById('match-list').innerHTML='<div class="empty">⚠️ 불러오기 실패: '+e.message+'</div>';
   });
 }
 
 function saveMatch(){
-  const date = document.getElementById('f-date').value;
+  const date=document.getElementById('f-date').value;
   if(!date){ showToast('⚠️ 경기일을 선택해 주세요.'); return; }
-  const data = {
-    date,
-    homeaway: document.getElementById('f-ha').value,
-    location: document.getElementById('f-loc').value.trim(),
-    note:     document.getElementById('f-note').value.trim(),
-    games:    getGames(),
-    updatedAt: Date.now()
-  };
-  const btn = document.getElementById('btn-submit');
-  btn.disabled = true; btn.textContent = '저장 중...';
-
-  const done = (msg) => {
-    allMatches.sort((a,b) => b.date.localeCompare(a.date));
-    renderSummary(); renderList();
-    closeMatchModal();
-    showToast(msg);
-    btn.disabled = false;
-    btn.textContent = editingId ? '수정하기' : '등록하기';
-  };
-
-  const DB_URL = 'https://joonghung-9a14c-default-rtdb.asia-southeast1.firebasedatabase.app';
-  if(editingId){
-    fetch(DB_URL+'/matches/'+editingId+'.json', {method:'PATCH', body:JSON.stringify(data)})
-      .then(r=>r.json())
-      .then(()=>{
-        const idx=allMatches.findIndex(m=>m.id===editingId);
-        if(idx>-1) allMatches[idx]={...allMatches[idx],...data};
-        done('✅ 수정되었습니다.');
-      }).catch(e=>{showToast('❌ 실패: '+e.message); btn.disabled=false;});
+  const data={ date, homeaway:document.getElementById('f-ha').value, location:document.getElementById('f-loc').value.trim(), note:document.getElementById('f-note').value.trim(), games:getGames(), updatedAt:Date.now() };
+  const btn=document.getElementById('btn-submit');
+  btn.disabled=true; btn.textContent='저장 중...';
+  const reset=()=>{ btn.disabled=false; btn.textContent=editId?'수정하기':'등록하기'; };
+  if(editId){
+    apiPatch('/matches/'+editId, data).then(()=>{
+      const i=allMatches.findIndex(m=>m.id===editId);
+      if(i>-1) allMatches[i]={...allMatches[i],...data};
+      allMatches.sort((a,b)=>(b.date||'').localeCompare(a.date||''));
+      renderSummary(); renderList(); closeModal(); showToast('✅ 수정되었습니다.'); reset();
+    }).catch(e=>{ showToast('❌ 실패: '+e.message); reset(); });
   } else {
-    data.createdAt = Date.now();
-    fetch(DB_URL+'/matches.json', {method:'POST', body:JSON.stringify(data)})
-      .then(r=>r.json())
-      .then(res=>{
-        allMatches.unshift({id:res.name, ...data});
-        done('✅ 등록되었습니다.');
-      }).catch(e=>{showToast('❌ 실패: '+e.message); btn.disabled=false;});
+    data.createdAt=Date.now();
+    apiPost('/matches', data).then(res=>{
+      allMatches.unshift({id:res.name,...data});
+      allMatches.sort((a,b)=>(b.date||'').localeCompare(a.date||''));
+      renderSummary(); renderList(); closeModal(); showToast('✅ 등록되었습니다.'); reset();
+    }).catch(e=>{ showToast('❌ 실패: '+e.message); reset(); });
   }
 }
 
-function deleteMatch(id){
+function delMatch(id){
   if(!confirm('이 경기를 삭제하시겠습니까?')) return;
-  dbRef.ref('matches/'+id).remove().then(() => {
-    allMatches = allMatches.filter(m => m.id!==id);
-    renderSummary(); renderList();
-    showToast('✅ 삭제되었습니다.');
-  }).catch(e => showToast('❌ 실패: '+e.message));
+  apiDel('/matches/'+id).then(()=>{
+    allMatches=allMatches.filter(m=>m.id!==id);
+    renderSummary(); renderList(); showToast('✅ 삭제되었습니다.');
+  }).catch(e=>showToast('❌ 실패: '+e.message));
 }
 
-/* ── 렌더 ── */
-function hasResult(m){
-  return m.games && m.games.some(g =>
-    g.us!==''&&g.us!==null&&g.us!==undefined&&g.opp!==''&&g.opp!==null&&g.opp!==undefined
-  );
-}
+/* 렌더 */
+function hasResult(m){ return m.games&&m.games.some(g=>g.us!==''&&g.us!=null&&g.opp!==''&&g.opp!=null); }
 function renderSummary(){
-  let total=0,win=0,draw=0,lose=0,goal=0;
-  allMatches.forEach(m => (m.games||[]).forEach(g => {
-    const us=parseInt(g.us), opp=parseInt(g.opp);
-    if(isNaN(us)||isNaN(opp)) return;
-    total++; goal+=us;
-    if(us>opp) win++; else if(us===opp) draw++; else lose++;
+  let t=0,w=0,d=0,l=0,g=0;
+  allMatches.forEach(m=>(m.games||[]).forEach(gm=>{
+    const us=parseInt(gm.us),op=parseInt(gm.opp);
+    if(isNaN(us)||isNaN(op)) return;
+    t++; g+=us;
+    if(us>op) w++; else if(us===op) d++; else l++;
   }));
-  document.getElementById('s-total').textContent = total;
-  document.getElementById('s-win').textContent   = win;
-  document.getElementById('s-draw').textContent  = draw;
-  document.getElementById('s-lose').textContent  = lose;
-  document.getElementById('s-goal').textContent  = goal;
+  document.getElementById('s-total').textContent=t;
+  document.getElementById('s-win').textContent=w;
+  document.getElementById('s-draw').textContent=d;
+  document.getElementById('s-lose').textContent=l;
+  document.getElementById('s-goal').textContent=g;
 }
 function renderList(){
   const days=['일','월','화','수','목','금','토'];
-  const filtered = allMatches.filter(m =>
-    curTab==='all' ? true : curTab==='result' ? hasResult(m) : !hasResult(m)
-  );
-  const total = Math.max(1, Math.ceil(filtered.length/PAGE_SIZE));
+  const filtered=allMatches.filter(m=>curTab==='all'?true:curTab==='result'?hasResult(m):!hasResult(m));
+  const total=Math.max(1,Math.ceil(filtered.length/PAGE));
   if(curPage>total) curPage=1;
-  const paged = filtered.slice((curPage-1)*PAGE_SIZE, curPage*PAGE_SIZE);
-  const list  = document.getElementById('match-list');
-
-  if(paged.length===0){
-    list.innerHTML='<div class="empty">📋 등록된 경기가 없습니다.</div>';
-    document.getElementById('pagination').innerHTML='';
-    return;
-  }
-
-  list.innerHTML = paged.map(m => {
-    const d   = m.date||'';
-    const obj = d ? new Date(d) : null;
-    const day = obj ? `(${days[obj.getDay()]})` : '';
-    const gamesHTML = (m.games||[]).map((g,i) => {
-      const us=parseInt(g.us), opp=parseInt(g.opp);
-      const ok = !isNaN(us)&&!isNaN(opp)&&g.us!==''&&g.opp!=='';
+  const paged=filtered.slice((curPage-1)*PAGE,curPage*PAGE);
+  const list=document.getElementById('match-list');
+  if(paged.length===0){ list.innerHTML='<div class="empty">📋 등록된 경기가 없습니다.</div>'; document.getElementById('pagination').innerHTML=''; return; }
+  list.innerHTML=paged.map(m=>{
+    const obj=m.date?new Date(m.date):null;
+    const day=obj?`(${days[obj.getDay()]})`:'' ;
+    const gHTML=(m.games||[]).map((g,i)=>{
+      const us=parseInt(g.us),op=parseInt(g.opp);
+      const ok=!isNaN(us)&&!isNaN(op)&&g.us!==''&&g.opp!=='';
       let sc='';
       if(ok){
-        const uc=us>opp?'sw':us===opp?'sd':'sl';
-        const oc=opp>us?'sl':opp===us?'sd':'sw';
-        const bc=us>opp?'rb-w':us===opp?'rb-d':'rb-l';
-        const bl=us>opp?'승':us===opp?'무':'패';
-        sc=`<div class="score-wrap"><span class="${uc}">${us}</span><span style="color:#d1d5db;font-size:14px;">:</span><span class="${oc}">${opp}</span></div>
-            <span class="r-badge ${bc}">${bl}</span>`;
-      } else {
-        sc=`<span class="vs-txt">VS</span>`;
-      }
-      return `<div class="game-row">
-        <span class="game-num">${i+1}게임</span>
-        <span class="team-us">중흥FC</span>
-        ${sc}
-        <span class="team-opp">${g.opp_name||'상대팀'}</span>
-      </div>`;
+        const uc=us>op?'sw':us===op?'sd':'sl', oc=op>us?'sl':op===us?'sd':'sw';
+        const bc=us>op?'rb-w':us===op?'rb-d':'rb-l', bl=us>op?'승':us===op?'무':'패';
+        sc=`<div class="score-wrap"><span class="${uc}">${us}</span><span style="color:#d1d5db;font-size:14px;">:</span><span class="${oc}">${op}</span></div><span class="r-badge ${bc}">${bl}</span>`;
+      } else sc=`<span class="vs-txt">VS</span>`;
+      return `<div class="game-row"><span class="game-num">${i+1}게임</span><span class="team-us">중흥FC</span>${sc}<span class="team-opp">${g.opp_name||'상대팀'}</span></div>`;
     }).join('');
-
     return `<div class="match-card">
       <div class="match-head">
-        <span class="match-date-badge">${d.replace(/-/g,'.')} ${day}</span>
+        <span class="match-date-badge">${(m.date||'').replace(/-/g,'.')} ${day}</span>
         <span class="home-badge ${m.homeaway==='원정'?'hb-away':'hb-home'}">${m.homeaway||'홈'}</span>
         ${m.location?`<span class="match-loc">📍 ${m.location}</span>`:''}
       </div>
-      ${gamesHTML||'<div style="font-size:13px;color:#9ca3af;padding:6px 0;">게임 정보 없음</div>'}
+      ${gHTML||'<div style="font-size:13px;color:#9ca3af;padding:6px 0;">게임 정보 없음</div>'}
       ${m.note?`<div style="font-size:12px;color:var(--gray2);margin-top:8px;">📝 ${m.note}</div>`:''}
       <div class="match-admin-btns${isAdmin()?' show':''}">
-        <button class="btn-sm btn-edit-sm" onclick="(function(){openMatchModal(allMatches.find(x=>x.id==='${m.id}'))})()">✏️ 수정</button>
-        <button class="btn-sm btn-del-sm"  onclick="deleteMatch('${m.id}')">🗑 삭제</button>
+        <button class="btn-sm btn-edit-sm" data-id="${m.id}">✏️ 수정</button>
+        <button class="btn-sm btn-del-sm" data-id="${m.id}">🗑 삭제</button>
       </div>
     </div>`;
   }).join('');
 
+  // 수정/삭제 이벤트
+  document.querySelectorAll('.btn-edit-sm').forEach(b=>b.onclick=()=>{ const m=allMatches.find(x=>x.id===b.dataset.id); if(m) openModal(m); });
+  document.querySelectorAll('.btn-del-sm').forEach(b=>b.onclick=()=>delMatch(b.dataset.id));
+
   // 페이지네이션
-  const pg = document.getElementById('pagination');
+  const pg=document.getElementById('pagination');
   if(total<=1){pg.innerHTML='';return;}
-  let h=`<button class="page-btn" onclick="curPage=Math.max(1,curPage-1);renderList()">‹</button>`;
-  for(let i=1;i<=total;i++) h+=`<button class="page-btn${i===curPage?' active':''}" onclick="curPage=${i};renderList()">${i}</button>`;
-  h+=`<button class="page-btn" onclick="curPage=Math.min(${total},curPage+1);renderList()">›</button>`;
+  let h=`<button class="page-btn" id="pg-prev">‹</button>`;
+  for(let i=1;i<=total;i++) h+=`<button class="page-btn${i===curPage?' active':''}" data-p="${i}">${i}</button>`;
+  h+=`<button class="page-btn" id="pg-next">›</button>`;
   pg.innerHTML=h;
+  pg.querySelectorAll('[data-p]').forEach(b=>b.onclick=()=>{curPage=parseInt(b.dataset.p);renderList();});
+  document.getElementById('pg-prev').onclick=()=>{if(curPage>1){curPage--;renderList();}};
+  document.getElementById('pg-next').onclick=()=>{if(curPage<total){curPage++;renderList();}};
 }
 
-/* ── 탭 ── */
-['all','result','upcoming'].forEach(t => {
-  document.getElementById('tab-'+t).onclick = function(){
+/* 탭 */
+['all','result','upcoming'].forEach(t=>{
+  document.getElementById('tab-'+t).onclick=function(){
     curTab=t; curPage=1;
     document.querySelectorAll('.tab-btn').forEach(b=>b.classList.remove('active'));
-    this.classList.add('active');
-    renderList();
+    this.classList.add('active'); renderList();
   };
 });
 
-/* ── 버튼 이벤트 ── */
-document.getElementById('btn-open').onclick = () => {
-  if(isAdmin()) openMatchModal();
-  else openPwModal(() => openMatchModal());
-};
-document.getElementById('btn-modal-cancel').onclick = closeMatchModal;
-document.getElementById('btn-submit').onclick = saveMatch;
-document.getElementById('btn-add-gi').onclick = () => appendGameRow({}, document.getElementById('gi-container').children.length+1);
-document.getElementById('btn-pw-cancel').onclick = closePwModal;
-document.getElementById('btn-pw-ok').onclick = checkPw;
-document.getElementById('pw-input').onkeydown = e => { if(e.key==='Enter') checkPw(); };
+/* 버튼 */
+document.getElementById('btn-open').onclick=()=>{ if(isAdmin()) openModal(); else openPw(()=>openModal()); };
+document.getElementById('btn-modal-cancel').onclick=closeModal;
+document.getElementById('btn-submit').onclick=saveMatch;
+document.getElementById('btn-add-gi').onclick=()=>addGameRow({},null);
+document.getElementById('btn-pw-cancel').onclick=closePw;
+document.getElementById('btn-pw-ok').onclick=checkPw;
+document.getElementById('pw-input').onkeydown=e=>{if(e.key==='Enter')checkPw();};
 
-function showToast(msg){
-  const t=document.getElementById('toast');
-  t.textContent=msg; t.classList.add('show');
-  setTimeout(()=>t.classList.remove('show'),2500);
-}
+function showToast(msg){ const t=document.getElementById('toast'); t.textContent=msg; t.classList.add('show'); setTimeout(()=>t.classList.remove('show'),2500); }
 
-/* ── 시작 ── */
 setAdminUI();
 loadMatches();
 </script>
