@@ -89,6 +89,21 @@
   .toast.show{opacity:1;transform:translateX(-50%) translateY(0);}
   footer{background:var(--dark);color:#6b7280;padding:28px 40px;font-size:13px;display:flex;align-items:center;justify-content:space-between;}
   .footer-logo{font-size:17px;font-weight:900;color:#fff;margin-bottom:4px;}
+  /* 전화번호 */
+  .phone-btn{display:inline-flex;align-items:center;gap:4px;margin-top:6px;font-size:11px;font-weight:600;color:var(--green);background:#ecfdf5;border:1px solid #a7f3d0;border-radius:5px;padding:3px 8px;cursor:pointer;transition:all .2s;}
+  .phone-btn:hover{background:#d1fae5;}
+  .phone-reveal{display:none;margin-top:4px;font-size:12px;font-weight:700;color:var(--dark);letter-spacing:.5px;}
+  .phone-reveal.show{display:block;}
+  /* 전화번호 확인 모달 */
+  .phone-overlay{position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:300;display:flex;align-items:center;justify-content:center;backdrop-filter:blur(4px);}
+  .phone-box{background:#fff;border-radius:16px;padding:28px;width:300px;max-width:92vw;box-shadow:0 8px 40px rgba(0,0,0,.2);}
+  .phone-box h3{font-size:16px;font-weight:800;margin-bottom:6px;}
+  .phone-box p{font-size:13px;color:var(--gray2);margin-bottom:14px;}
+  .phone-pw{width:100%;padding:10px 14px;border:1.5px solid var(--gray3);border-radius:8px;font-size:15px;font-family:inherit;outline:none;letter-spacing:2px;margin-bottom:6px;}
+  .phone-pw:focus{border-color:var(--green);}
+  .phone-err{font-size:12px;color:#ef4444;min-height:16px;margin-bottom:10px;}
+  .phone-mbtns{display:flex;gap:8px;justify-content:flex-end;}
+
   @media(max-width:640px){
     .main-wrap,.summary-bar{padding-left:16px;padding-right:16px;}
     .page-header{padding:28px 20px;} nav{padding:0 16px;}
@@ -182,9 +197,27 @@
         <option value="GK">GK (골키퍼)</option>
       </select>
     </div>
+    <div class="fg"><label>휴대번호 <span style="font-size:11px;color:var(--gray2);">(비밀번호로 잠금)</span></label>
+      <input type="tel" id="f-phone" placeholder="010-0000-0000">
+    </div>
     <div class="mbtns">
       <button class="mbtn-cancel" id="btn-modal-cancel">취소</button>
       <button class="mbtn-ok" id="btn-submit">추가하기</button>
+    </div>
+  </div>
+</div>
+
+
+<!-- 전화번호 확인 모달 -->
+<div class="phone-overlay" id="phone-modal" style="display:none;">
+  <div class="phone-box">
+    <h3>📱 휴대번호 확인</h3>
+    <p id="phone-modal-name">비밀번호를 입력하면 번호가 표시됩니다.</p>
+    <input class="phone-pw" type="password" id="phone-pw-input" placeholder="비밀번호" maxlength="20">
+    <div class="phone-err" id="phone-pw-err"></div>
+    <div class="phone-mbtns">
+      <button class="mbtn-cancel" id="btn-phone-cancel" style="padding:8px 16px;border-radius:8px;border:1.5px solid var(--gray3);background:#fff;font-size:13px;font-weight:600;color:var(--gray2);cursor:pointer;font-family:inherit;">취소</button>
+      <button class="mbtn-ok" id="btn-phone-ok" style="padding:8px 18px;border-radius:8px;background:var(--green);color:#fff;border:none;font-size:13px;font-weight:700;cursor:pointer;font-family:inherit;">확인</button>
     </div>
   </div>
 </div>
@@ -275,6 +308,7 @@ function openModal(m){
   document.getElementById('f-name').value = m ? m.name : '';
   document.getElementById('f-num').value  = m ? (m.num||'') : '';
   document.getElementById('f-pos').value  = m ? (m.pos||'MF') : 'MF';
+  document.getElementById('f-phone').value = m ? (m.phone||'') : '';
   document.getElementById('member-modal').style.display='flex';
   setTimeout(()=>document.getElementById('f-name').focus(),100);
 }
@@ -295,7 +329,7 @@ function loadMembers(){
 function saveMember(){
   const name = document.getElementById('f-name').value.trim();
   if(!name){ showToast('⚠️ 이름을 입력해 주세요.'); return; }
-  const data = { name, num: document.getElementById('f-num').value, pos: document.getElementById('f-pos').value };
+  const data = { name, num: document.getElementById('f-num').value, pos: document.getElementById('f-pos').value, phone: document.getElementById('f-phone').value.trim() };
   const btn = document.getElementById('btn-submit');
   btn.disabled=true; btn.textContent='저장 중...';
   const reset = () => { btn.disabled=false; btn.textContent=editId?'수정하기':'추가하기'; };
@@ -346,6 +380,7 @@ function renderMembers(){
 
   grid.querySelectorAll('.btn-icon-edit').forEach(b=>b.onclick=()=>{ const m=allMembers.find(x=>x.id===b.dataset.id); if(m) openModal(m); });
   grid.querySelectorAll('.btn-icon-del').forEach(b=>b.onclick=()=>delMember(b.dataset.id));
+  grid.querySelectorAll('.phone-btn').forEach(b=>b.onclick=()=>openPhoneModal(b.dataset.name, b.dataset.phone, b));
 }
 
 /* 필터·검색 */
@@ -366,6 +401,41 @@ document.getElementById('pw-input').onkeydown=e=>{ if(e.key==='Enter') checkPw()
 document.getElementById('f-name').onkeydown=e=>{ if(e.key==='Enter') saveMember(); };
 
 function showToast(msg){ const t=document.getElementById('toast'); t.textContent=msg; t.classList.add('show'); setTimeout(()=>t.classList.remove('show'),2500); }
+
+
+/* ── 전화번호 확인 ── */
+const PHONE_PW = 'joonghung2015';
+let phoneCb = null;
+
+function openPhoneModal(name, phone, btn){
+  document.getElementById('phone-modal-name').textContent = name + '님의 휴대번호를 확인하려면 비밀번호를 입력하세요.';
+  document.getElementById('phone-pw-input').value='';
+  document.getElementById('phone-pw-err').textContent='';
+  document.getElementById('phone-modal').style.display='flex';
+  phoneCb = () => {
+    // 카드 내 phone-reveal 표시
+    const revealEl = btn.nextElementSibling;
+    if(revealEl && revealEl.classList.contains('phone-reveal')){
+      revealEl.textContent = '📞 ' + phone;
+      revealEl.classList.add('show');
+      btn.style.display='none';
+    }
+  };
+  setTimeout(()=>document.getElementById('phone-pw-input').focus(),100);
+}
+function closePhoneModal(){ document.getElementById('phone-modal').style.display='none'; }
+function checkPhonePw(){
+  if(document.getElementById('phone-pw-input').value===PHONE_PW){
+    closePhoneModal(); if(phoneCb){phoneCb();phoneCb=null;}
+  } else {
+    document.getElementById('phone-pw-err').textContent='❌ 비밀번호가 틀렸습니다.';
+    document.getElementById('phone-pw-input').value='';
+  }
+}
+
+document.getElementById('btn-phone-cancel').onclick=closePhoneModal;
+document.getElementById('btn-phone-ok').onclick=checkPhonePw;
+document.getElementById('phone-pw-input').onkeydown=e=>{ if(e.key==='Enter') checkPhonePw(); };
 
 setAdminUI();
 loadMembers();
