@@ -330,11 +330,11 @@
 <!-- MEMBERS -->
 <div class="section" id="members">
   <div class="section-header">
-    <div class="section-title"><span>👥</span> 회원 명단</div>
-    <a href="members.html" class="more-btn">전체보기 →</a>
+    <div class="section-title"><span>📝</span> 경기기록</div>
+    <a href="record.html" class="more-btn">전체보기 →</a>
   </div>
-  <div class="members-grid" id="home-members-grid">
-    <div style="grid-column:1/-1;text-align:center;padding:24px;color:#9ca3af;font-size:14px;">
+  <div id="home-record-preview">
+    <div style="text-align:center;padding:24px;color:#9ca3af;font-size:14px;">
       <div style="width:22px;height:22px;border:2px solid #e5e7eb;border-top-color:#1a7f3c;border-radius:50%;animation:spin .7s linear infinite;margin:0 auto 8px;"></div>
       불러오는 중...
     </div>
@@ -530,6 +530,40 @@ function loadHomeMembers(){
 }
 
 
+/* ── 경기기록 미리보기 ── */
+function driveThumbRec(url){
+  const m = url.match(/\/file\/d\/([^\/\?]+)/) || url.match(/[?&]id=([^&]+)/);
+  return m ? `https://drive.google.com/thumbnail?id=${m[1]}&sz=w400` : url;
+}
+function loadHomeRecord(){
+  fetch(DB+'/records.json')
+    .then(r=>r.json())
+    .then(data=>{
+      const el = document.getElementById('home-record-preview');
+      if(!el) return;
+      let records=[];
+      if(data&&typeof data==='object') Object.entries(data).forEach(([k,v])=>{ if(v) records.push({id:k,...v}); });
+      records.sort((a,b)=>(b.date||'').localeCompare(a.date||''));
+      const r = records[0];
+      if(!r){ el.innerHTML='<div style="text-align:center;padding:24px;color:#9ca3af;">등록된 경기기록이 없습니다.</div>'; return; }
+      const imgs = (r.images||[]).slice(0,3);
+      const imgHTML = imgs.length>0 ? `<div style="display:grid;grid-template-columns:repeat(${imgs.length},1fr);gap:8px;margin-top:14px;">${
+        imgs.map(url=>`<img src="${driveThumbRec(url)}" style="width:100%;aspect-ratio:4/3;object-fit:cover;border-radius:8px;" onerror="this.style.display='none'" loading="lazy">`).join('')
+      }</div>` : '';
+      el.innerHTML = `<div style="background:#fff;border-radius:14px;box-shadow:0 2px 16px rgba(0,0,0,.07);padding:20px 24px;cursor:pointer;" onclick="location.href='record.html'">
+        <div style="display:flex;align-items:center;gap:10px;margin-bottom:12px;">
+          <span style="background:#111827;color:#fff;font-size:12px;font-weight:700;padding:4px 10px;border-radius:6px;">📅 ${(r.date||'').replace(/-/g,'.')}</span>
+        </div>
+        <div style="font-size:14px;line-height:1.85;color:#374151;white-space:pre-wrap;display:-webkit-box;-webkit-line-clamp:4;-webkit-box-orient:vertical;overflow:hidden;">${r.body||''}</div>
+        ${imgHTML}
+        <div style="margin-top:14px;font-size:13px;font-weight:600;color:#1a7f3c;">더 보기 →</div>
+      </div>`;
+    }).catch(()=>{
+      const el=document.getElementById('home-record-preview');
+      if(el) el.innerHTML='<div style="text-align:center;padding:24px;color:#9ca3af;">경기기록을 불러올 수 없습니다.</div>';
+    });
+}
+
 /* ── 갤러리 ── */
 function driveThumbHome(url){
   const m = url.match(/\/file\/d\/([^\/\?]+)/) || url.match(/[?&]id=([^&]+)/);
@@ -564,7 +598,7 @@ function loadHomeGallery(){
 
 loadHomeNotice();
 loadHomeSchedule();
-loadHomeMembers();
+loadHomeRecord();
 loadHomeGallery();
 </script>
 
