@@ -71,6 +71,14 @@
   .pw-input{width:100%;padding:11px 16px;border:1.5px solid var(--gray3);border-radius:9px;font-size:15px;font-family:inherit;outline:none;letter-spacing:3px;margin-bottom:6px;}
   .pw-err{font-size:12px;color:#ef4444;min-height:18px;margin-bottom:10px;}
 
+  /* 페이지네이션 */
+  .pagination{display:flex;align-items:center;justify-content:center;gap:6px;margin-top:24px;flex-wrap:wrap;}
+  .page-btn{width:36px;height:36px;border-radius:8px;border:1.5px solid var(--gray3);background:#fff;font-size:14px;font-weight:600;cursor:pointer;font-family:inherit;transition:all .2s;display:flex;align-items:center;justify-content:center;}
+  .page-btn:hover{border-color:var(--green);color:var(--green);}
+  .page-btn.active{background:var(--green);color:#fff;border-color:var(--green);}
+  .page-btn:disabled{opacity:.4;cursor:default;}
+  .page-info{font-size:13px;color:var(--gray2);margin:0 4px;}
+
   .toast{position:fixed;bottom:30px;left:50%;transform:translateX(-50%) translateY(20px);background:var(--dark);color:#fff;padding:12px 24px;border-radius:10px;font-size:14px;font-weight:600;opacity:0;transition:all .3s;pointer-events:none;z-index:999;}
   .toast.show{opacity:1;transform:translateX(-50%) translateY(0);}
   @media(max-width:640px){
@@ -167,6 +175,7 @@ document.querySelectorAll('.nav-links a').forEach(a=>{
   <div class="gallery-grid" id="gallery-grid">
     <div class="loading" style="grid-column:1/-1;"><div class="spinner"></div>불러오는 중...</div>
   </div>
+  <div class="pagination" id="pagination" style="display:none;"></div>
 </div>
 
 <!-- 사진 추가 모달 -->
