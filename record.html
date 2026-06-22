@@ -20,6 +20,28 @@
   .add-btn{background:var(--green);color:#fff;border:none;border-radius:9px;padding:9px 18px;font-size:14px;font-weight:700;cursor:pointer;font-family:inherit;}
   .admin-badge{display:inline-flex;align-items:center;gap:5px;background:#ecfdf5;color:var(--green);border:1px solid #a7f3d0;font-size:12px;font-weight:700;padding:4px 10px;border-radius:6px;cursor:pointer;}
 
+  /* 게임 박스 */
+  .game-box{background:#f9fafb;border:1.5px solid var(--gray3);border-radius:10px;padding:14px 16px;margin-bottom:10px;position:relative;}
+  .game-box-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;}
+  .game-box-title{font-size:13px;font-weight:700;color:var(--gray1);}
+  .btn-del-game{padding:4px 8px;border-radius:6px;background:#fee2e2;color:#ef4444;border:none;cursor:pointer;font-size:11px;font-weight:600;}
+  .game-score-row{display:grid;grid-template-columns:1fr 52px 16px 52px;gap:7px;align-items:center;margin-bottom:8px;}
+  .game-score-row input.opp{padding:8px 10px;border:1.5px solid var(--gray3);border-radius:7px;font-size:13px;font-family:inherit;outline:none;}
+  .game-score-row input.opp:focus{border-color:var(--green);}
+  .game-score-num{padding:8px 4px!important;text-align:center!important;font-weight:700!important;font-size:15px!important;border:1.5px solid var(--gray3);border-radius:7px;font-family:inherit;outline:none;width:100%;}
+  .game-score-num:focus{border-color:var(--green);}
+  .game-score-vs{text-align:center;font-weight:800;color:var(--gray2);font-size:13px;}
+  .game-scorers{display:flex;flex-direction:column;gap:5px;}
+  .game-scorer-row{display:flex;gap:5px;align-items:center;}
+  .game-scorer-row input{flex:1;padding:7px 10px;border:1.5px solid var(--gray3);border-radius:6px;font-size:12px;font-family:inherit;outline:none;}
+  .game-scorer-row input:focus{border-color:var(--green);}
+  .btn-add-game{width:100%;padding:9px;border-radius:9px;background:#fff;border:2px dashed var(--gray3);color:var(--gray2);font-size:13px;font-weight:700;cursor:pointer;font-family:inherit;margin-bottom:14px;transition:all .2s;}
+  .btn-add-game:hover{border-color:var(--green);color:var(--green);}
+
+  /* 카드 - 게임별 */
+  .game-card-item{background:#f9fafb;border-radius:8px;padding:10px 14px;margin-bottom:8px;border:1px solid #e5e7eb;}
+  .game-card-item:last-child{margin-bottom:0;}
+
   /* 기록 카드 */
   .record-list{display:flex;flex-direction:column;gap:16px;}
   .record-card{background:#fff;border-radius:var(--radius);box-shadow:var(--shadow);overflow:hidden;}
@@ -190,20 +212,9 @@ document.querySelectorAll('.nav-links a').forEach(a=>{
     <div class="fg"><label>경기 날짜 *</label><input type="date" id="f-date"></div>
 
     <div class="fg">
-      <label>⚽ 경기 결과</label>
-      <div class="score-row">
-        <input type="text" class="opp" id="f-opponent" placeholder="상대팀명">
-        <input type="number" class="score-num" id="f-score-us" placeholder="0" min="0" max="99">
-        <div class="score-vs">:</div>
-        <input type="number" class="score-num" id="f-score-them" placeholder="0" min="0" max="99">
-      </div>
-      <div style="font-size:11px;color:var(--gray2);">중흥FC 점수 : 상대팀 점수</div>
-    </div>
-
-    <div class="fg">
-      <label>🎯 득점자</label>
-      <div class="scorer-list" id="scorer-list"></div>
-      <button class="btn-add-small" id="btn-add-scorer">+ 득점자 추가</button>
+      <label>⚽ 게임별 결과 & 득점자</label>
+      <div id="game-list"></div>
+      <button class="btn-add-game" id="btn-add-game">+ 게임 추가</button>
     </div>
 
     <div class="fg">
@@ -299,31 +310,71 @@ function openModal(r){
   document.getElementById('modal-title').textContent = r ? '경기기록 수정' : '경기기록 작성';
   document.getElementById('btn-submit').textContent  = r ? '수정하기' : '등록하기';
   document.getElementById('f-date').value      = r ? (r.date||'') : '';
-  document.getElementById('f-opponent').value  = r ? (r.opponent||'') : '';
-  document.getElementById('f-score-us').value  = r ? (r.scoreUs!=null?r.scoreUs:'') : '';
-  document.getElementById('f-score-them').value= r ? (r.scoreThem!=null?r.scoreThem:'') : '';
-  document.getElementById('f-body').value      = r ? (r.body||'') : '';
-  buildScorerInputs(r ? (r.scorers||[]) : []);
+  document.getElementById('f-body').value = r ? (r.body||'') : '';
+  buildGameList(r ? (r.games||[]) : []);
   buildImgInputs(r ? (r.images||[]) : []);
   buildAttendGrid(r ? (r.attendIds||[]) : []);
   document.getElementById('record-modal').style.display='flex';
 }
 function closeModal(){ document.getElementById('record-modal').style.display='none'; }
 
-/* ── 득점자 ── */
-function buildScorerInputs(list){
-  const c=document.getElementById('scorer-list'); c.innerHTML='';
-  if(!list||list.length===0){ addScorerRow(''); return; }
-  list.forEach(v=>addScorerRow(v));
+/* ── 게임별 입력 ── */
+let gameCount = 0;
+function buildGameList(games){
+  const c=document.getElementById('game-list'); c.innerHTML=''; gameCount=0;
+  if(!games||games.length===0){ addGameBox(); return; }
+  games.forEach(g=>addGameBox(g));
 }
-function addScorerRow(val=''){
-  const c=document.getElementById('scorer-list');
-  const div=document.createElement('div'); div.className='scorer-row';
-  div.innerHTML=`<input type="text" placeholder="득점자 이름" value="${val}"><button class="btn-del-row">✕</button>`;
-  div.querySelector('.btn-del-row').onclick=()=>div.remove();
+function addGameBox(game){
+  gameCount++;
+  const idx=gameCount;
+  const c=document.getElementById('game-list');
+  const div=document.createElement('div'); div.className='game-box'; div.dataset.idx=idx;
+  const scorers=(game&&game.scorers)||[];
+  div.innerHTML=`
+    <div class="game-box-header">
+      <span class="game-box-title">게임 ${idx}</span>
+      <button class="btn-del-game" onclick="this.closest('.game-box').remove();renumberGames();">✕ 삭제</button>
+    </div>
+    <div class="game-score-row">
+      <input type="text" class="opp" placeholder="상대팀명" value="${(game&&game.opponent)||''}">
+      <input type="number" class="game-score-num" placeholder="0" min="0" max="99" value="${(game&&game.scoreUs!=null)?game.scoreUs:''}">
+      <div class="game-score-vs">:</div>
+      <input type="number" class="game-score-num" placeholder="0" min="0" max="99" value="${(game&&game.scoreThem!=null)?game.scoreThem:''}">
+    </div>
+    <div style="font-size:11px;color:var(--gray2);margin-bottom:8px;">중흥FC 점수 : 상대팀 점수</div>
+    <div style="font-size:12px;font-weight:700;color:var(--gray1);margin-bottom:5px;">🎯 득점자</div>
+    <div class="game-scorers">
+      ${scorers.length>0 ? scorers.map(s=>`<div class="game-scorer-row"><input type="text" placeholder="득점자 이름" value="${s}"><button class="btn-del-row" onclick="this.parentElement.remove()">✕</button></div>`).join('') : '<div class="game-scorer-row"><input type="text" placeholder="득점자 이름"><button class="btn-del-row" onclick="this.parentElement.remove()">✕</button></div>'}
+    </div>
+    <button class="btn-add-small" style="margin-top:7px;" onclick="addScorerToGame(this)">+ 득점자 추가</button>
+  `;
   c.appendChild(div);
 }
-function getScorerValues(){ return Array.from(document.querySelectorAll('#scorer-list input')).map(i=>i.value.trim()).filter(Boolean); }
+function addScorerToGame(btn){
+  const scorers=btn.previousElementSibling;
+  const div=document.createElement('div'); div.className='game-scorer-row';
+  div.innerHTML='<input type="text" placeholder="득점자 이름"><button class="btn-del-row" onclick="this.parentElement.remove()">✕</button>';
+  scorers.appendChild(div);
+}
+function renumberGames(){
+  document.querySelectorAll('#game-list .game-box').forEach((box,i)=>{
+    box.querySelector('.game-box-title').textContent=`게임 ${i+1}`;
+  });
+}
+function getGames(){
+  return Array.from(document.querySelectorAll('#game-list .game-box')).map(box=>{
+    const inputs=box.querySelectorAll('input');
+    const suVal=inputs[1].value; const stVal=inputs[2].value;
+    const scorers=Array.from(box.querySelectorAll('.game-scorers input')).map(i=>i.value.trim()).filter(Boolean);
+    return {
+      opponent: inputs[0].value.trim(),
+      scoreUs:  suVal!==''?parseInt(suVal):null,
+      scoreThem:stVal!==''?parseInt(stVal):null,
+      scorers
+    };
+  }).filter(g=>g.opponent||g.scoreUs!=null);
+}
 
 /* ── 참석자 ── */
 function buildAttendGrid(checkedIds){
@@ -358,25 +409,26 @@ function getImgUrls(){ return Array.from(document.querySelectorAll('#img-input-l
 async function saveRecord(){
   const date = document.getElementById('f-date').value;
   if(!date){ showToast('⚠️ 날짜를 선택해 주세요.'); return; }
-  const suVal = document.getElementById('f-score-us').value;
-  const stVal = document.getElementById('f-score-them').value;
-  const opponent  = document.getElementById('f-opponent').value.trim();
-  const scoreUs   = suVal!=='' ? parseInt(suVal) : null;
-  const scoreThem = stVal!=='' ? parseInt(stVal) : null;
-  const scorers   = getScorerValues();
+  const games     = getGames();
   const attendIds = getAttendIds();
   const body      = document.getElementById('f-body').value.trim();
   const images    = getImgUrls();
-
-  const data = { date, opponent, scoreUs, scoreThem, scorers, attendIds, body, images, updatedAt: Date.now() };
+  // 대표 게임(첫번째)
+  const firstGame = games[0]||{};
+  const data = { date, games, attendIds, body, images,
+    opponent:  firstGame.opponent||'',
+    scoreUs:   firstGame.scoreUs!=null?firstGame.scoreUs:null,
+    scoreThem: firstGame.scoreThem!=null?firstGame.scoreThem:null,
+    scorers:   firstGame.scorers||[],
+    updatedAt: Date.now() };
   const btn = document.getElementById('btn-submit');
   btn.disabled=true; btn.textContent='저장 중...';
   const reset=()=>{ btn.disabled=false; btn.textContent=editId?'수정하기':'등록하기'; };
 
   /* 경기일정 데이터 */
-  const matchData = { date, opponent:opponent||'상대팀', homeScore:scoreUs, awayScore:scoreThem, isHome:true, memo:body?body.substring(0,50):'', fromRecord:true };
+  const matchData = { date, opponent:firstGame.opponent||'상대팀', homeScore:firstGame.scoreUs, awayScore:firstGame.scoreThem, isHome:true, memo:body?body.substring(0,50):'', games, fromRecord:true };
   /* 참여율 데이터 */
-  const attendData = { date, memo:`vs ${opponent||'상대팀'}`, members:attendIds, fromRecord:true, updatedAt:Date.now() };
+  const attendData = { date, memo:games.length>0?`vs ${games.map(g=>g.opponent||'상대팀').join(', ')}`:'경기', members:attendIds, fromRecord:true, updatedAt:Date.now() };
 
   try {
     if(editId){
@@ -394,7 +446,7 @@ async function saveRecord(){
       const recordId=recRes.name;
       let linkedMatchId=null, linkedAttendId=null;
 
-      if(opponent||scoreUs!=null){
+      if(games.length>0){
         const mRes=await fetch(DB+'/matches.json',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({...matchData,createdAt:Date.now()})}).then(r=>r.json()).catch(()=>({}));
         linkedMatchId=mRes.name||null;
       }
@@ -409,7 +461,7 @@ async function saveRecord(){
     }
     allRecords.sort((a,b)=>(b.date||'').localeCompare(a.date||''));
     renderRecords(); closeModal();
-    const synced=[(opponent||scoreUs!=null)?'경기일정':'',(attendIds.length>0)?'참여율':''].filter(Boolean);
+    const synced=[(games.length>0)?'경기일정':'',(attendIds.length>0)?'참여율':''].filter(Boolean);
     showToast('✅ 저장 완료!'+(synced.length?` (${synced.join('·')} 자동 반영)`:'')); reset();
   } catch(e){ showToast('❌ 실패: '+e.message); reset(); }
 }
@@ -446,18 +498,26 @@ function renderRecords(){
   const list=document.getElementById('record-list');
   if(allRecords.length===0){ list.innerHTML='<div class="empty">📝 등록된 경기기록이 없습니다.</div>'; setAdminUI(); return; }
   list.innerHTML=allRecords.map(r=>{
-    /* 결과 배지 */
+    /* 게임별 결과 */
+    const games = r.games && r.games.length>0 ? r.games :
+      (r.opponent||r.scoreUs!=null ? [{opponent:r.opponent,scoreUs:r.scoreUs,scoreThem:r.scoreThem,scorers:r.scorers||[]}] : []);
     let resultHTML='';
-    if(r.opponent||r.scoreUs!=null){
-      const us=r.scoreUs??'-', them=r.scoreThem??'-';
-      let badge='', bCls='';
-      if(r.scoreUs!=null&&r.scoreThem!=null){ badge=r.scoreUs>r.scoreThem?'승':r.scoreUs===r.scoreThem?'무':'패'; bCls=r.scoreUs>r.scoreThem?'W':r.scoreUs===r.scoreThem?'D':'L'; }
-      resultHTML=`<div class="result-row">
-        ${r.opponent?`<span class="vs-opponent">vs ${r.opponent}</span>`:''}
-        ${r.scoreUs!=null?`<span class="score-big">${us} : ${them}</span><span class="result-badge badge-${bCls}">${badge}</span>`:''}
-      </div>`;
+    if(games.length>0){
+      resultHTML=`<div style="margin-bottom:10px;">${games.map((g,i)=>{
+        const us=g.scoreUs!=null?g.scoreUs:'-', them=g.scoreThem!=null?g.scoreThem:'-';
+        let badge='',bCls='';
+        if(g.scoreUs!=null&&g.scoreThem!=null){ badge=g.scoreUs>g.scoreThem?'승':g.scoreUs===g.scoreThem?'무':'패'; bCls=g.scoreUs>g.scoreThem?'W':g.scoreUs===g.scoreThem?'D':'L'; }
+        return `<div class="game-card-item">
+          <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;">
+            <span style="font-size:11px;font-weight:700;color:var(--gray2);">게임${i+1}</span>
+            ${g.opponent?`<span style="font-size:13px;font-weight:700;color:var(--gray1);">vs ${g.opponent}</span>`:''}
+            ${g.scoreUs!=null?`<span class="score-big" style="font-size:18px;">${us}:${them}</span><span class="result-badge badge-${bCls}">${badge}</span>`:''}
+          </div>
+          ${g.scorers&&g.scorers.length>0?`<div style="font-size:12px;color:var(--gray1);margin-top:5px;">🎯 ${g.scorers.join(', ')}</div>`:''}
+        </div>`;
+      }).join('')}</div>`;
     }
-    const scorersHTML = r.scorers&&r.scorers.length>0 ? `<div class="scorers-row">🎯 득점: ${r.scorers.join(', ')}</div>` : '';
+    const scorersHTML='';
     const attendHTML  = r.attendIds&&r.attendIds.length>0 ? `<div class="attend-row">✅ 참석: ${r.attendIds.length}명</div>` : '';
     const imgHTML = (r.images||[]).length>0 ? `<div class="record-images">${(r.images||[]).map(url=>`<a href="${driveLink(url)}" target="_blank"><img class="record-img" src="${driveThumb(url)}" loading="lazy" onerror="this.parentElement.style.display='none'"></a>`).join('')}</div>` : '';
     return `<div class="record-card">
@@ -484,7 +544,7 @@ function renderRecords(){
 document.getElementById('btn-add').addEventListener('click',()=>{ if(isAdmin()) openModal(); else openPw(()=>openModal()); });
 document.getElementById('btn-modal-cancel').addEventListener('click',closeModal);
 document.getElementById('btn-submit').addEventListener('click',saveRecord);
-document.getElementById('btn-add-scorer').addEventListener('click',()=>addScorerRow());
+document.getElementById('btn-add-game').addEventListener('click',()=>addGameBox());
 document.getElementById('btn-add-img').addEventListener('click',()=>addImgRow());
 document.getElementById('btn-check-all-attend').addEventListener('click',()=>{
   allCheckedAttend=!allCheckedAttend;
