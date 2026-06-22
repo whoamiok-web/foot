@@ -263,6 +263,7 @@ const DB = 'https://joonghung-9a14c-default-rtdb.asia-southeast1.firebasedatabas
 const ADMIN_PW = 'joonghung2015';
 const ADMIN_KEY = 'jfc_admin';
 let allPhotos = [];
+let curPage = 1;
 let lbIdx = 0;
 let pwCb = null;
 
@@ -324,9 +325,21 @@ function loadGallery(){
 
 function renderGallery(){
   const grid=document.getElementById('gallery-grid');
-  if(allPhotos.length===0){ grid.innerHTML='<div class="empty" style="grid-column:1/-1;"><div class="empty-icon">📭</div>등록된 사진이 없습니다.</div>'; setAdminUI(); return; }
-  grid.innerHTML=allPhotos.map((p,i)=>`
-    <div class="gallery-item" data-idx="${i}">
+  const pag=document.getElementById('pagination');
+  if(allPhotos.length===0){
+    grid.innerHTML='<div class="empty" style="grid-column:1/-1;"><div class="empty-icon">📭</div>등록된 사진이 없습니다.</div>';
+    pag.style.display='none'; setAdminUI(); return;
+  }
+
+  // 페이지 크기: 모바일 20장, 데스크탑 40장
+  const pageSize = window.innerWidth <= 640 ? 20 : 40;
+  const totalPages = Math.ceil(allPhotos.length / pageSize);
+  if(curPage > totalPages) curPage = 1;
+  const startIdx = (curPage-1)*pageSize;
+  const pagePhotos = allPhotos.slice(startIdx, startIdx+pageSize);
+
+  grid.innerHTML=pagePhotos.map((p,i)=>`
+    <div class="gallery-item" data-idx="${startIdx+i}">
       <img src="${thumbUrl(p.url)}" loading="lazy" alt="${p.caption||''}"
            onerror="this.parentElement.innerHTML='<div style=\'width:100%;height:100%;display:flex;align-items:center;justify-content:center;color:#6b7280;font-size:13px;\'>❌ 로드 실패</div>'">
       <div class="gallery-overlay">
@@ -341,7 +354,34 @@ function renderGallery(){
   grid.querySelectorAll('.gallery-del-btn').forEach(b=>{
     b.onclick=e=>{ e.stopPropagation(); delPhoto(b.dataset.id); };
   });
+
+  // 페이지네이션 렌더
+  if(totalPages <= 1){ pag.style.display='none'; }
+  else {
+    pag.style.display='flex';
+    let btns='';
+    btns+=`<button class="page-btn" onclick="goPage(${curPage-1})" ${curPage===1?'disabled':''}>‹</button>`;
+    for(let i=1;i<=totalPages;i++){
+      if(totalPages>7 && i>2 && i<totalPages-1 && Math.abs(i-curPage)>1){
+        if(i===3||i===totalPages-2) btns+=`<span class="page-info">…</span>`;
+        continue;
+      }
+      btns+=`<button class="page-btn${i===curPage?' active':''}" onclick="goPage(${i})">${i}</button>`;
+    }
+    btns+=`<button class="page-btn" onclick="goPage(${curPage+1})" ${curPage===totalPages?'disabled':''}>›</button>`;
+    btns+=`<span class="page-info">${curPage}/${totalPages}p · 총${allPhotos.length}장</span>`;
+    pag.innerHTML=btns;
+  }
   setAdminUI();
+}
+
+function goPage(page){
+  const pageSize=window.innerWidth<=640?20:40;
+  const total=Math.ceil(allPhotos.length/pageSize);
+  if(page<1||page>total) return;
+  curPage=page;
+  renderGallery();
+  window.scrollTo({top:0,behavior:'smooth'});
 }
 
 function savePhotos(){
