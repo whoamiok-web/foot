@@ -381,6 +381,8 @@ function addGameBox(game){
       <input type="number" class="game-score-num" placeholder="0" min="0" max="99" value="${(game&&game.scoreThem!=null)?game.scoreThem:''}">
     </div>
     <div style="font-size:11px;color:var(--gray2);margin-bottom:8px;">중흥FC 점수 : 상대팀 점수</div>
+    <div style="font-size:12px;font-weight:700;color:var(--gray1);margin-bottom:5px;">👕 선발선수 <span style="font-size:10px;color:var(--gray2);">(쉼표로 구분)</span></div>
+    <div class="game-scorer-row" style="margin-bottom:8px;"><input type="text" class="g-starters" placeholder="예) 홍길동, 김철수, 이영희..." value="${(game&&game.starters)||''}"></div>
     <div style="font-size:12px;font-weight:700;color:var(--gray1);margin-bottom:5px;">🎯 득점자</div>
     <div class="game-scorers">
       ${scorers.length>0 ? scorers.map(s=>`<div class="game-scorer-row"><input type="text" placeholder="득점자 이름" value="${s}"><button class="btn-del-row" onclick="this.parentElement.remove()">✕</button></div>`).join('') : '<div class="game-scorer-row"><input type="text" placeholder="득점자 이름"><button class="btn-del-row" onclick="this.parentElement.remove()">✕</button></div>'}
@@ -405,10 +407,12 @@ function getGames(){
     const inputs=box.querySelectorAll('input');
     const suVal=inputs[1].value; const stVal=inputs[2].value;
     const scorers=Array.from(box.querySelectorAll('.game-scorers input')).map(i=>i.value.trim()).filter(Boolean);
+    const startersEl=box.querySelector('.g-starters');
     return {
-      opponent: inputs[0].value.trim(),
-      scoreUs:  suVal!==''?parseInt(suVal):null,
-      scoreThem:stVal!==''?parseInt(stVal):null,
+      opponent:  inputs[0].value.trim(),
+      scoreUs:   suVal!==''?parseInt(suVal):null,
+      scoreThem: stVal!==''?parseInt(stVal):null,
+      starters:  startersEl?startersEl.value.trim():'',
       scorers
     };
   }).filter(g=>g.opponent||g.scoreUs!=null);
@@ -468,8 +472,9 @@ async function saveRecord(){
   // schedule.html 형식으로 변환: games = [{opp_name, us, opp}]
   const scheduleGames = games.map(g=>({
     opp_name: g.opponent||'상대팀',
-    us: g.scoreUs!=null ? String(g.scoreUs) : '',
-    opp: g.scoreThem!=null ? String(g.scoreThem) : ''
+    us:  g.scoreUs!=null  ? String(g.scoreUs)  : '',
+    opp: g.scoreThem!=null? String(g.scoreThem): '',
+    starters: g.starters||''
   }));
   const matchData = {
     date,
@@ -580,7 +585,8 @@ function renderRecords(){
             ${g.opponent?`<span style="font-size:13px;font-weight:700;color:var(--gray1);">vs ${g.opponent}</span>`:''}
             ${g.scoreUs!=null?`<span class="score-big" style="font-size:18px;">${us}:${them}</span><span class="result-badge badge-${bCls}">${badge}</span>`:''}
           </div>
-          ${g.scorers&&g.scorers.length>0?`<div style="font-size:12px;color:var(--gray1);margin-top:5px;">🎯 ${g.scorers.join(', ')}</div>`:''}
+          ${g.starters?`<div style="font-size:12px;color:var(--gray2);margin-top:4px;">👕 ${g.starters}</div>`:''}
+          ${g.scorers&&g.scorers.length>0?`<div style="font-size:12px;color:var(--gray1);margin-top:4px;">🎯 ${g.scorers.join(', ')}</div>`:''}
         </div>`;
       }).join('')}</div>`;
     }
