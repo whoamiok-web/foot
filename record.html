@@ -481,11 +481,25 @@ async function saveRecord(){
 }
 
 /* ── 삭제 ── */
-function delRecord(id){
-  if(!confirm('이 기록을 삭제하시겠습니까?')) return;
-  fetch(DB+'/records/'+id+'.json',{method:'DELETE'})
-    .then(()=>{ allRecords=allRecords.filter(r=>r.id!==id); renderRecords(); showToast('✅ 삭제되었습니다.'); })
-    .catch(e=>showToast('❌ 실패: '+e.message));
+async function delRecord(id){
+  if(!confirm('이 기록을 삭제하시겠습니까?\n연동된 경기일정·참여율 데이터도 함께 삭제됩니다.')) return;
+  try {
+    const rec = allRecords.find(r=>r.id===id);
+    // 1) 연동된 경기일정 삭제
+    if(rec && rec.linkedMatchId){
+      await fetch(DB+'/matches/'+rec.linkedMatchId+'.json', {method:'DELETE'}).catch(()=>{});
+    }
+    // 2) 연동된 참여율 삭제
+    if(rec && rec.linkedAttendId){
+      await fetch(DB+'/attendances/'+rec.linkedAttendId+'.json', {method:'DELETE'}).catch(()=>{});
+    }
+    // 3) 경기기록 삭제
+    await fetch(DB+'/records/'+id+'.json', {method:'DELETE'});
+    allRecords = allRecords.filter(r=>r.id!==id);
+    renderRecords();
+    const deleted = [rec&&rec.linkedMatchId?'경기일정':'', rec&&rec.linkedAttendId?'참여율':''].filter(Boolean);
+    showToast('✅ 삭제 완료!' + (deleted.length ? ` (${deleted.join('·')} 함께 삭제)` : ''));
+  } catch(e){ showToast('❌ 실패: '+e.message); }
 }
 
 /* ── 로드 ── */
