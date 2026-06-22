@@ -426,7 +426,21 @@ async function saveRecord(){
   const reset=()=>{ btn.disabled=false; btn.textContent=editId?'수정하기':'등록하기'; };
 
   /* 경기일정 데이터 */
-  const matchData = { date, opponent:firstGame.opponent||'상대팀', homeScore:firstGame.scoreUs, awayScore:firstGame.scoreThem, isHome:true, memo:body?body.substring(0,50):'', games, fromRecord:true };
+  // schedule.html 형식으로 변환: games = [{opp_name, us, opp}]
+  const scheduleGames = games.map(g=>({
+    opp_name: g.opponent||'상대팀',
+    us: g.scoreUs!=null ? String(g.scoreUs) : '',
+    opp: g.scoreThem!=null ? String(g.scoreThem) : ''
+  }));
+  const matchData = {
+    date,
+    homeaway: '홈',
+    location: '',
+    note: body ? body.substring(0,50) : '',
+    games: scheduleGames,
+    fromRecord: true,
+    updatedAt: Date.now()
+  };
   /* 참여율 데이터 */
   const attendData = { date, memo:games.length>0?`vs ${games.map(g=>g.opponent||'상대팀').join(', ')}`:'경기', members:attendIds, fromRecord:true, updatedAt:Date.now() };
 
@@ -435,7 +449,7 @@ async function saveRecord(){
       await fetch(DB+'/records/'+editId+'.json',{method:'PATCH',headers:{'Content-Type':'application/json'},body:JSON.stringify(data)});
       const rec=allRecords.find(r=>r.id===editId);
       if(rec){
-        if(rec.linkedMatchId) await fetch(DB+'/matches/'+rec.linkedMatchId+'.json',{method:'PATCH',headers:{'Content-Type':'application/json'},body:JSON.stringify(matchData)}).catch(()=>{});
+        if(rec.linkedMatchId){ const mPatch={...matchData,games:games.map(g=>({opp_name:g.opponent||'상대팀',us:g.scoreUs!=null?String(g.scoreUs):'',opp:g.scoreThem!=null?String(g.scoreThem):''}))}; await fetch(DB+'/matches/'+rec.linkedMatchId+'.json',{method:'PATCH',headers:{'Content-Type':'application/json'},body:JSON.stringify(mPatch)}).catch(()=>{}); }
         if(rec.linkedAttendId) await fetch(DB+'/attendances/'+rec.linkedAttendId+'.json',{method:'PATCH',headers:{'Content-Type':'application/json'},body:JSON.stringify(attendData)}).catch(()=>{});
       }
       const i=allRecords.findIndex(r=>r.id===editId);
