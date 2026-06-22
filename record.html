@@ -20,6 +20,12 @@
   .add-btn{background:var(--green);color:#fff;border:none;border-radius:9px;padding:9px 18px;font-size:14px;font-weight:700;cursor:pointer;font-family:inherit;}
   .admin-badge{display:inline-flex;align-items:center;gap:5px;background:#ecfdf5;color:var(--green);border:1px solid #a7f3d0;font-size:12px;font-weight:700;padding:4px 10px;border-radius:6px;cursor:pointer;}
 
+  /* 선발선수 체크 */
+  .starter-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(90px,1fr));gap:5px;margin-top:6px;max-height:140px;overflow-y:auto;}
+  .starter-item{display:flex;align-items:center;gap:4px;padding:5px 8px;border-radius:6px;border:1.5px solid var(--gray3);cursor:pointer;font-size:12px;font-weight:600;transition:all .15s;user-select:none;}
+  .starter-item.on{background:#ecfdf5;border-color:var(--green);color:var(--green);}
+  .btn-starter-all{padding:4px 10px;border-radius:5px;background:#f3f4f6;border:1.5px solid var(--gray3);font-size:11px;font-weight:600;cursor:pointer;font-family:inherit;margin-bottom:5px;}
+
   /* 게임 박스 */
   .game-box{background:#f9fafb;border:1.5px solid var(--gray3);border-radius:10px;padding:14px 16px;margin-bottom:10px;position:relative;}
   .game-box-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;}
@@ -366,6 +372,7 @@ function buildGameList(games){
 function addGameBox(game){
   gameCount++;
   const idx=gameCount;
+  if(allMembers.length===0){ setTimeout(()=>addGameBox(game), 300); return; }
   const c=document.getElementById('game-list');
   const div=document.createElement('div'); div.className='game-box'; div.dataset.idx=idx;
   const scorers=(game&&game.scorers)||[];
@@ -381,8 +388,12 @@ function addGameBox(game){
       <input type="number" class="game-score-num" placeholder="0" min="0" max="99" value="${(game&&game.scoreThem!=null)?game.scoreThem:''}">
     </div>
     <div style="font-size:11px;color:var(--gray2);margin-bottom:8px;">중흥FC 점수 : 상대팀 점수</div>
-    <div style="font-size:12px;font-weight:700;color:var(--gray1);margin-bottom:5px;">👕 선발선수 <span style="font-size:10px;color:var(--gray2);">(쉼표로 구분)</span></div>
-    <div class="game-scorer-row" style="margin-bottom:8px;"><input type="text" class="g-starters" placeholder="예) 홍길동, 김철수, 이영희..." value="${(game&&game.starters)||''}"></div>
+    <div style="font-size:12px;font-weight:700;color:var(--gray1);margin-bottom:5px;">👕 선발선수 <span style="font-size:10px;color:var(--gray2);">(선발 1회=1점 누적)</span></div>
+    <button class="btn-starter-all" onclick="toggleAllStarters(this)">전체 선택/해제</button>
+    <div class="starter-grid" id="starter-grid-${idx}">${allMembers.map(m=>`
+      <div class="starter-item${(game&&game.starterIds&&game.starterIds.includes(m.id))?' on':''}" data-id="${m.id}" onclick="this.classList.toggle('on')">
+        <span>${(game&&game.starterIds&&game.starterIds.includes(m.id))?'✅':'⬜'}</span><span>${m.name}</span>
+      </div>`).join('')}</div>
     <div style="font-size:12px;font-weight:700;color:var(--gray1);margin-bottom:5px;">🎯 득점자</div>
     <div class="game-scorers">
       ${scorers.length>0 ? scorers.map(s=>`<div class="game-scorer-row"><input type="text" placeholder="득점자 이름" value="${s}"><button class="btn-del-row" onclick="this.parentElement.remove()">✕</button></div>`).join('') : '<div class="game-scorer-row"><input type="text" placeholder="득점자 이름"><button class="btn-del-row" onclick="this.parentElement.remove()">✕</button></div>'}
@@ -402,17 +413,28 @@ function renumberGames(){
     box.querySelector('.game-box-title').textContent=`게임 ${i+1}`;
   });
 }
+function toggleAllStarters(btn){
+  const grid = btn.nextElementSibling;
+  const items = grid.querySelectorAll('.starter-item');
+  const allOn = Array.from(items).every(el=>el.classList.contains('on'));
+  items.forEach(el=>{
+    el.classList.toggle('on', !allOn);
+    el.querySelector('span').textContent = !allOn ? '✅' : '⬜';
+  });
+}
+
 function getGames(){
   return Array.from(document.querySelectorAll('#game-list .game-box')).map(box=>{
     const inputs=box.querySelectorAll('input');
     const suVal=inputs[1].value; const stVal=inputs[2].value;
     const scorers=Array.from(box.querySelectorAll('.game-scorers input')).map(i=>i.value.trim()).filter(Boolean);
-    const startersEl=box.querySelector('.g-starters');
+    const starterIds=Array.from(box.querySelectorAll('.starter-item.on')).map(el=>el.dataset.id);
+    const starterNames=Array.from(box.querySelectorAll('.starter-item.on')).map(el=>el.querySelector('span:last-child').textContent);
     return {
-      opponent:  inputs[0].value.trim(),
-      scoreUs:   suVal!==''?parseInt(suVal):null,
-      scoreThem: stVal!==''?parseInt(stVal):null,
-      starters:  startersEl?startersEl.value.trim():'',
+      opponent:   inputs[0].value.trim(),
+      scoreUs:    suVal!==''?parseInt(suVal):null,
+      scoreThem:  stVal!==''?parseInt(stVal):null,
+      starterIds, starters: starterNames.join(', '),
       scorers
     };
   }).filter(g=>g.opponent||g.scoreUs!=null);
@@ -474,7 +496,8 @@ async function saveRecord(){
     opp_name: g.opponent||'상대팀',
     us:  g.scoreUs!=null  ? String(g.scoreUs)  : '',
     opp: g.scoreThem!=null? String(g.scoreThem): '',
-    starters: g.starters||''
+    starters:   g.starters||'',
+    starterIds: g.starterIds||[]
   }));
   const matchData = {
     date,
@@ -585,7 +608,7 @@ function renderRecords(){
             ${g.opponent?`<span style="font-size:13px;font-weight:700;color:var(--gray1);">vs ${g.opponent}</span>`:''}
             ${g.scoreUs!=null?`<span class="score-big" style="font-size:18px;">${us}:${them}</span><span class="result-badge badge-${bCls}">${badge}</span>`:''}
           </div>
-          ${g.starters?`<div style="font-size:12px;color:var(--gray2);margin-top:4px;">👕 ${g.starters}</div>`:''}
+          ${g.starters?`<div style="font-size:12px;color:#6b7280;margin-top:4px;">👕 선발(${g.starterIds?g.starterIds.length:0}명): ${g.starters}</div>`:''}
           ${g.scorers&&g.scorers.length>0?`<div style="font-size:12px;color:var(--gray1);margin-top:4px;">🎯 ${g.scorers.join(', ')}</div>`:''}
         </div>`;
       }).join('')}</div>`;
