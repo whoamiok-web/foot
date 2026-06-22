@@ -350,7 +350,7 @@ function setHomeAway(val){
   updateHAStyle();
 }
 function getHomeAway(){
-  return document.querySelector('input[name="homeaway"]:checked')?.value || '홈';
+  return document.querySelector('input[name="homeaway"]:checked')?.value ?? '';
 }
 
 /* ── 모달 ── */
