@@ -716,14 +716,14 @@ async function loadHomeRating(){
     el.innerHTML = scores.length===0
       ? '<div style="text-align:center;padding:16px;color:#9ca3af;font-size:13px;">데이터 없음</div>'
       : scores.map((m,i)=>`
-      <div style="display:flex;align-items:center;gap:10px;padding:8px 12px;background:#fff;border-radius:10px;box-shadow:0 1px 6px rgba(0,0,0,.05);">
-        <span style="font-size:16px;width:24px;text-align:center;">${medals[i]}</span>
-        <span style="font-size:13px;font-weight:700;flex:1;">${m.name}</span>
-        <div style="display:flex;align-items:center;gap:6px;">
-          <div style="width:70px;height:6px;background:#f3f4f6;border-radius:3px;overflow:hidden;">
-            <div style="width:${Math.round(m.score/maxScore*100)}%;height:100%;background:#1a7f3c;border-radius:3px;"></div>
-          </div>
-          <span style="font-size:13px;font-weight:900;color:#1a7f3c;width:32px;">${m.score}점</span>
+      <div style="padding:10px 14px;background:#fff;border-radius:10px;box-shadow:0 1px 6px rgba(0,0,0,.05);">
+        <div style="display:flex;align-items:center;gap:8px;margin-bottom:6px;">
+          <span style="font-size:15px;">${medals[i]}</span>
+          <span style="font-size:13px;font-weight:700;flex:1;">${m.name}</span>
+          <span style="font-size:13px;font-weight:900;color:#1a7f3c;">${m.score}점</span>
+        </div>
+        <div style="height:6px;background:#f3f4f6;border-radius:3px;overflow:hidden;">
+          <div style="width:${Math.round(m.score/maxScore*100)}%;height:100%;background:#1a7f3c;border-radius:3px;"></div>
         </div>
       </div>`).join('');
   } catch(e){ if(el) el.innerHTML='<div style="text-align:center;padding:16px;color:#9ca3af;font-size:13px;">불러오기 실패</div>'; }
@@ -753,14 +753,14 @@ async function loadHomeAttend(){
     el.innerHTML = rates.length===0
       ? '<div style="text-align:center;padding:16px;color:#9ca3af;font-size:13px;">데이터 없음</div>'
       : rates.map((m,i)=>`
-      <div style="display:flex;align-items:center;gap:10px;padding:8px 12px;background:#fff;border-radius:10px;box-shadow:0 1px 6px rgba(0,0,0,.05);">
-        <span style="font-size:16px;width:24px;text-align:center;">${medals[i]}</span>
-        <span style="font-size:13px;font-weight:700;flex:1;">${m.name}</span>
-        <div style="display:flex;align-items:center;gap:6px;">
-          <div style="width:70px;height:6px;background:#f3f4f6;border-radius:3px;overflow:hidden;">
-            <div style="width:${m.rate}%;height:100%;background:#2563eb;border-radius:3px;"></div>
-          </div>
-          <span style="font-size:13px;font-weight:900;color:#2563eb;width:36px;">${m.rate}%</span>
+      <div style="padding:10px 14px;background:#fff;border-radius:10px;box-shadow:0 1px 6px rgba(0,0,0,.05);">
+        <div style="display:flex;align-items:center;gap:8px;margin-bottom:6px;">
+          <span style="font-size:15px;">${medals[i]}</span>
+          <span style="font-size:13px;font-weight:700;flex:1;">${m.name}</span>
+          <span style="font-size:13px;font-weight:900;color:#2563eb;">${m.rate}%</span>
+        </div>
+        <div style="height:6px;background:#f3f4f6;border-radius:3px;overflow:hidden;">
+          <div style="width:${m.rate}%;height:100%;background:#2563eb;border-radius:3px;"></div>
         </div>
       </div>`).join('');
   } catch(e){ if(el) el.innerHTML='<div style="text-align:center;padding:16px;color:#9ca3af;font-size:13px;">불러오기 실패</div>'; }
