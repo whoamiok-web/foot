@@ -407,6 +407,41 @@ document.querySelectorAll('.nav-links a').forEach(a=>{
   </div>
 </div>
 
+<!-- RATING + ATTENDANCE -->
+<div class="section" id="rating-attend">
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:20px;">
+
+    <!-- 선발점수 TOP5 -->
+    <div>
+      <div class="section-header" style="margin-bottom:16px;">
+        <div class="section-title"><span>🏅</span> 선발점수 TOP 5</div>
+        <a href="rating.html" class="more-btn">전체보기 →</a>
+      </div>
+      <div id="home-rating-list" style="display:flex;flex-direction:column;gap:8px;">
+        <div style="text-align:center;padding:16px;color:#9ca3af;font-size:13px;">
+          <div style="width:20px;height:20px;border:2px solid #e5e7eb;border-top-color:#1a7f3c;border-radius:50%;animation:spin .7s linear infinite;margin:0 auto 6px;"></div>
+          불러오는 중...
+        </div>
+      </div>
+    </div>
+
+    <!-- 출석률 TOP5 -->
+    <div>
+      <div class="section-header" style="margin-bottom:16px;">
+        <div class="section-title"><span>📊</span> 출석률 TOP 5</div>
+        <a href="attendance.html" class="more-btn">전체보기 →</a>
+      </div>
+      <div id="home-attend-list" style="display:flex;flex-direction:column;gap:8px;">
+        <div style="text-align:center;padding:16px;color:#9ca3af;font-size:13px;">
+          <div style="width:20px;height:20px;border:2px solid #e5e7eb;border-top-color:#1a7f3c;border-radius:50%;animation:spin .7s linear infinite;margin:0 auto 6px;"></div>
+          불러오는 중...
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
 <!-- GALLERY -->
 <div style="background:#fff; border-top:1px solid #e5e7eb;">
 <div class="section" id="gallery">
@@ -646,6 +681,91 @@ function loadHomeRecord(){
     });
 }
 
+
+/* ── 선발점수 TOP5 ── */
+async function loadHomeRating(){
+  const el = document.getElementById('home-rating-list');
+  if(!el) return;
+  try {
+    const [mData, rData, sData] = await Promise.all([
+      fetch(DB+'/members.json').then(r=>r.json()),
+      fetch(DB+'/records.json').then(r=>r.json()),
+      fetch(DB+'/matches.json').then(r=>r.json())
+    ]);
+    let members=[];
+    if(mData&&typeof mData==='object') Object.entries(mData).forEach(([k,v])=>{if(v) members.push({id:k,...v});});
+
+    // 선발 횟수 집계
+    let games=[];
+    if(rData&&typeof rData==='object') Object.entries(rData).forEach(([k,v])=>{
+      if(!v||!v.games) return;
+      v.games.forEach(g=>{ if(g.starterIds&&g.starterIds.length>0) games.push(g.starterIds); });
+    });
+    if(sData&&typeof sData==='object') Object.entries(sData).forEach(([k,v])=>{
+      if(!v||!v.games||v.fromRecord) return;
+      v.games.forEach(g=>{ if(g.starterIds&&g.starterIds.length>0) games.push(g.starterIds); });
+    });
+
+    const scores = members.map(m=>({
+      name: m.name,
+      score: games.filter(ids=>ids.includes(m.id)).length
+    })).sort((a,b)=>b.score-a.score).slice(0,5);
+
+    const maxScore = scores[0]?.score||1;
+    const medals = ['🥇','🥈','🥉','4','5'];
+    el.innerHTML = scores.length===0
+      ? '<div style="text-align:center;padding:16px;color:#9ca3af;font-size:13px;">데이터 없음</div>'
+      : scores.map((m,i)=>`
+      <div style="display:flex;align-items:center;gap:10px;padding:8px 12px;background:#fff;border-radius:10px;box-shadow:0 1px 6px rgba(0,0,0,.05);">
+        <span style="font-size:16px;width:24px;text-align:center;">${medals[i]}</span>
+        <span style="font-size:13px;font-weight:700;flex:1;">${m.name}</span>
+        <div style="display:flex;align-items:center;gap:6px;">
+          <div style="width:70px;height:6px;background:#f3f4f6;border-radius:3px;overflow:hidden;">
+            <div style="width:${Math.round(m.score/maxScore*100)}%;height:100%;background:#1a7f3c;border-radius:3px;"></div>
+          </div>
+          <span style="font-size:13px;font-weight:900;color:#1a7f3c;width:32px;">${m.score}점</span>
+        </div>
+      </div>`).join('');
+  } catch(e){ if(el) el.innerHTML='<div style="text-align:center;padding:16px;color:#9ca3af;font-size:13px;">불러오기 실패</div>'; }
+}
+
+/* ── 출석률 TOP5 ── */
+async function loadHomeAttend(){
+  const el = document.getElementById('home-attend-list');
+  if(!el) return;
+  try {
+    const [mData, aData] = await Promise.all([
+      fetch(DB+'/members.json').then(r=>r.json()),
+      fetch(DB+'/attendances.json').then(r=>r.json())
+    ]);
+    let members=[], attendances=[];
+    if(mData&&typeof mData==='object') Object.entries(mData).forEach(([k,v])=>{if(v) members.push({id:k,...v});});
+    if(aData&&typeof aData==='object') Object.entries(aData).forEach(([k,v])=>{if(v) attendances.push({id:k,...v});});
+
+    const totalDays = new Set(attendances.map(a=>a.date||'')).size||1;
+    const medals = ['🥇','🥈','🥉','4','5'];
+
+    const rates = members.map(m=>{
+      const cnt = attendances.filter(a=>(a.members||[]).includes(m.id)).length;
+      return { name:m.name, cnt, rate: Math.round(cnt/totalDays*100) };
+    }).sort((a,b)=>b.rate-a.rate||b.cnt-a.cnt).slice(0,5);
+
+    el.innerHTML = rates.length===0
+      ? '<div style="text-align:center;padding:16px;color:#9ca3af;font-size:13px;">데이터 없음</div>'
+      : rates.map((m,i)=>`
+      <div style="display:flex;align-items:center;gap:10px;padding:8px 12px;background:#fff;border-radius:10px;box-shadow:0 1px 6px rgba(0,0,0,.05);">
+        <span style="font-size:16px;width:24px;text-align:center;">${medals[i]}</span>
+        <span style="font-size:13px;font-weight:700;flex:1;">${m.name}</span>
+        <div style="display:flex;align-items:center;gap:6px;">
+          <div style="width:70px;height:6px;background:#f3f4f6;border-radius:3px;overflow:hidden;">
+            <div style="width:${m.rate}%;height:100%;background:#2563eb;border-radius:3px;"></div>
+          </div>
+          <span style="font-size:13px;font-weight:900;color:#2563eb;width:36px;">${m.rate}%</span>
+        </div>
+      </div>`).join('');
+  } catch(e){ if(el) el.innerHTML='<div style="text-align:center;padding:16px;color:#9ca3af;font-size:13px;">불러오기 실패</div>'; }
+}
+
 /* ── 갤러리 ── */
 function driveThumbHome(url){
   const m = url.match(/\/file\/d\/([^\/\?]+)/) || url.match(/[?&]id=([^&]+)/);
@@ -681,6 +801,8 @@ function loadHomeGallery(){
 loadHomeNotice();
 loadHomeSchedule();
 loadHomeRecord();
+loadHomeRating();
+loadHomeAttend();
 loadHomeGallery();
 </script>
 
