@@ -212,6 +212,18 @@ document.querySelectorAll('.nav-links a').forEach(a=>{
     <div class="fg"><label>경기 날짜 *</label><input type="date" id="f-date"></div>
 
     <div class="fg">
+      <label>홈 / 원정</label>
+      <div style="display:flex;gap:8px;">
+        <label style="display:flex;align-items:center;gap:6px;padding:8px 16px;border:1.5px solid var(--gray3);border-radius:8px;cursor:pointer;font-size:14px;font-weight:600;flex:1;justify-content:center;" id="label-home">
+          <input type="radio" name="homeaway" id="f-home" value="홈" style="accent-color:var(--green);"> 🏠 홈
+        </label>
+        <label style="display:flex;align-items:center;gap:6px;padding:8px 16px;border:1.5px solid var(--gray3);border-radius:8px;cursor:pointer;font-size:14px;font-weight:600;flex:1;justify-content:center;" id="label-away">
+          <input type="radio" name="homeaway" id="f-away" value="원정" style="accent-color:var(--green);"> ✈️ 원정
+        </label>
+      </div>
+    </div>
+
+    <div class="fg">
       <label>⚽ 게임별 결과 & 득점자</label>
       <div id="game-list"></div>
       <button class="btn-add-game" id="btn-add-game">+ 게임 추가</button>
@@ -304,6 +316,31 @@ function checkPw(){
   else{ document.getElementById('pw-err').textContent='❌ 비밀번호가 틀렸습니다.'; document.getElementById('pw-input').value=''; }
 }
 
+/* ── 홈/원정 라디오 스타일 ── */
+function initHomeAwayRadio(){
+  document.querySelectorAll('input[name="homeaway"]').forEach(radio=>{
+    radio.addEventListener('change', updateHAStyle);
+  });
+}
+function updateHAStyle(){
+  const homeVal = document.getElementById('f-home').checked;
+  const awayVal = document.getElementById('f-away').checked;
+  document.getElementById('label-home').style.borderColor = homeVal ? 'var(--green)' : 'var(--gray3)';
+  document.getElementById('label-home').style.background  = homeVal ? '#ecfdf5' : '#fff';
+  document.getElementById('label-home').style.color       = homeVal ? 'var(--green)' : '';
+  document.getElementById('label-away').style.borderColor = awayVal ? 'var(--green)' : 'var(--gray3)';
+  document.getElementById('label-away').style.background  = awayVal ? '#ecfdf5' : '#fff';
+  document.getElementById('label-away').style.color       = awayVal ? 'var(--green)' : '';
+}
+function setHomeAway(val){
+  if(val==='원정'){ document.getElementById('f-away').checked=true; }
+  else { document.getElementById('f-home').checked=true; }
+  updateHAStyle();
+}
+function getHomeAway(){
+  return document.querySelector('input[name="homeaway"]:checked')?.value || '홈';
+}
+
 /* ── 모달 ── */
 function openModal(r){
   editId = r ? r.id : null;
@@ -311,6 +348,7 @@ function openModal(r){
   document.getElementById('btn-submit').textContent  = r ? '수정하기' : '등록하기';
   document.getElementById('f-date').value      = r ? (r.date||'') : '';
   document.getElementById('f-body').value = r ? (r.body||'') : '';
+  setHomeAway(r ? (r.homeaway||'홈') : '홈');
   buildGameList(r ? (r.games||[]) : []);
   buildImgInputs(r ? (r.images||[]) : []);
   buildAttendGrid(r ? (r.attendIds||[]) : []);
@@ -415,7 +453,8 @@ async function saveRecord(){
   const images    = getImgUrls();
   // 대표 게임(첫번째)
   const firstGame = games[0]||{};
-  const data = { date, games, attendIds, body, images,
+  const homeaway = getHomeAway();
+  const data = { date, homeaway, games, attendIds, body, images,
     opponent:  firstGame.opponent||'',
     scoreUs:   firstGame.scoreUs!=null?firstGame.scoreUs:null,
     scoreThem: firstGame.scoreThem!=null?firstGame.scoreThem:null,
@@ -434,7 +473,7 @@ async function saveRecord(){
   }));
   const matchData = {
     date,
-    homeaway: '홈',
+    homeaway: homeaway,
     location: '',
     note: body ? body.substring(0,50) : '',
     games: scheduleGames,
@@ -551,6 +590,7 @@ function renderRecords(){
     return `<div class="record-card">
       <div class="record-head">
         <span class="record-date-badge">📅 ${(r.date||'').replace(/-/g,'.')}</span>
+          ${r.homeaway ? `<span style="font-size:11px;font-weight:700;padding:3px 8px;border-radius:5px;${r.homeaway==='홈'?'background:#ecfdf5;color:#1a7f3c;border:1px solid #a7f3d0;':'background:#eff6ff;color:#2563eb;border:1px solid #bfdbfe;'}">${r.homeaway==='홈'?'🏠 홈':'✈️ 원정'}</span>` : ''}
         <div class="record-admin-btns${isAdmin()?' show':''}">
           <button class="btn-sm btn-edit-sm" data-id="${r.id}">✏️ 수정</button>
           <button class="btn-sm btn-del-sm" data-id="${r.id}">🗑 삭제</button>
@@ -584,6 +624,7 @@ document.getElementById('pw-input').addEventListener('keydown',e=>{ if(e.key==='
 
 function showToast(msg){ const t=document.getElementById('toast'); t.textContent=msg; t.classList.add('show'); setTimeout(()=>t.classList.remove('show'),3000); }
 
+initHomeAwayRadio();
 setAdminUI();
 loadMembers();
 loadRecords();
