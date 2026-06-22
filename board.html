@@ -176,7 +176,10 @@ document.querySelectorAll('.nav-links a').forEach(a=>{
   <div id="view-list">
     <div class="top-bar">
       <span class="post-count" id="post-count"></span>
-      <button class="write-btn" id="btn-write">✏️ 글쓰기</button>
+      <div style="display:flex;gap:8px;align-items:center;">
+        <span id="board-admin-ui"></span>
+        <button class="write-btn" id="btn-write">✏️ 글쓰기</button>
+      </div>
     </div>
     <div class="post-list" id="post-list">
       <div class="loading"><div class="spinner"></div>불러오는 중...</div>
@@ -245,9 +248,51 @@ const DB = 'https://joonghung-9a14c-default-rtdb.asia-southeast1.firebasedatabas
 const MEMBER_PW = '2026'; // 회원 글쓰기 비번
 
 let allPosts = [];
+const ADMIN_PW = 'joonghung2015';
+const BOARD_ADMIN_KEY = 'jfc_board_admin';
+const isBoardAdmin = () => sessionStorage.getItem(BOARD_ADMIN_KEY) === '1';
 let curPostId = null;
 let editId = null;
 let pwCb = null;
+
+
+/* ── 관리자 로그인/아웃 ── */
+function setBoardAdminUI(){
+  const el = document.getElementById('board-admin-ui');
+  if(!el) return;
+  if(isBoardAdmin()){
+    el.innerHTML = '<span style="display:inline-flex;align-items:center;gap:5px;background:#fff7ed;color:#f97316;border:1px solid #fed7aa;font-size:12px;font-weight:700;padding:4px 10px;border-radius:6px;cursor:pointer;" id="board-admin-logout">👑 관리자 · 로그아웃</span>';
+    document.getElementById('board-admin-logout').onclick=()=>{ sessionStorage.removeItem(BOARD_ADMIN_KEY); setBoardAdminUI(); renderList(); };
+  } else {
+    el.innerHTML = '<span style="display:inline-flex;align-items:center;gap:5px;background:#f9fafb;color:#6b7280;border:1px solid #e5e7eb;font-size:12px;font-weight:600;padding:4px 10px;border-radius:6px;cursor:pointer;" onclick="boardAdminLogin()">🔐 관리자</span>';
+  }
+}
+
+function boardAdminLogin(){
+  const pw = prompt('관리자 비밀번호를 입력하세요:');
+  if(pw===ADMIN_PW){ sessionStorage.setItem(BOARD_ADMIN_KEY,'1'); setBoardAdminUI(); renderList(); showToast('✅ 관리자 로그인됨'); }
+  else if(pw!==null) showToast('❌ 비밀번호가 틀렸습니다.');
+}
+
+/* ── 관리자 글 삭제 ── */
+async function adminDeletePost(id){
+  if(!confirm('관리자 권한으로 이 게시글을 삭제하시겠습니까?')) return;
+  await api('/board/'+id, {method:'DELETE'});
+  allPosts=allPosts.filter(x=>x.id!==id);
+  if(curPostId===id) goBack();
+  else renderList();
+  showToast('✅ 관리자: 게시글 삭제됨');
+}
+
+/* ── 관리자 댓글 삭제 ── */
+async function adminDeleteComment(postId, commentId){
+  if(!confirm('관리자 권한으로 이 댓글을 삭제하시겠습니까?')) return;
+  await api('/board/'+postId+'/comments/'+commentId, {method:'DELETE'});
+  const fresh=await api('/board/'+postId);
+  const i=allPosts.findIndex(x=>x.id===postId);
+  if(i>-1) allPosts[i]={...allPosts[i],...fresh};
+  renderDetail(allPosts[i]); showToast('✅ 관리자: 댓글 삭제됨');
+}
 
 /* ── API ── */
 const api = (path, opt={}) => fetch(DB+path+'.json', opt).then(r=>{ if(!r.ok) throw new Error('HTTP '+r.status); return r.json(); });
@@ -278,6 +323,7 @@ function renderList(){
         <div class="post-title${commentCount>0?' has-comments':''}" ${commentCount>0?`data-comments="[${commentCount}]"`:''}>
           ${p.title||'(제목없음)'}
         </div>
+        ${isBoardAdmin()?`<button class="btn-sm btn-del-sm" style="flex-shrink:0;" onclick="event.stopPropagation();adminDeletePost('${p.id}')">🗑 삭제</button>`:''}
       </div>
       <div class="post-preview">${(p.body||'').replace(/\n/g,' ')}</div>
       <div class="post-footer">
@@ -326,6 +372,7 @@ function renderDetail(p){
       <div class="post-manage-btns">
         <button class="btn-sm btn-edit-sm" onclick="editPost('${p.id}')">✏️ 수정</button>
         <button class="btn-sm btn-del-sm" onclick="deletePost('${p.id}')">🗑 삭제</button>
+        ${isBoardAdmin()?`<button class="btn-sm" style="border-color:#f97316;color:#f97316;background:#fff7ed;" onclick="adminDeletePost('${p.id}')">👑 관리자 삭제</button>`:''}
       </div>
       <button class="back-btn" onclick="goBack()">← 목록</button>
     </div>
@@ -345,6 +392,7 @@ function renderDetail(p){
                 <div style="display:flex;align-items:center;gap:8px;">
                   <span class="comment-date">${cdStr}</span>
                   <button class="comment-del" onclick="deleteComment('${p.id}','${cid}','${c.pw||''}')">🗑</button>
+                  ${isBoardAdmin()?`<button class="comment-del" style="color:#f97316;" onclick="adminDeleteComment('${p.id}','${cid}')">👑</button>`:''}
                 </div>
               </div>
               <div class="comment-body">${c.body||''}</div>
@@ -373,7 +421,8 @@ function goBack(){
   document.getElementById('view-list').style.display='block';
   document.getElementById('view-detail').style.display='none';
   curPostId=null;
-  loadPosts();
+  setBoardAdminUI();
+loadPosts();
 }
 
 /* ── 글쓰기 모달 ── */
@@ -533,6 +582,7 @@ document.getElementById('pw-check-input').addEventListener('keydown', e=>{ if(e.
 
 function showToast(msg){ const t=document.getElementById('toast'); t.textContent=msg; t.classList.add('show'); setTimeout(()=>t.classList.remove('show'),2500); }
 
+setBoardAdminUI();
 loadPosts();
 </script>
 </body>
