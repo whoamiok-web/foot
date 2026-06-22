@@ -447,9 +447,14 @@ loadGallery();
 
 // 모바일↔데스크탑 전환 시 페이지 재렌더
 let resizeTimer;
+let _lastPS = window.innerWidth <= 640 ? 20 : 40;
 window.addEventListener('resize', ()=>{
   clearTimeout(resizeTimer);
-  resizeTimer = setTimeout(()=>{ curPage=1; renderGallery(); }, 300);
+  resizeTimer = setTimeout(()=>{
+    const newPS = window.innerWidth <= 640 ? 20 : 40;
+    if(newPS !== _lastPS){ _lastPS = newPS; curPage = 1; }
+    renderGallery();
+  }, 300);
 });
 </script>
 </body>
