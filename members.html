@@ -318,6 +318,15 @@ function checkPw(){
 }
 
 /* 전화번호 비번 */
+/* ── 전화번호 하이픈 포맷 ── */
+function formatPhone(num){
+  if(!num) return '';
+  const n = num.replace(/[^0-9]/g, '');
+  if(n.length===11) return n.replace(/(\d{3})(\d{4})(\d{4})/, '$1-$2-$3');
+  if(n.length===10) return n.replace(/(\d{3})(\d{3})(\d{4})/, '$1-$2-$3');
+  return num;
+}
+
 function openPhoneModal(name, phone, memberId){
   document.getElementById('phone-modal-desc').textContent = name + '님의 휴대번호를 확인하려면 비밀번호를 입력하세요.';
   document.getElementById('phone-pw').value='';
@@ -327,7 +336,7 @@ function openPhoneModal(name, phone, memberId){
   phoneCb = function(){
     const reveal = document.getElementById('ph-'+memberId);
     const btn    = document.getElementById('pb-'+memberId);
-    if(reveal){ reveal.innerHTML = '<a href="tel:'+phone+'" style="color:var(--dark);text-decoration:none;font-weight:700;font-size:12px;">📞 '+phone+'</a>'; reveal.style.display='block'; }
+    if(reveal){ const fp=formatPhone(phone); reveal.innerHTML = '<a href="tel:'+phone+'" style="color:var(--dark);text-decoration:none;font-weight:700;font-size:12px;">📞 '+fp+'</a>'; reveal.style.display='block'; }
     if(btn) btn.style.display='none';
   };
 }
