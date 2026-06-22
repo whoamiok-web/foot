@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>참여율 – 중흥FC</title>
+<title>출석률 – 중흥FC</title>
 <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700;900&display=swap" rel="stylesheet">
 <style>
   *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
@@ -51,7 +51,7 @@
   .pos-gk{background:#fdf4ff;color:#9333ea;border:1px solid #e9d5ff;}
   .member-name{font-size:14px;font-weight:700;}
   .attend-count{font-size:13px;color:var(--gray2);text-align:center;}
-  /* 참여율 바 */
+  /* 출석률 바 */
   .rate-wrap{display:flex;align-items:center;gap:8px;}
   .rate-bar{flex:1;height:8px;background:#f3f4f6;border-radius:4px;overflow:hidden;}
   .rate-fill{height:100%;border-radius:4px;background:var(--green);transition:width .5s;}
@@ -132,7 +132,8 @@
     <li><a href="notice.html" class="">공지사항</a></li>
     <li><a href="schedule.html" class="">경기일정</a></li>
     <li><a href="record.html" class="">경기기록</a></li>
-    <li><a href="attendance.html" class="nav-active">참여율</a></li>
+    <li><a href="attendance.html" class="nav-active">출석률</a></li>
+    <li><a href="rating.html" class="">선발점수</a></li>
     <li><a href="gallery.html" class="">갤러리</a></li>
   </ul>
 </nav>
@@ -158,13 +159,12 @@ document.querySelectorAll('.nav-links a').forEach(a=>{
   .hamburger.active span:nth-child(3){transform:translateY(-7px) rotate(-45deg);}
   .nav-links{display:flex;gap:2px;list-style:none;flex-wrap:nowrap;align-items:center;}
   .nav-links li{position:relative;}
-  .nav-links a{color:#9ca3af;font-size:14px;font-weight:500;text-decoration:none;white-space:nowrap;display:inline-flex;align-items:center;gap:2px;padding:5px 9px;border-radius:6px;transition:color .2s,background .2s;}
+  .nav-links a{color:#9ca3af;font-size:13px;font-weight:500;text-decoration:none;white-space:nowrap;display:inline-flex;align-items:center;gap:2px;padding:5px 8px;border-radius:6px;transition:color .2s,background .2s;}
   .nav-links a:hover{color:#fff;}
   .nav-active{color:#fff!important;background:#1a7f3c!important;}
   .nav-arrow{font-size:9px;opacity:.6;}
-  /* 드롭다운 - li에 padding으로 hover 영역 확보 */
   .nav-item-drop{padding-bottom:12px;margin-bottom:-12px;}
-  .nav-dropdown{position:absolute;top:calc(100% - 12px);left:50%;transform:translateX(-50%);background:#1f2937;border-radius:10px;padding:6px 0;min-width:120px;box-shadow:0 8px 24px rgba(0,0,0,.3);opacity:0;visibility:hidden;transition:opacity .15s,visibility .15s;z-index:200;}
+  .nav-dropdown{position:absolute;top:100%;left:50%;transform:translateX(-50%);background:#1f2937;border-radius:10px;padding:6px 0;min-width:120px;box-shadow:0 8px 24px rgba(0,0,0,.3);opacity:0;visibility:hidden;transition:opacity .15s,visibility .15s;z-index:200;}
   .nav-dropdown::before{content:'';position:absolute;top:-5px;left:50%;transform:translateX(-50%);border:5px solid transparent;border-bottom-color:#1f2937;border-top:none;}
   .nav-item-drop:hover .nav-dropdown{opacity:1;visibility:visible;}
   .nav-dropdown a{display:block;padding:9px 18px;color:#d1d5db;font-size:13px;font-weight:500;white-space:nowrap;text-decoration:none;background:none;border-radius:0;transition:background .15s,color .15s;}
@@ -185,9 +185,9 @@ document.querySelectorAll('.nav-links a').forEach(a=>{
 </style>
 <div class="page-header">
   <div class="page-header-inner">
-    <div class="breadcrumb"><span onclick="location.href='index.html'" style="cursor:pointer;">홈</span><span>›</span><span class="cur">참여율</span></div>
-    <h1>📊 회원 참여율</h1>
-    <p>경기별 참석 현황과 회원 참여율을 확인하세요.</p>
+    <div class="breadcrumb"><span onclick="location.href='index.html'" style="cursor:pointer;">홈</span><span>›</span><span class="cur">출석률</span></div>
+    <h1>📊 회원 출석률</h1>
+    <p>경기별 참석 현황과 회원 출석률을 확인하세요.</p>
   </div>
 </div>
 
@@ -196,7 +196,7 @@ document.querySelectorAll('.nav-links a').forEach(a=>{
   <div class="summary-cards">
     <div class="sum-card"><div class="sum-num green" id="s-matches">-</div><div class="sum-label">총 경기 수</div></div>
     <div class="sum-card"><div class="sum-num green" id="s-members">-</div><div class="sum-label">등록 회원</div></div>
-    <div class="sum-card"><div class="sum-num" id="s-avg">-</div><div class="sum-label">평균 참여율</div></div>
+    <div class="sum-card"><div class="sum-num" id="s-avg">-</div><div class="sum-label">평균 출석률</div></div>
     <div class="sum-card"><div class="sum-num" id="s-top">-</div><div class="sum-label">최고 참여자</div></div>
   </div>
 
@@ -219,7 +219,7 @@ document.querySelectorAll('.nav-links a').forEach(a=>{
         <div style="text-align:center;">포지션</div>
         <div>이름</div>
         <div style="text-align:center;">참석</div>
-        <div>참여율</div>
+        <div>출석률</div>
         <div style="text-align:center;">등번호</div>
       </div>
       <div id="rank-body"><div class="loading"><div class="spinner"></div>불러오는 중...</div></div>
