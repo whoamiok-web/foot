@@ -77,9 +77,11 @@
   .games-box-title{font-size:13px;font-weight:700;color:var(--green);margin-bottom:10px;}
   .gi-row{display:grid;grid-template-columns:52px 1fr 44px 12px 44px 36px;gap:6px;align-items:start;margin-bottom:10px;}
   .gi-starters{margin-top:6px;padding:8px 10px;background:#f9fafb;border-radius:7px;border:1.5px solid #e5e7eb;grid-column:1/-1;}
-  .gi-starters-label{font-size:11px;font-weight:700;color:var(--gray2);margin-bottom:5px;}
-  .gi-starters input{width:100%;padding:6px 10px;border:1.5px solid var(--gray3);border-radius:6px;font-size:12px;font-family:inherit;outline:none;}
-  .gi-starters input:focus{border-color:var(--green);}
+  .gi-starters-label{font-size:11px;font-weight:700;color:var(--gray2);margin-bottom:5px;display:flex;align-items:center;justify-content:space-between;}
+  .gi-starter-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(85px,1fr));gap:4px;margin-top:5px;max-height:130px;overflow-y:auto;}
+  .gi-starter-item{display:flex;align-items:center;gap:4px;padding:4px 7px;border-radius:5px;border:1.5px solid var(--gray3);cursor:pointer;font-size:11px;font-weight:600;transition:all .15s;user-select:none;}
+  .gi-starter-item.on{background:#ecfdf5;border-color:var(--green);color:var(--green);}
+  .btn-gi-all{font-size:10px;padding:2px 7px;border-radius:4px;background:#f3f4f6;border:1px solid var(--gray3);cursor:pointer;font-family:inherit;}
   .gi-row input{padding:7px 8px;border:1.5px solid var(--gray3);border-radius:7px;font-size:13px;font-family:inherit;outline:none;width:100%;text-align:center;}
   .gi-row input.opp-name{text-align:left;}
   .gi-row input:focus{border-color:var(--green);}
@@ -277,6 +279,7 @@ function copyAccount(e){
 <div class="toast" id="toast"></div>
 
 <script>
+let allMembersCache = [];
 const DB = 'https://joonghung-9a14c-default-rtdb.asia-southeast1.firebasedatabase.app';
 const ADMIN_PW = 'joonghung2015';
 const ADMIN_KEY = 'jfc_admin';
@@ -325,6 +328,13 @@ function openModal(m){
 }
 function closeModal(){ document.getElementById('match-modal').style.display='none'; }
 
+function toggleGiAll(btn){
+  const grid = btn.closest('.gi-starters').querySelector('.gi-starter-grid');
+  const items = grid.querySelectorAll('.gi-starter-item');
+  const allOn = Array.from(items).every(el=>el.classList.contains('on'));
+  items.forEach(el=>{ el.classList.toggle('on',!allOn); el.querySelector('span').textContent=!allOn?'✅':'⬜'; });
+}
+
 function buildGames(list){ const c=document.getElementById('gi-container'); c.innerHTML=''; list.forEach((g,i)=>addGameRow(g,i+1)); }
 function addGameRow(g, num){
   const c=document.getElementById('gi-container');
@@ -339,14 +349,26 @@ function addGameRow(g, num){
     <input type="number" class="g-opp" placeholder="0" value="${(g&&g.opp!==undefined&&g.opp!=='')?g.opp:''}" min="0" max="99">
     <button onclick="this.closest('.gi-row').remove()" style="padding:6px;border-radius:6px;background:#fee2e2;color:#ef4444;border:none;cursor:pointer;font-size:11px;">✕</button>
     <div class="gi-starters">
-      <div class="gi-starters-label">👕 선발선수 (쉼표로 구분)</div>
-      <input type="text" class="g-starters" placeholder="예) 홍길동, 김철수, 이영희..." value="${starters}">
+      <div class="gi-starters-label">
+        <span>👕 선발선수</span>
+        <button class="btn-gi-all" onclick="toggleGiAll(this)">전체선택/해제</button>
+      </div>
+      <div class="gi-starter-grid">${allMembersCache.map(m=>`
+        <div class="gi-starter-item${(g&&g.starterIds&&g.starterIds.includes(m.id))?' on':''}" data-id="${m.id}" onclick="this.classList.toggle('on')">
+          <span>${(g&&g.starterIds&&g.starterIds.includes(m.id))?'✅':'⬜'}</span><span>${m.name}</span>
+        </div>`).join('')}
+      </div>
     </div>`;
   c.appendChild(d);
 }
 
 function renum(){ document.querySelectorAll('#gi-container .gi-row').forEach((r,i)=>{ r.querySelector('span').textContent=`${i+1}게임`; }); }
-function getGames(){ return Array.from(document.querySelectorAll('#gi-container .gi-row')).map(r=>({ opp_name:r.querySelector('.opp-name').value.trim(), us:r.querySelector('.g-us').value, opp:r.querySelector('.g-opp').value, starters:r.querySelector('.g-starters')?r.querySelector('.g-starters').value.trim():'' })); }
+function getGames(){ return Array.from(document.querySelectorAll('#gi-container .gi-row')).map(r=>{
+  const starterEls = r.querySelectorAll('.gi-starter-item.on');
+  const starterIds = Array.from(starterEls).map(el=>el.dataset.id);
+  const starters   = Array.from(starterEls).map(el=>el.querySelector('span:last-child').textContent).join(', ');
+  return { opp_name:r.querySelector('.opp-name').value.trim(), us:r.querySelector('.g-us').value, opp:r.querySelector('.g-opp').value, starterIds, starters };
+}); }
 
 /* Firebase REST */
 function apiGet(path){ return fetch(DB+path+'.json').then(r=>{ if(!r.ok) throw new Error('HTTP '+r.status); return r.json(); }); }
@@ -494,6 +516,12 @@ document.getElementById('pw-input').onkeydown=e=>{if(e.key==='Enter')checkPw();}
 function showToast(msg){ const t=document.getElementById('toast'); t.textContent=msg; t.classList.add('show'); setTimeout(()=>t.classList.remove('show'),2500); }
 
 setAdminUI();
+// 회원 목록 미리 로드
+fetch('https://joonghung-9a14c-default-rtdb.asia-southeast1.firebasedatabase.app/members.json')
+  .then(r=>r.json()).then(data=>{
+    if(data&&typeof data==='object') Object.entries(data).forEach(([k,v])=>{if(v) allMembersCache.push({id:k,...v});});
+    allMembersCache.sort((a,b)=>a.name.localeCompare(b.name,'ko'));
+  }).catch(()=>{});
 loadMatches();
 </script>
 </body>
