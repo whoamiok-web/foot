@@ -120,7 +120,8 @@
     <li><a href="notice.html" class="">공지사항</a></li>
     <li><a href="schedule.html" class="nav-active">경기일정</a></li>
     <li><a href="record.html" class="">경기기록</a></li>
-    <li><a href="attendance.html" class="">참여율</a></li>
+    <li><a href="attendance.html" class="">출석률</a></li>
+    <li><a href="rating.html" class="">선발점수</a></li>
     <li><a href="gallery.html" class="">갤러리</a></li>
   </ul>
 </nav>
@@ -146,13 +147,12 @@ document.querySelectorAll('.nav-links a').forEach(a=>{
   .hamburger.active span:nth-child(3){transform:translateY(-7px) rotate(-45deg);}
   .nav-links{display:flex;gap:2px;list-style:none;flex-wrap:nowrap;align-items:center;}
   .nav-links li{position:relative;}
-  .nav-links a{color:#9ca3af;font-size:14px;font-weight:500;text-decoration:none;white-space:nowrap;display:inline-flex;align-items:center;gap:2px;padding:5px 9px;border-radius:6px;transition:color .2s,background .2s;}
+  .nav-links a{color:#9ca3af;font-size:13px;font-weight:500;text-decoration:none;white-space:nowrap;display:inline-flex;align-items:center;gap:2px;padding:5px 8px;border-radius:6px;transition:color .2s,background .2s;}
   .nav-links a:hover{color:#fff;}
   .nav-active{color:#fff!important;background:#1a7f3c!important;}
   .nav-arrow{font-size:9px;opacity:.6;}
-  /* 드롭다운 - li에 padding으로 hover 영역 확보 */
   .nav-item-drop{padding-bottom:12px;margin-bottom:-12px;}
-  .nav-dropdown{position:absolute;top:calc(100% - 12px);left:50%;transform:translateX(-50%);background:#1f2937;border-radius:10px;padding:6px 0;min-width:120px;box-shadow:0 8px 24px rgba(0,0,0,.3);opacity:0;visibility:hidden;transition:opacity .15s,visibility .15s;z-index:200;}
+  .nav-dropdown{position:absolute;top:100%;left:50%;transform:translateX(-50%);background:#1f2937;border-radius:10px;padding:6px 0;min-width:120px;box-shadow:0 8px 24px rgba(0,0,0,.3);opacity:0;visibility:hidden;transition:opacity .15s,visibility .15s;z-index:200;}
   .nav-dropdown::before{content:'';position:absolute;top:-5px;left:50%;transform:translateX(-50%);border:5px solid transparent;border-bottom-color:#1f2937;border-top:none;}
   .nav-item-drop:hover .nav-dropdown{opacity:1;visibility:visible;}
   .nav-dropdown a{display:block;padding:9px 18px;color:#d1d5db;font-size:13px;font-weight:500;white-space:nowrap;text-decoration:none;background:none;border-radius:0;transition:background .15s,color .15s;}
