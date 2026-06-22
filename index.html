@@ -556,10 +556,11 @@ function renderHomeSchedule(){
         const oc=op>us?'score-lose':op<us?'score-win':'';
         sc=`<div class="score-box" style="font-size:18px;"><span class="${uc}">${us}</span><span class="score-sep">:</span><span class="${oc}">${op}</span></div>`;
       } else sc=`<div class="score-box" style="font-size:14px;color:#9ca3af;">VS</div>`;
-      return `<div style="display:flex;align-items:center;gap:6px;padding:5px 0;border-bottom:1px solid #f3f4f6;">
-        <span style="font-size:11px;color:#9ca3af;width:36px;">${i+1}게임</span>
-        <span style="font-size:13px;font-weight:800;color:#1a7f3c;">중흥FC</span>${sc}
-        <span style="font-size:13px;font-weight:700;">${g.opp_name||'상대팀'}</span>
+      return `<div style="display:flex;align-items:center;gap:6px;padding:5px 0;border-bottom:1px solid #f3f4f6;overflow:hidden;">
+        <span style="font-size:11px;color:#9ca3af;width:36px;flex-shrink:0;">${i+1}게임</span>
+        <span style="font-size:13px;font-weight:800;color:#1a7f3c;flex-shrink:0;">중흥FC</span>${sc}
+        <span style="font-size:13px;font-weight:700;flex-shrink:0;">${g.opp_name||'상대팀'}</span>
+        ${(g.starterIds&&g.starterIds.length>0)?`<span style="font-size:11px;color:#9ca3af;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;max-width:160px;flex:1;">👕 ${g.starters||''}</span>`:''}
       </div>`;
     }).join('');
     return `<div class="match-card" onclick="location.href='schedule.html'" style="cursor:pointer;flex-direction:column;gap:10px;padding:18px 20px;">
