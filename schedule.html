@@ -75,7 +75,11 @@
   .frow{display:grid;grid-template-columns:1fr 1fr;gap:12px;}
   .games-box{background:#f0fdf4;border:1.5px solid #bbf7d0;border-radius:10px;padding:14px;margin-bottom:14px;}
   .games-box-title{font-size:13px;font-weight:700;color:var(--green);margin-bottom:10px;}
-  .gi-row{display:grid;grid-template-columns:52px 1fr 44px 12px 44px 36px;gap:6px;align-items:center;margin-bottom:7px;}
+  .gi-row{display:grid;grid-template-columns:52px 1fr 44px 12px 44px 36px;gap:6px;align-items:start;margin-bottom:10px;}
+  .gi-starters{margin-top:6px;padding:8px 10px;background:#f9fafb;border-radius:7px;border:1.5px solid #e5e7eb;grid-column:1/-1;}
+  .gi-starters-label{font-size:11px;font-weight:700;color:var(--gray2);margin-bottom:5px;}
+  .gi-starters input{width:100%;padding:6px 10px;border:1.5px solid var(--gray3);border-radius:6px;font-size:12px;font-family:inherit;outline:none;}
+  .gi-starters input:focus{border-color:var(--green);}
   .gi-row input{padding:7px 8px;border:1.5px solid var(--gray3);border-radius:7px;font-size:13px;font-family:inherit;outline:none;width:100%;text-align:center;}
   .gi-row input.opp-name{text-align:left;}
   .gi-row input:focus{border-color:var(--green);}
@@ -326,17 +330,23 @@ function addGameRow(g, num){
   const c=document.getElementById('gi-container');
   const n=num||c.children.length+1;
   const d=document.createElement('div'); d.className='gi-row';
-  d.innerHTML=`<span style="font-size:12px;font-weight:700;color:var(--gray2);text-align:center;">${n}게임</span>
-    <input type="text" class="opp-name" placeholder="상대팀" value="${g.opp_name||''}">
-    <input type="number" class="g-us" placeholder="0" value="${(g.us!==undefined&&g.us!=='')?g.us:''}" min="0" max="99">
-    <span class="gi-sep">:</span>
-    <input type="number" class="g-opp" placeholder="0" value="${(g.opp!==undefined&&g.opp!=='')?g.opp:''}" min="0" max="99">
-    <button class="btn-del-gi">✕</button>`;
-  d.querySelector('.btn-del-gi').onclick=()=>{ d.remove(); renum(); };
+  const starters=(g&&g.starters)||'';
+  d.innerHTML=`
+    <span style="font-size:12px;font-weight:700;color:var(--gray2);text-align:center;padding-top:8px;">${n}게임</span>
+    <input type="text" class="opp-name" placeholder="상대팀" value="${g&&g.opp_name||''}">
+    <input type="number" class="g-us" placeholder="0" value="${(g&&g.us!==undefined&&g.us!=='')?g.us:''}" min="0" max="99">
+    <span class="gi-sep" style="padding-top:8px;">:</span>
+    <input type="number" class="g-opp" placeholder="0" value="${(g&&g.opp!==undefined&&g.opp!=='')?g.opp:''}" min="0" max="99">
+    <button onclick="this.closest('.gi-row').remove()" style="padding:6px;border-radius:6px;background:#fee2e2;color:#ef4444;border:none;cursor:pointer;font-size:11px;">✕</button>
+    <div class="gi-starters">
+      <div class="gi-starters-label">👕 선발선수 (쉼표로 구분)</div>
+      <input type="text" class="g-starters" placeholder="예) 홍길동, 김철수, 이영희..." value="${starters}">
+    </div>`;
   c.appendChild(d);
 }
+
 function renum(){ document.querySelectorAll('#gi-container .gi-row').forEach((r,i)=>{ r.querySelector('span').textContent=`${i+1}게임`; }); }
-function getGames(){ return Array.from(document.querySelectorAll('#gi-container .gi-row')).map(r=>({ opp_name:r.querySelector('.opp-name').value.trim(), us:r.querySelector('.g-us').value, opp:r.querySelector('.g-opp').value })); }
+function getGames(){ return Array.from(document.querySelectorAll('#gi-container .gi-row')).map(r=>({ opp_name:r.querySelector('.opp-name').value.trim(), us:r.querySelector('.g-us').value, opp:r.querySelector('.g-opp').value, starters:r.querySelector('.g-starters')?r.querySelector('.g-starters').value.trim():'' })); }
 
 /* Firebase REST */
 function apiGet(path){ return fetch(DB+path+'.json').then(r=>{ if(!r.ok) throw new Error('HTTP '+r.status); return r.json(); }); }
