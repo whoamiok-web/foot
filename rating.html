@@ -1,0 +1,344 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>선발점수 – 중흥FC</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700;900&display=swap" rel="stylesheet">
+<style>
+  *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+  :root{--green:#1a7f3c;--green2:#23a852;--dark:#111827;--gray1:#374151;--gray2:#6b7280;--gray3:#d1d5db;--bg:#f4f6f8;--shadow:0 2px 16px rgba(0,0,0,.07);--radius:14px;}
+  body{font-family:'Noto Sans KR','Apple SD Gothic Neo','Malgun Gothic',sans-serif;background:var(--bg);color:var(--dark);min-height:100vh;}
+  .page-header{background:linear-gradient(135deg,#0f2027 0%,#1a4a2e 60%,#203a43 100%);padding:40px 40px 36px;}
+  .page-header-inner{max-width:900px;margin:0 auto;}
+  .breadcrumb{font-size:12px;color:#6b7280;margin-bottom:10px;display:flex;align-items:center;gap:6px;}
+  .breadcrumb .cur{color:var(--green2);font-weight:600;}
+  .page-header h1{font-size:28px;font-weight:900;color:#fff;}
+  .page-header p{font-size:14px;color:#9ca3af;margin-top:6px;}
+  .main-wrap{max-width:900px;margin:0 auto;padding:28px 40px 60px;}
+
+  /* 요약 카드 */
+  .summary-cards{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:24px;}
+  .sum-card{background:#fff;border-radius:12px;padding:16px 20px;box-shadow:var(--shadow);text-align:center;}
+  .sum-num{font-size:26px;font-weight:900;color:var(--green);}
+  .sum-label{font-size:12px;color:var(--gray2);margin-top:3px;}
+
+  /* 랭킹 테이블 */
+  .rank-table{background:#fff;border-radius:var(--radius);box-shadow:var(--shadow);overflow:hidden;}
+  .rank-header{display:grid;grid-template-columns:56px 40px 1fr 70px 1fr;padding:12px 20px;background:#f9fafb;border-bottom:2px solid #e5e7eb;font-size:12px;font-weight:700;color:var(--gray2);}
+  .rank-row{display:grid;grid-template-columns:56px 40px 1fr 70px 1fr;padding:14px 20px;border-bottom:1px solid #f3f4f6;align-items:center;transition:background .15s;}
+  .rank-row:last-child{border-bottom:none;}
+  .rank-row:hover{background:#f9fafb;}
+  .rank-num{font-size:15px;font-weight:900;text-align:center;}
+  .rank-1{color:#f59e0b;} .rank-2{color:#9ca3af;} .rank-3{color:#cd7c2f;}
+  .pos-badge{font-size:10px;font-weight:700;padding:2px 6px;border-radius:4px;text-align:center;}
+  .pos-fw{background:#fff7ed;color:#ea580c;border:1px solid #fed7aa;}
+  .pos-mf{background:#eff6ff;color:#2563eb;border:1px solid #bfdbfe;}
+  .pos-df{background:#ecfdf5;color:var(--green);border:1px solid #a7f3d0;}
+  .pos-gk{background:#fdf4ff;color:#9333ea;border:1px solid #e9d5ff;}
+  .member-name{font-size:14px;font-weight:700;}
+  .score-num{font-size:18px;font-weight:900;color:var(--green);text-align:center;}
+  /* 점수 바 */
+  .score-bar-wrap{display:flex;align-items:center;gap:8px;}
+  .score-bar{flex:1;height:8px;background:#f3f4f6;border-radius:4px;overflow:hidden;}
+  .score-bar-fill{height:100%;background:var(--green);border-radius:4px;transition:width .5s;}
+
+  /* 탭 */
+  .tab-bar{display:flex;gap:6px;margin-bottom:20px;}
+  .tab-btn{padding:7px 18px;border-radius:8px;border:1.5px solid var(--gray3);background:#fff;font-size:13px;font-weight:600;color:var(--gray2);cursor:pointer;font-family:inherit;transition:all .2s;}
+  .tab-btn.active{background:var(--green);color:#fff;border-color:var(--green);}
+
+  /* 게임별 선발 내역 */
+  .game-detail-card{background:#fff;border-radius:var(--radius);box-shadow:var(--shadow);margin-bottom:12px;overflow:hidden;}
+  .game-detail-head{padding:14px 20px;background:#f9fafb;border-bottom:1px solid #e5e7eb;display:flex;align-items:center;gap:12px;flex-wrap:wrap;cursor:pointer;}
+  .game-detail-head:hover{background:#f3f4f6;}
+  .game-date-badge{background:var(--dark);color:#fff;font-size:12px;font-weight:700;padding:4px 10px;border-radius:6px;}
+  .game-detail-body{padding:16px 20px;display:none;}
+  .game-detail-body.open{display:block;}
+  .starter-chips{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px;}
+  .starter-chip{font-size:12px;font-weight:600;padding:4px 10px;border-radius:6px;background:#ecfdf5;color:var(--green);border:1px solid #a7f3d0;}
+
+  .empty{text-align:center;padding:60px;color:var(--gray2);font-size:14px;}
+  .loading{text-align:center;padding:48px;color:var(--gray2);}
+  .spinner{width:32px;height:32px;border:3px solid #e5e7eb;border-top-color:var(--green);border-radius:50%;animation:spin .7s linear infinite;margin:0 auto 12px;}
+  @keyframes spin{to{transform:rotate(360deg);}}
+  .toast{position:fixed;bottom:30px;left:50%;transform:translateX(-50%) translateY(20px);background:var(--dark);color:#fff;padding:12px 24px;border-radius:10px;font-size:14px;font-weight:600;opacity:0;transition:all .3s;pointer-events:none;z-index:999;}
+  .toast.show{opacity:1;transform:translateX(-50%) translateY(0);}
+  @media(max-width:640px){
+    .main-wrap{padding:24px 16px 48px;}.page-header{padding:28px 20px;}
+    .summary-cards{grid-template-columns:repeat(3,1fr);}
+    .rank-header,.rank-row{grid-template-columns:44px 36px 1fr 56px;}
+    .rank-header>:last-child,.rank-row>:last-child{display:none;}
+  }
+</style>
+</head>
+<body>
+<nav>
+  <a class="nav-logo" href="index.html">⚽ 중흥FC</a>
+  <button class="hamburger" id="hamburger" aria-label="메뉴"><span></span><span></span><span></span></button>
+  <ul class="nav-links" id="nav-links">
+    <li class="nav-item-drop">
+      <a href="intro.html" class="">소개 <span class="nav-arrow">▾</span></a>
+      <div class="nav-dropdown"><a href="intro.html">팀 소개</a><a href="members.html">회원명단</a><a href="rules.html">회칙</a></div>
+    </li>
+    <li><a href="notice.html" class="">공지사항</a></li>
+    <li><a href="schedule.html" class="">경기일정</a></li>
+    <li><a href="record.html" class="">경기기록</a></li>
+    <li><a href="attendance.html" class="">출석률</a></li>
+    <li><a href="rating.html" class="nav-active">선발점수</a></li>
+    <li><a href="gallery.html" class="">갤러리</a></li>
+  </ul>
+</nav>
+<script>
+document.getElementById('hamburger').addEventListener('click',function(){
+  document.getElementById('nav-links').classList.toggle('open');
+  this.classList.toggle('active');
+});
+document.querySelectorAll('.nav-links a').forEach(a=>{
+  a.addEventListener('click',()=>{
+    document.getElementById('nav-links').classList.remove('open');
+    document.getElementById('hamburger').classList.remove('active');
+  });
+});
+</script>
+<style>
+  nav{position:sticky;top:0;z-index:100;background:#111827;display:flex;align-items:center;justify-content:space-between;flex-wrap:nowrap;gap:10px;padding:0 20px;height:60px;box-shadow:0 2px 12px rgba(0,0,0,.3);}
+  .nav-logo{font-size:18px;font-weight:900;color:#fff;text-decoration:none;white-space:nowrap;flex-shrink:0;}
+  .hamburger{display:none;flex-direction:column;justify-content:center;gap:5px;width:36px;height:36px;background:none;border:none;cursor:pointer;padding:4px;flex-shrink:0;}
+  .hamburger span{display:block;height:2px;background:#fff;border-radius:2px;transition:all .3s;}
+  .hamburger.active span:nth-child(1){transform:translateY(7px) rotate(45deg);}
+  .hamburger.active span:nth-child(2){opacity:0;}
+  .hamburger.active span:nth-child(3){transform:translateY(-7px) rotate(-45deg);}
+  .nav-links{display:flex;gap:2px;list-style:none;flex-wrap:nowrap;align-items:center;}
+  .nav-links li{position:relative;}
+  .nav-links a{color:#9ca3af;font-size:13px;font-weight:500;text-decoration:none;white-space:nowrap;display:inline-flex;align-items:center;gap:2px;padding:5px 8px;border-radius:6px;transition:color .2s,background .2s;}
+  .nav-links a:hover{color:#fff;}
+  .nav-active{color:#fff!important;background:#1a7f3c!important;}
+  .nav-arrow{font-size:9px;opacity:.6;}
+  .nav-item-drop{padding-bottom:12px;margin-bottom:-12px;}
+  .nav-dropdown{position:absolute;top:100%;left:50%;transform:translateX(-50%);background:#1f2937;border-radius:10px;padding:6px 0;min-width:120px;box-shadow:0 8px 24px rgba(0,0,0,.3);opacity:0;visibility:hidden;transition:opacity .15s,visibility .15s;z-index:200;}
+  .nav-dropdown::before{content:'';position:absolute;top:-5px;left:50%;transform:translateX(-50%);border:5px solid transparent;border-bottom-color:#1f2937;border-top:none;}
+  .nav-item-drop:hover .nav-dropdown{opacity:1;visibility:visible;}
+  .nav-dropdown a{display:block;padding:9px 18px;color:#d1d5db;font-size:13px;font-weight:500;white-space:nowrap;text-decoration:none;background:none;border-radius:0;transition:background .15s,color .15s;}
+  .nav-dropdown a:hover{background:#374151!important;color:#fff!important;}
+  @media(max-width:640px){
+    .hamburger{display:flex;}
+    .nav-links{display:none;flex-direction:column;align-items:stretch;gap:0;position:absolute;top:60px;left:0;right:0;width:100%;background:#1f2937;padding:8px 0;box-shadow:0 8px 24px rgba(0,0,0,.3);z-index:99;}
+    .nav-links.open{display:flex;}
+    .nav-links li{width:100%;position:static;padding-bottom:0;margin-bottom:0;}
+    .nav-links>li>a{display:block;width:100%;padding:13px 20px;border-radius:0;font-size:15px;color:#d1d5db;box-sizing:border-box;}
+    .nav-links>li>a:hover,.nav-links>li>a.nav-active{background:#1a7f3c;color:#fff;}
+    .nav-arrow{display:none;}
+    .nav-item-drop .nav-dropdown{position:static!important;transform:none!important;opacity:1!important;visibility:visible!important;box-shadow:none;border-radius:0;padding:0;background:#111827;width:100%;}
+    .nav-dropdown::before{display:none;}
+    .nav-dropdown a{display:block;width:100%;padding:12px 20px 12px 40px;font-size:14px;color:#9ca3af;box-sizing:border-box;border-left:3px solid #1a7f3c;}
+    .nav-dropdown a:hover{background:#1f2937!important;color:#fff!important;}
+  }
+</style>
+
+<div class="page-header">
+  <div class="page-header-inner">
+    <div class="breadcrumb"><span onclick="location.href='index.html'" style="cursor:pointer;">홈</span><span>›</span><span class="cur">선발점수</span></div>
+    <h1>🏅 선발점수</h1>
+    <p>게임별 선발 출전 횟수를 점수로 누적 관리합니다.</p>
+  </div>
+</div>
+
+<div class="main-wrap">
+  <!-- 요약 -->
+  <div class="summary-cards">
+    <div class="sum-card"><div class="sum-num" id="s-games">-</div><div class="sum-label">총 게임 수</div></div>
+    <div class="sum-card"><div class="sum-num" id="s-members">-</div><div class="sum-label">등록 회원</div></div>
+    <div class="sum-card"><div class="sum-num" id="s-top">-</div><div class="sum-label">최다 선발</div></div>
+  </div>
+
+  <div class="tab-bar">
+    <button class="tab-btn active" id="tab-rank">🏆 랭킹</button>
+    <button class="tab-btn" id="tab-detail">📋 게임별 선발</button>
+  </div>
+
+  <!-- 랭킹 뷰 -->
+  <div id="view-rank">
+    <div class="rank-table">
+      <div class="rank-header">
+        <div style="text-align:center;">순위</div>
+        <div style="text-align:center;">포지션</div>
+        <div>이름</div>
+        <div style="text-align:center;">점수</div>
+        <div>선발 비율</div>
+      </div>
+      <div id="rank-body"><div class="loading"><div class="spinner"></div>불러오는 중...</div></div>
+    </div>
+  </div>
+
+  <!-- 게임별 선발 뷰 -->
+  <div id="view-detail" style="display:none;">
+    <div id="detail-list"><div class="loading"><div class="spinner"></div>불러오는 중...</div></div>
+  </div>
+</div>
+
+<div style="background:#111827;width:100%;">
+  <div style="max-width:1160px;margin:0 auto;padding:28px 40px;box-sizing:border-box;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:16px;">
+    <div style="color:#6b7280;font-size:13px;">
+      <a href="index.html" style="font-size:16px;font-weight:900;color:#fff;text-decoration:none;display:block;margin-bottom:5px;">⚽ 중흥FC</a>
+      <div>광주광역시 북구 중흥동 | 매주 일요일 AM 06:30 | 전남대학교 부설중학교 운동장</div>
+      <div style="margin-top:3px;">가입문의: 총무 010&#8209;4686&#8209;9320 | <a href="https://open.kakao.com/o/pFIIRBAi" target="_blank" style="color:#9ca3af;">💬 카카오톡 채널</a></div>
+      <div style="margin-top:3px;">회비계좌: <span onclick="copyAccount(event)" style="cursor:pointer;color:#d1d5db;border-bottom:1px dashed #6b7280;">카카오뱅크 7942&#8209;2614&#8209;9821 나성균</span> <span id="copy-toast" style="display:none;font-size:11px;color:#23a852;font-weight:700;">✅ 복사 완료!</span></div>
+      <div style="margin-top:14px;font-size:12px;color:#4b5563;">© 2026 중흥FC. All rights reserved.</div>
+    </div>
+  </div>
+</div>
+<script>function copyAccount(e){ if(e) e.preventDefault(); navigator.clipboard.writeText('79422614982').then(()=>{ const t=document.getElementById('copy-toast'); t.style.display='inline'; setTimeout(()=>t.style.display='none',2000); }); }</script>
+<div class="toast" id="toast"></div>
+
+<script>
+const DB = 'https://joonghung-9a14c-default-rtdb.asia-southeast1.firebasedatabase.app';
+let allMembers = [];
+let allGames = []; // 모든 경기의 게임별 데이터 [{date, matchInfo, gameNum, starterIds}]
+let curTab = 'rank';
+
+const posCls = {FW:'pos-fw',MF:'pos-mf',DF:'pos-df',GK:'pos-gk'};
+
+/* 데이터 로드 */
+async function loadAll(){
+  try {
+    const [mData, rData, sData] = await Promise.all([
+      fetch(DB+'/members.json').then(r=>r.json()),
+      fetch(DB+'/records.json').then(r=>r.json()),
+      fetch(DB+'/matches.json').then(r=>r.json())
+    ]);
+
+    // 회원
+    allMembers=[];
+    if(mData&&typeof mData==='object') Object.entries(mData).forEach(([k,v])=>{if(v) allMembers.push({id:k,...v});});
+    allMembers.sort((a,b)=>(parseInt(a.num)||999)-(parseInt(b.num)||999));
+
+    // 게임별 선발 데이터 수집
+    allGames=[];
+
+    // 경기기록에서
+    if(rData&&typeof rData==='object'){
+      Object.entries(rData).forEach(([k,v])=>{
+        if(!v||!v.games) return;
+        v.games.forEach((g,i)=>{
+          if(g.starterIds&&g.starterIds.length>0){
+            allGames.push({ date:v.date, source:'record', info:`vs ${g.opponent||'상대팀'}`, gameNum:i+1, starterIds:g.starterIds });
+          }
+        });
+      });
+    }
+
+    // 경기일정에서 (record에서 연동된 것 제외 - fromRecord:true)
+    if(sData&&typeof sData==='object'){
+      Object.entries(sData).forEach(([k,v])=>{
+        if(!v||!v.games||v.fromRecord) return; // 경기기록에서 연동된 건 중복 방지
+        v.games.forEach((g,i)=>{
+          if(g.starterIds&&g.starterIds.length>0){
+            allGames.push({ date:v.date, source:'schedule', info:`vs ${g.opp_name||'상대팀'}`, gameNum:i+1, starterIds:g.starterIds });
+          }
+        });
+      });
+    }
+
+    allGames.sort((a,b)=>(b.date||'').localeCompare(a.date||''));
+
+    renderSummary();
+    renderRank();
+  } catch(e){
+    document.getElementById('rank-body').innerHTML=`<div class="empty">⚠️ 불러오기 실패: ${e.message}</div>`;
+  }
+}
+
+/* 요약 */
+function renderSummary(){
+  document.getElementById('s-games').textContent = allGames.length;
+  document.getElementById('s-members').textContent = allMembers.length;
+  if(allMembers.length===0||allGames.length===0){ document.getElementById('s-top').textContent='-'; return; }
+  const scores = getMemberScores();
+  const top = scores[0];
+  document.getElementById('s-top').textContent = top ? `${top.name} (${top.score}점)` : '-';
+}
+
+/* 회원별 점수 계산 */
+function getMemberScores(){
+  return allMembers.map(m=>{
+    const score = allGames.filter(g=>g.starterIds.includes(m.id)).length;
+    return {...m, score};
+  }).sort((a,b)=>b.score-a.score||a.name.localeCompare(b.name,'ko'));
+}
+
+/* 랭킹 렌더 */
+function renderRank(){
+  const body = document.getElementById('rank-body');
+  if(allMembers.length===0){ body.innerHTML='<div class="empty">등록된 회원이 없습니다.</div>'; return; }
+  const scores = getMemberScores();
+  const maxScore = scores[0]?.score||1;
+
+  body.innerHTML = scores.map((m,i)=>{
+    const icon = i===0?'🥇':i===1?'🥈':i===2?'🥉':(i+1);
+    const cls  = i===0?'rank-1':i===1?'rank-2':i===2?'rank-3':'';
+    const pct  = Math.round(m.score/maxScore*100);
+    return `<div class="rank-row">
+      <div class="rank-num ${cls}">${icon}</div>
+      <div style="display:flex;justify-content:center;"><span class="pos-badge ${posCls[m.pos]||''}">${m.pos||'?'}</span></div>
+      <div class="member-name">${m.name}${m.role?` <span style="font-size:10px;color:#9ca3af;">(${m.role})</span>`:''}</div>
+      <div class="score-num">${m.score}</div>
+      <div class="score-bar-wrap">
+        <div class="score-bar"><div class="score-bar-fill" style="width:${pct}%"></div></div>
+        <span style="font-size:11px;color:var(--gray2);width:30px;">${m.score}점</span>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+/* 게임별 선발 렌더 */
+function renderDetail(){
+  const list = document.getElementById('detail-list');
+  if(allGames.length===0){ list.innerHTML='<div class="empty">📋 선발 데이터가 없습니다.<br><small>경기기록 또는 경기일정에서 게임별 선발선수를 입력해주세요.</small></div>'; return; }
+
+  // 날짜별로 묶기
+  const byDate = {};
+  allGames.forEach(g=>{
+    const key = g.date+'_'+g.info;
+    if(!byDate[key]) byDate[key]={date:g.date, info:g.info, games:[]};
+    byDate[key].games.push(g);
+  });
+
+  list.innerHTML = Object.values(byDate).map(d=>{
+    const totalStarters = d.games.reduce((s,g)=>s+g.starterIds.length,0);
+    return `<div class="game-detail-card">
+      <div class="game-detail-head" onclick="this.nextElementSibling.classList.toggle('open')">
+        <span class="game-date-badge">📅 ${(d.date||'').replace(/-/g,'.')}</span>
+        <span style="font-size:14px;font-weight:700;color:var(--gray1);">${d.info}</span>
+        <span style="font-size:12px;color:var(--gray2);">총 ${d.games.length}게임 · ${totalStarters}명 선발</span>
+      </div>
+      <div class="game-detail-body">
+        ${d.games.map(g=>{
+          const names = g.starterIds.map(id=>{ const m=allMembers.find(x=>x.id===id); return m?m.name:id; });
+          return `<div style="margin-bottom:12px;">
+            <div style="font-size:12px;font-weight:700;color:var(--gray2);margin-bottom:5px;">${g.gameNum}게임 선발 (${names.length}명)</div>
+            <div class="starter-chips">${names.map(n=>`<span class="starter-chip">👕 ${n}</span>`).join('')}</div>
+          </div>`;
+        }).join('')}
+      </div>
+    </div>`;
+  }).join('');
+}
+
+/* 탭 */
+document.getElementById('tab-rank').onclick=function(){
+  curTab='rank'; this.classList.add('active'); document.getElementById('tab-detail').classList.remove('active');
+  document.getElementById('view-rank').style.display='block'; document.getElementById('view-detail').style.display='none';
+};
+document.getElementById('tab-detail').onclick=function(){
+  curTab='detail'; this.classList.add('active'); document.getElementById('tab-rank').classList.remove('active');
+  document.getElementById('view-rank').style.display='none'; document.getElementById('view-detail').style.display='block';
+  renderDetail();
+};
+
+function showToast(msg){ const t=document.getElementById('toast'); t.textContent=msg; t.classList.add('show'); setTimeout(()=>t.classList.remove('show'),2500); }
+
+loadAll();
+</script>
+</body>
+</html>
