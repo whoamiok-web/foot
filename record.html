@@ -9,14 +9,12 @@
   *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
   :root{--green:#1a7f3c;--green2:#23a852;--dark:#111827;--gray1:#374151;--gray2:#6b7280;--gray3:#d1d5db;--bg:#f4f6f8;--white:#fff;--shadow:0 2px 16px rgba(0,0,0,.07);--radius:14px;}
   body{font-family:'Noto Sans KR','Apple SD Gothic Neo','Malgun Gothic',sans-serif;background:var(--bg);color:var(--dark);min-height:100vh;}
-
   .page-header{background:linear-gradient(135deg,#0f2027 0%,#1a4a2e 60%,#203a43 100%);padding:40px 40px 36px;}
   .page-header-inner{max-width:860px;margin:0 auto;}
   .breadcrumb{font-size:12px;color:#6b7280;margin-bottom:10px;display:flex;align-items:center;gap:6px;}
   .breadcrumb .cur{color:var(--green2);font-weight:600;}
   .page-header h1{font-size:28px;font-weight:900;color:#fff;}
   .page-header p{font-size:14px;color:#9ca3af;margin-top:6px;}
-
   .main-wrap{max-width:860px;margin:0 auto;padding:28px 40px 60px;}
   .top-bar{display:flex;align-items:center;justify-content:space-between;margin-bottom:20px;flex-wrap:wrap;gap:10px;}
   .add-btn{background:var(--green);color:#fff;border:none;border-radius:9px;padding:9px 18px;font-size:14px;font-weight:700;cursor:pointer;font-family:inherit;}
@@ -25,7 +23,7 @@
   /* 기록 카드 */
   .record-list{display:flex;flex-direction:column;gap:16px;}
   .record-card{background:#fff;border-radius:var(--radius);box-shadow:var(--shadow);overflow:hidden;}
-  .record-head{padding:18px 22px 14px;border-bottom:1px solid #f3f4f6;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px;}
+  .record-head{padding:16px 22px;border-bottom:1px solid #f3f4f6;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px;}
   .record-date-badge{background:var(--dark);color:#fff;font-size:12px;font-weight:700;padding:4px 12px;border-radius:6px;}
   .record-admin-btns{display:none;gap:6px;}
   .record-admin-btns.show{display:flex;}
@@ -33,12 +31,20 @@
   .btn-edit-sm{border-color:#e5e7eb;color:var(--gray2);background:#fff;}
   .btn-del-sm{border-color:#fee2e2;color:#ef4444;background:#fff5f5;}
   .record-body{padding:18px 22px;}
+
+  /* 결과 표시 */
+  .result-row{display:flex;align-items:center;gap:12px;margin-bottom:12px;flex-wrap:wrap;}
+  .vs-opponent{font-size:14px;font-weight:700;color:var(--gray1);}
+  .score-big{font-size:24px;font-weight:900;color:var(--dark);}
+  .result-badge{display:inline-block;padding:3px 10px;border-radius:6px;font-size:12px;font-weight:700;}
+  .badge-W{background:#ecfdf5;color:#1a7f3c;border:1px solid #a7f3d0;}
+  .badge-D{background:#fffbeb;color:#d97706;border:1px solid #fde68a;}
+  .badge-L{background:#fef2f2;color:#ef4444;border:1px solid #fecaca;}
+  .scorers-row{font-size:13px;color:var(--gray1);margin-bottom:8px;}
+  .attend-row{font-size:12px;color:var(--gray2);margin-bottom:8px;}
   .record-content{font-size:14px;line-height:1.85;color:var(--gray1);white-space:pre-wrap;}
-  /* 이미지 갤러리 */
-  .record-images{display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:8px;margin-top:14px;}
-  .record-img{width:100%;aspect-ratio:4/3;object-fit:cover;border-radius:8px;cursor:pointer;transition:transform .2s;}
-  .record-img:hover{transform:scale(1.02);}
-  .img-caption{font-size:11px;color:var(--gray2);margin-top:8px;}
+  .record-images{display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:8px;margin-top:12px;}
+  .record-img{width:100%;aspect-ratio:4/3;object-fit:cover;border-radius:8px;cursor:pointer;}
 
   .empty{text-align:center;padding:60px;color:var(--gray2);font-size:14px;}
   .loading{text-align:center;padding:48px;color:var(--gray2);}
@@ -46,23 +52,43 @@
   @keyframes spin{to{transform:rotate(360deg);}}
 
   /* 모달 */
-  .overlay{position:fixed;inset:0;background:rgba(0,0,0,.55);z-index:200;display:flex;align-items:center;justify-content:center;backdrop-filter:blur(4px);}
-  .mbox{background:#fff;border-radius:16px;padding:28px;width:520px;max-width:95vw;box-shadow:0 8px 40px rgba(0,0,0,.2);max-height:90vh;overflow-y:auto;}
+  .overlay{position:fixed;inset:0;background:rgba(0,0,0,.55);z-index:200;display:flex;align-items:center;justify-content:center;backdrop-filter:blur(4px);padding:16px;}
+  .mbox{background:#fff;border-radius:16px;padding:28px;width:560px;max-width:100%;box-shadow:0 8px 40px rgba(0,0,0,.2);max-height:90vh;overflow-y:auto;}
   .mbox h3{font-size:18px;font-weight:800;margin-bottom:18px;}
   .fg{margin-bottom:14px;}
   .fg label{font-size:13px;font-weight:700;color:var(--gray1);margin-bottom:5px;display:block;}
-  .fg input,.fg textarea{width:100%;padding:10px 13px;border:1.5px solid var(--gray3);border-radius:8px;font-size:14px;font-family:inherit;outline:none;transition:border-color .2s;}
-  .fg input:focus,.fg textarea:focus{border-color:var(--green);}
-  .fg textarea{min-height:140px;resize:vertical;line-height:1.7;}
+  .fg input,.fg textarea,.fg select{width:100%;padding:10px 13px;border:1.5px solid var(--gray3);border-radius:8px;font-size:14px;font-family:inherit;outline:none;transition:border-color .2s;}
+  .fg input:focus,.fg textarea:focus,.fg select:focus{border-color:var(--green);}
+  .fg textarea{min-height:100px;resize:vertical;line-height:1.7;}
 
-  /* 드라이브 이미지 */
+  /* 경기 결과 입력 */
+  .score-row{display:grid;grid-template-columns:1fr 64px 20px 64px;gap:8px;align-items:center;margin-bottom:6px;}
+  .score-row input.opp{padding:10px 13px;border:1.5px solid var(--gray3);border-radius:8px;font-size:14px;font-family:inherit;outline:none;}
+  .score-row input.opp:focus{border-color:var(--green);}
+  .score-num{padding:10px 6px!important;text-align:center!important;font-weight:700!important;font-size:16px!important;}
+  .score-vs{text-align:center;font-weight:800;color:var(--gray2);}
+
+  /* 득점자 */
+  .scorer-list{display:flex;flex-direction:column;gap:6px;margin-bottom:8px;}
+  .scorer-row{display:flex;gap:6px;align-items:center;}
+  .scorer-row input{flex:1;padding:9px 12px;border:1.5px solid var(--gray3);border-radius:7px;font-size:13px;font-family:inherit;outline:none;}
+  .scorer-row input:focus{border-color:var(--green);}
+  .btn-del-row{padding:6px 9px;border-radius:6px;background:#fee2e2;color:#ef4444;border:none;cursor:pointer;font-size:12px;}
+  .btn-add-small{padding:7px 14px;border-radius:7px;background:var(--green);color:#fff;border:none;font-size:12px;font-weight:700;cursor:pointer;font-family:inherit;}
+
+  /* 참석자 체크 */
+  .attend-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(110px,1fr));gap:5px;margin-top:6px;max-height:180px;overflow-y:auto;}
+  .attend-item{display:flex;align-items:center;gap:5px;padding:6px 8px;border-radius:7px;border:1.5px solid var(--gray3);cursor:pointer;font-size:12px;font-weight:600;transition:all .2s;user-select:none;}
+  .attend-item.on{background:#ecfdf5;border-color:var(--green);color:var(--green);}
+  .btn-check-all{padding:5px 12px;border-radius:6px;background:#f3f4f6;border:1.5px solid var(--gray3);font-size:11px;font-weight:600;cursor:pointer;font-family:inherit;margin-bottom:6px;}
+
+  /* 드라이브 사진 */
   .drive-box{background:#f0fdf4;border:1.5px solid #bbf7d0;border-radius:10px;padding:14px;margin-bottom:14px;}
-  .drive-box-title{font-size:13px;font-weight:700;color:var(--green);margin-bottom:10px;}
-  .drive-row{display:flex;gap:8px;margin-bottom:7px;align-items:center;}
-  .drive-row input{flex:1;padding:8px 12px;border:1.5px solid var(--gray3);border-radius:7px;font-size:13px;font-family:inherit;outline:none;}
-  .drive-row input:focus{border-color:var(--green);}
-  .btn-add-img{padding:7px 13px;border-radius:7px;background:var(--green);color:#fff;border:none;font-size:12px;font-weight:700;cursor:pointer;font-family:inherit;white-space:nowrap;}
-  .btn-del-img{padding:6px 9px;border-radius:6px;background:#fee2e2;color:#ef4444;border:none;cursor:pointer;font-size:13px;}
+  .drive-box-title{font-size:13px;font-weight:700;color:var(--green);margin-bottom:8px;}
+  .img-input-list{display:flex;flex-direction:column;gap:7px;margin-bottom:7px;}
+  .img-row{display:flex;gap:6px;align-items:center;}
+  .img-row input{flex:1;padding:8px 12px;border:1.5px solid var(--gray3);border-radius:7px;font-size:13px;font-family:inherit;outline:none;}
+  .img-row input:focus{border-color:var(--green);}
   .drive-help{font-size:11px;color:var(--gray2);line-height:1.6;margin-top:6px;}
 
   .mbtns{display:flex;gap:8px;justify-content:flex-end;margin-top:18px;}
@@ -70,44 +96,9 @@
   .mbtn-cancel{padding:10px 18px;border-radius:9px;border:1.5px solid var(--gray3);background:#fff;font-size:14px;font-weight:600;color:var(--gray2);cursor:pointer;font-family:inherit;}
   .pw-input{width:100%;padding:11px 16px;border:1.5px solid var(--gray3);border-radius:9px;font-size:15px;font-family:inherit;outline:none;letter-spacing:3px;margin-bottom:6px;}
   .pw-err{font-size:12px;color:#ef4444;min-height:18px;margin-bottom:10px;}
-  /* 경기결과 */
-  .score-row{display:grid;grid-template-columns:1fr 60px 16px 60px;gap:8px;align-items:center;margin-bottom:14px;}
-  .score-row input[type=text]{padding:10px 13px;border:1.5px solid var(--gray3);border-radius:8px;font-size:14px;font-family:inherit;outline:none;}
-  .score-row input[type=text]:focus{border-color:var(--green);}
-  .score-num{padding:10px 8px;border:1.5px solid var(--gray3);border-radius:8px;font-size:16px;font-weight:700;font-family:inherit;outline:none;text-align:center;width:100%;}
-  .score-num:focus{border-color:var(--green);}
-  .score-vs{text-align:center;font-weight:800;color:var(--gray2);font-size:14px;}
-  .result-badge{display:inline-block;padding:3px 10px;border-radius:6px;font-size:12px;font-weight:700;}
-  .result-W{background:#ecfdf5;color:#1a7f3c;border:1px solid #a7f3d0;}
-  .result-D{background:#fffbeb;color:#d97706;border:1px solid #fde68a;}
-  .result-L{background:#fef2f2;color:#ef4444;border:1px solid #fecaca;}
-  /* 득점자 */
-  .scorer-list{display:flex;flex-direction:column;gap:6px;margin-bottom:8px;}
-  .scorer-row{display:flex;gap:6px;align-items:center;}
-  .scorer-row input{flex:1;padding:8px 12px;border:1.5px solid var(--gray3);border-radius:7px;font-size:13px;font-family:inherit;outline:none;}
-  .scorer-row input:focus{border-color:var(--green);}
-  .btn-del-scorer{padding:6px 9px;border-radius:6px;background:#fee2e2;color:#ef4444;border:none;cursor:pointer;font-size:12px;}
-  .btn-add-scorer{padding:7px 14px;border-radius:7px;background:var(--green);color:#fff;border:none;font-size:12px;font-weight:700;cursor:pointer;font-family:inherit;margin-bottom:4px;}
-  /* 참석자 체크 */
-  .attend-check-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(110px,1fr));gap:6px;margin-top:8px;}
-  .attend-check-item{display:flex;align-items:center;gap:6px;padding:7px 10px;border-radius:7px;border:1.5px solid var(--gray3);cursor:pointer;font-size:12px;font-weight:600;transition:all .2s;user-select:none;}
-  .attend-check-item.on{background:#ecfdf5;border-color:var(--green);color:var(--green);}
-  .btn-check-all-sm{padding:5px 12px;border-radius:6px;background:#f3f4f6;border:1.5px solid var(--gray3);font-size:11px;font-weight:600;cursor:pointer;font-family:inherit;margin-bottom:8px;}
-
-  /* 카드 표시 */
-  .record-result{display:flex;align-items:center;gap:10px;margin-bottom:10px;flex-wrap:wrap;}
-  .score-display{font-size:20px;font-weight:900;color:var(--dark);}
-  .scorer-display{font-size:13px;color:var(--gray1);margin-top:6px;}
-  .attend-display{font-size:12px;color:var(--gray2);margin-top:6px;}
-
   .toast{position:fixed;bottom:30px;left:50%;transform:translateX(-50%) translateY(20px);background:var(--dark);color:#fff;padding:12px 24px;border-radius:10px;font-size:14px;font-weight:600;opacity:0;transition:all .3s;pointer-events:none;z-index:999;}
   .toast.show{opacity:1;transform:translateX(-50%) translateY(0);}
-  @media(max-width:640px){.main-wrap{padding:24px 16px 48px;}.page-header{padding:28px 20px;}.record-images{grid-template-columns:repeat(2,1fr);}}
-  footer{background:#111827;color:#6b7280;padding:32px 40px;font-size:13px;}
-  .footer-inner{max-width:1160px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;gap:24px;flex-wrap:wrap;}
-  .footer-left{flex:1;}
-  .footer-right{font-size:12px;color:#4b5563;white-space:nowrap;flex-shrink:0;}
-  .footer-logo{font-size:17px;font-weight:900;color:#fff;}
+  @media(max-width:640px){.main-wrap{padding:24px 16px 48px;}.page-header{padding:28px 20px;}.score-row{grid-template-columns:1fr 52px 16px 52px;}}
 </style>
 </head>
 <body>
@@ -123,7 +114,7 @@
     </li>
     <li><a href="notice.html" class="">공지사항</a></li>
     <li><a href="schedule.html" class="">경기일정</a></li>
-    <li><a href="record.html" class="nav-active">경기기록</a></li>
+    <li><a href="record.html" class="">경기기록</a></li>
     <li><a href="attendance.html" class="">참여율</a></li>
     <li><a href="gallery.html" class="">갤러리</a></li>
   </ul>
@@ -182,7 +173,6 @@ document.querySelectorAll('.nav-links a').forEach(a=>{
     <p>중흥FC 경기 후기와 기록을 확인하세요.</p>
   </div>
 </div>
-
 <div class="main-wrap">
   <div class="top-bar">
     <span id="admin-ui"></span>
@@ -195,15 +185,14 @@ document.querySelectorAll('.nav-links a').forEach(a=>{
 
 <!-- 기록 모달 -->
 <div class="overlay" id="record-modal" style="display:none;">
-  <div class="mbox" style="width:560px;">
+  <div class="mbox">
     <h3 id="modal-title">경기기록 작성</h3>
-
     <div class="fg"><label>경기 날짜 *</label><input type="date" id="f-date"></div>
 
     <div class="fg">
       <label>⚽ 경기 결과</label>
       <div class="score-row">
-        <input type="text" id="f-opponent" placeholder="상대팀명">
+        <input type="text" class="opp" id="f-opponent" placeholder="상대팀명">
         <input type="number" class="score-num" id="f-score-us" placeholder="0" min="0" max="99">
         <div class="score-vs">:</div>
         <input type="number" class="score-num" id="f-score-them" placeholder="0" min="0" max="99">
@@ -214,21 +203,21 @@ document.querySelectorAll('.nav-links a').forEach(a=>{
     <div class="fg">
       <label>🎯 득점자</label>
       <div class="scorer-list" id="scorer-list"></div>
-      <button class="btn-add-scorer" id="btn-add-scorer">+ 득점자 추가</button>
+      <button class="btn-add-small" id="btn-add-scorer">+ 득점자 추가</button>
     </div>
 
     <div class="fg">
       <label>✅ 경기 참석자</label>
-      <button class="btn-check-all-sm" id="btn-check-all-attend">전체 선택 / 해제</button>
-      <div class="attend-check-grid" id="attend-check-grid"><div style="font-size:12px;color:#9ca3af;">회원 정보 로딩 중...</div></div>
+      <button class="btn-check-all" id="btn-check-all-attend">전체 선택 / 해제</button>
+      <div class="attend-grid" id="attend-grid"></div>
     </div>
 
-    <div class="fg"><label>📝 경기 내용</label><textarea id="f-body" placeholder="경기 하이라이트, 특이사항 등을 자유롭게 작성해 주세요..." style="min-height:100px;"></textarea></div>
+    <div class="fg"><label>📝 경기 내용</label><textarea id="f-body" placeholder="경기 하이라이트, 특이사항 등 자유롭게 작성해 주세요..."></textarea></div>
 
     <div class="drive-box">
       <div class="drive-box-title">📸 사진 첨부 (Google Drive)</div>
-      <div id="img-inputs"></div>
-      <button class="btn-add-img" id="btn-add-img">+ 사진 추가</button>
+      <div class="img-input-list" id="img-input-list"></div>
+      <button class="btn-add-small" id="btn-add-img">+ 사진 추가</button>
       <div class="drive-help">① Google Drive에서 사진 우클릭 → 공유 → 링크 복사<br>② 권한: "링크가 있는 모든 사용자"로 설정 후 붙여넣기</div>
     </div>
     <div class="mbtns">
@@ -258,29 +247,13 @@ document.querySelectorAll('.nav-links a').forEach(a=>{
       <a href="index.html" style="font-size:16px;font-weight:900;color:#fff;text-decoration:none;display:block;margin-bottom:5px;">⚽ 중흥FC</a>
       <div>광주광역시 북구 중흥동 | 매주 일요일 AM 06:30 | 전남대학교 부설중학교 운동장</div>
       <div style="margin-top:3px;">가입문의: 총무 010&#8209;4686&#8209;9320 | <a href="https://open.kakao.com/o/pFIIRBAi" target="_blank" style="color:#9ca3af;">💬 카카오톡 채널</a></div>
-      <div style="margin-top:3px;">회비계좌: <span onclick="copyAccount(event)" style="cursor:pointer;color:#d1d5db;border-bottom:1px dashed #6b7280;" title="클릭하면 복사됩니다">카카오뱅크 7942&#8209;2614&#8209;9821 나성균</span> <span id="copy-toast" style="display:none;font-size:11px;color:#23a852;font-weight:700;">✅ 복사 완료!</span></div>
+      <div style="margin-top:3px;">회비계좌: <span onclick="copyAccount(event)" style="cursor:pointer;color:#d1d5db;border-bottom:1px dashed #6b7280;">카카오뱅크 7942&#8209;2614&#8209;9821 나성균</span> <span id="copy-toast" style="display:none;font-size:11px;color:#23a852;font-weight:700;">✅ 복사 완료!</span></div>
     </div>
     <div style="font-size:12px;color:#4b5563;white-space:nowrap;align-self:flex-end;">© 2026 중흥FC. All rights reserved.</div>
   </div>
 </div>
 <script>
-function copyAccount(e){
-  if(e) e.preventDefault();
-  navigator.clipboard.writeText('79422614982').then(()=>{
-    const t=document.getElementById('copy-toast');
-    t.style.display='inline'; setTimeout(()=>t.style.display='none',2000);
-  });
-}
-</script>
-</div>
-<script>
-function copyAccount(e){
-  if(e) e.preventDefault();
-  navigator.clipboard.writeText('79422614982').then(()=>{
-    const t=document.getElementById('copy-toast');
-    t.style.display='inline'; setTimeout(()=>t.style.display='none',2000);
-  });
-}
+function copyAccount(e){ if(e) e.preventDefault(); navigator.clipboard.writeText('79422614982').then(()=>{ const t=document.getElementById('copy-toast'); t.style.display='inline'; setTimeout(()=>t.style.display='none',2000); }); }
 </script>
 <div class="toast" id="toast"></div>
 
@@ -288,135 +261,171 @@ function copyAccount(e){
 const DB = 'https://joonghung-9a14c-default-rtdb.asia-southeast1.firebasedatabase.app';
 const ADMIN_PW = 'joonghung2015';
 const ADMIN_KEY = 'jfc_admin';
+
 let allRecords = [];
+let allMembers = [];
 let editId = null;
 let pwCb = null;
-
-
-/* ── 득점자 ── */
-function buildScorerInputs(list){
-  const c=document.getElementById('scorer-list'); c.innerHTML='';
-  if(list.length===0) addScorerRow('');
-  else list.forEach(v=>addScorerRow(v));
-}
-function addScorerRow(val=''){
-  const c=document.getElementById('scorer-list');
-  const div=document.createElement('div'); div.className='scorer-row';
-  div.innerHTML=`<input type="text" placeholder="득점자 이름 (예: 홍길동)" value="${val}">
-    <button class="btn-del-scorer">✕</button>`;
-  div.querySelector('.btn-del-scorer').onclick=()=>{div.remove();};
-  c.appendChild(div);
-}
-function getScorerValues(){
-  return Array.from(document.querySelectorAll('#scorer-list input')).map(i=>i.value.trim()).filter(Boolean);
-}
-
-/* ── 참석자 체크 ── */
 let allCheckedAttend = false;
-function buildAttendCheckGrid(checkedIds){
-  const g=document.getElementById('attend-check-grid');
-  if(allMembers.length===0){ g.innerHTML='<div style="font-size:12px;color:#9ca3af;">회원 정보 없음</div>'; return; }
-  g.innerHTML=allMembers.map(m=>`
-    <div class="attend-check-item${checkedIds.includes(m.id)?' on':''}" data-id="${m.id}" onclick="this.classList.toggle('on')">
-      <span>${checkedIds.includes(m.id)?'✅':'⬜'}</span>
-      <span>${m.name}</span>
-    </div>`).join('');
-  g.querySelectorAll('.attend-check-item').forEach(el=>{
-    el.onclick=()=>{
-      el.classList.toggle('on');
-      el.querySelector('span').textContent=el.classList.contains('on')?'✅':'⬜';
-    };
-  });
-}
-function getAttendCheckedIds(){
-  return Array.from(document.querySelectorAll('#attend-check-grid .attend-check-item.on')).map(el=>el.dataset.id);
-}
 
-/* ── 전체선택 ── */
-document.getElementById('btn-check-all-attend').onclick=()=>{
-  allCheckedAttend=!allCheckedAttend;
-  document.querySelectorAll('#attend-check-grid .attend-check-item').forEach(el=>{
-    el.classList.toggle('on',allCheckedAttend);
-    el.querySelector('span').textContent=allCheckedAttend?'✅':'⬜';
-  });
-};
-document.getElementById('btn-add-scorer').onclick=()=>addScorerRow();
+const isAdmin = () => sessionStorage.getItem(ADMIN_KEY) === '1';
+const api = (path, opt={}) => fetch(DB+path+'.json', opt).then(r=>{ if(!r.ok) throw new Error('HTTP '+r.status); return r.json(); });
 
-/* ── 회원 목록 로드 ── */
-let allMembers=[];
-fetch('https://joonghung-9a14c-default-rtdb.asia-southeast1.firebasedatabase.app/members.json')
-  .then(r=>r.json()).then(data=>{
-    if(data&&typeof data==='object') Object.entries(data).forEach(([k,v])=>{if(v) allMembers.push({id:k,...v});});
-    allMembers.sort((a,b)=>a.name.localeCompare(b.name,'ko'));
-  }).catch(()=>{});
+/* ── Drive 썸네일 ── */
+function driveThumb(url){ const m=url.match(/\/file\/d\/([^\/\?]+)/)||url.match(/[?&]id=([^&]+)/); return m?`https://drive.google.com/thumbnail?id=${m[1]}&sz=w600`:url; }
+function driveLink(url){ const m=url.match(/\/file\/d\/([^\/\?]+)/); return m?`https://drive.google.com/file/d/${m[1]}/view`:url; }
 
 /* ── 관리자 ── */
-const isAdmin = () => sessionStorage.getItem(ADMIN_KEY) === '1';
 function setAdminUI(){
-  const el = document.getElementById('admin-ui');
+  const el=document.getElementById('admin-ui');
   if(isAdmin()){
-    el.innerHTML = '<span class="admin-badge" id="logout-btn">✅ 관리자 · 로그아웃</span>';
-    document.getElementById('logout-btn').onclick = () => { sessionStorage.removeItem(ADMIN_KEY); setAdminUI(); renderRecords(); };
-  } else el.innerHTML = '';
-  document.querySelectorAll('.record-admin-btns').forEach(b => b.classList.toggle('show', isAdmin()));
+    el.innerHTML='<span class="admin-badge" id="logout-btn">✅ 관리자 · 로그아웃</span>';
+    document.getElementById('logout-btn').onclick=()=>{ sessionStorage.removeItem(ADMIN_KEY); setAdminUI(); renderRecords(); };
+  } else el.innerHTML='';
+  document.querySelectorAll('.record-admin-btns').forEach(b=>b.classList.toggle('show',isAdmin()));
 }
 
-/* ── 비번 모달 ── */
+/* ── 비번 ── */
 function openPw(cb){ pwCb=cb; document.getElementById('pw-input').value=''; document.getElementById('pw-err').textContent=''; document.getElementById('pw-modal').style.display='flex'; setTimeout(()=>document.getElementById('pw-input').focus(),100); }
 function closePw(){ document.getElementById('pw-modal').style.display='none'; }
 function checkPw(){
   if(document.getElementById('pw-input').value===ADMIN_PW){ sessionStorage.setItem(ADMIN_KEY,'1'); closePw(); setAdminUI(); if(pwCb){pwCb();pwCb=null;} }
-  else { document.getElementById('pw-err').textContent='❌ 비밀번호가 틀렸습니다.'; document.getElementById('pw-input').value=''; }
+  else{ document.getElementById('pw-err').textContent='❌ 비밀번호가 틀렸습니다.'; document.getElementById('pw-input').value=''; }
 }
 
-/* ── 기록 모달 ── */
+/* ── 모달 ── */
 function openModal(r){
   editId = r ? r.id : null;
   document.getElementById('modal-title').textContent = r ? '경기기록 수정' : '경기기록 작성';
   document.getElementById('btn-submit').textContent  = r ? '수정하기' : '등록하기';
-  document.getElementById('f-date').value    = r ? r.date : '';
-  document.getElementById('f-opponent').value= r ? (r.opponent||'') : '';
-  document.getElementById('f-score-us').value  = r ? (r.scoreUs!==undefined?r.scoreUs:'') : '';
-  document.getElementById('f-score-them').value= r ? (r.scoreThem!==undefined?r.scoreThem:'') : '';
-  document.getElementById('f-body').value    = r ? (r.body||'') : '';
-  buildScorerInputs(r ? (r.scorers||[]) : ['']);
+  document.getElementById('f-date').value      = r ? (r.date||'') : '';
+  document.getElementById('f-opponent').value  = r ? (r.opponent||'') : '';
+  document.getElementById('f-score-us').value  = r ? (r.scoreUs!=null?r.scoreUs:'') : '';
+  document.getElementById('f-score-them').value= r ? (r.scoreThem!=null?r.scoreThem:'') : '';
+  document.getElementById('f-body').value      = r ? (r.body||'') : '';
+  buildScorerInputs(r ? (r.scorers||[]) : []);
   buildImgInputs(r ? (r.images||[]) : []);
-  buildAttendCheckGrid(r ? (r.attendIds||[]) : []);
+  buildAttendGrid(r ? (r.attendIds||[]) : []);
   document.getElementById('record-modal').style.display='flex';
 }
 function closeModal(){ document.getElementById('record-modal').style.display='none'; }
 
-/* ── 이미지 입력 ── */
-function buildImgInputs(list){
-  const c = document.getElementById('img-inputs'); c.innerHTML='';
-  if(list.length===0) addImgRow();
-  else list.forEach(url => addImgRow(url));
+/* ── 득점자 ── */
+function buildScorerInputs(list){
+  const c=document.getElementById('scorer-list'); c.innerHTML='';
+  if(!list||list.length===0){ addScorerRow(''); return; }
+  list.forEach(v=>addScorerRow(v));
 }
-function addImgRow(val=''){
-  const c = document.getElementById('img-inputs');
-  const div = document.createElement('div'); div.className='drive-row';
-  div.innerHTML = `<input type="text" placeholder="Google Drive 공유 링크" value="${val}"><button class="btn-del-img">✕</button>`;
-  div.querySelector('.btn-del-img').onclick = () => { div.remove(); if(!document.getElementById('img-inputs').children.length) addImgRow(); };
+function addScorerRow(val=''){
+  const c=document.getElementById('scorer-list');
+  const div=document.createElement('div'); div.className='scorer-row';
+  div.innerHTML=`<input type="text" placeholder="득점자 이름" value="${val}"><button class="btn-del-row">✕</button>`;
+  div.querySelector('.btn-del-row').onclick=()=>div.remove();
   c.appendChild(div);
 }
-function getImgUrls(){ return Array.from(document.querySelectorAll('#img-inputs input')).map(i=>i.value.trim()).filter(Boolean); }
+function getScorerValues(){ return Array.from(document.querySelectorAll('#scorer-list input')).map(i=>i.value.trim()).filter(Boolean); }
 
-/* ── Drive URL 변환 ── */
-function driveThumb(url){
-  const m = url.match(/\/file\/d\/([^\/\?]+)/) || url.match(/[?&]id=([^&]+)/);
-  return m ? `https://drive.google.com/thumbnail?id=${m[1]}&sz=w600` : url;
+/* ── 참석자 ── */
+function buildAttendGrid(checkedIds){
+  const g=document.getElementById('attend-grid');
+  if(allMembers.length===0){ g.innerHTML='<div style="font-size:12px;color:#9ca3af;padding:8px;">회원 정보 없음</div>'; return; }
+  g.innerHTML=allMembers.map(m=>`
+    <div class="attend-item${checkedIds.includes(m.id)?' on':''}" data-id="${m.id}">
+      <span>${checkedIds.includes(m.id)?'✅':'⬜'}</span><span>${m.name}</span>
+    </div>`).join('');
+  g.querySelectorAll('.attend-item').forEach(el=>{
+    el.addEventListener('click',()=>{ el.classList.toggle('on'); el.querySelector('span').textContent=el.classList.contains('on')?'✅':'⬜'; });
+  });
 }
-function driveLink(url){
-  const m = url.match(/\/file\/d\/([^\/\?]+)/);
-  return m ? `https://drive.google.com/file/d/${m[1]}/view` : url;
+function getAttendIds(){ return Array.from(document.querySelectorAll('#attend-grid .attend-item.on')).map(el=>el.dataset.id); }
+
+/* ── 사진 ── */
+function buildImgInputs(list){
+  const c=document.getElementById('img-input-list'); c.innerHTML='';
+  if(!list||list.length===0){ addImgRow(); return; }
+  list.forEach(url=>addImgRow(url));
+}
+function addImgRow(val=''){
+  const c=document.getElementById('img-input-list');
+  const div=document.createElement('div'); div.className='img-row';
+  div.innerHTML=`<input type="text" placeholder="Google Drive 공유 링크" value="${val}"><button class="btn-del-row">✕</button>`;
+  div.querySelector('.btn-del-row').onclick=()=>{ div.remove(); if(!document.getElementById('img-input-list').children.length) addImgRow(); };
+  c.appendChild(div);
+}
+function getImgUrls(){ return Array.from(document.querySelectorAll('#img-input-list input')).map(i=>i.value.trim()).filter(Boolean); }
+
+/* ── 저장 ── */
+async function saveRecord(){
+  const date = document.getElementById('f-date').value;
+  if(!date){ showToast('⚠️ 날짜를 선택해 주세요.'); return; }
+  const suVal = document.getElementById('f-score-us').value;
+  const stVal = document.getElementById('f-score-them').value;
+  const opponent  = document.getElementById('f-opponent').value.trim();
+  const scoreUs   = suVal!=='' ? parseInt(suVal) : null;
+  const scoreThem = stVal!=='' ? parseInt(stVal) : null;
+  const scorers   = getScorerValues();
+  const attendIds = getAttendIds();
+  const body      = document.getElementById('f-body').value.trim();
+  const images    = getImgUrls();
+
+  const data = { date, opponent, scoreUs, scoreThem, scorers, attendIds, body, images, updatedAt: Date.now() };
+  const btn = document.getElementById('btn-submit');
+  btn.disabled=true; btn.textContent='저장 중...';
+  const reset=()=>{ btn.disabled=false; btn.textContent=editId?'수정하기':'등록하기'; };
+
+  /* 경기일정 데이터 */
+  const matchData = { date, opponent:opponent||'상대팀', homeScore:scoreUs, awayScore:scoreThem, isHome:true, memo:body?body.substring(0,50):'', fromRecord:true };
+  /* 참여율 데이터 */
+  const attendData = { date, memo:`vs ${opponent||'상대팀'}`, members:attendIds, fromRecord:true, updatedAt:Date.now() };
+
+  try {
+    if(editId){
+      await fetch(DB+'/records/'+editId+'.json',{method:'PATCH',headers:{'Content-Type':'application/json'},body:JSON.stringify(data)});
+      const rec=allRecords.find(r=>r.id===editId);
+      if(rec){
+        if(rec.linkedMatchId) await fetch(DB+'/matches/'+rec.linkedMatchId+'.json',{method:'PATCH',headers:{'Content-Type':'application/json'},body:JSON.stringify(matchData)}).catch(()=>{});
+        if(rec.linkedAttendId) await fetch(DB+'/attendances/'+rec.linkedAttendId+'.json',{method:'PATCH',headers:{'Content-Type':'application/json'},body:JSON.stringify(attendData)}).catch(()=>{});
+      }
+      const i=allRecords.findIndex(r=>r.id===editId);
+      if(i>-1) allRecords[i]={...allRecords[i],...data};
+    } else {
+      data.createdAt=Date.now();
+      const recRes=await fetch(DB+'/records.json',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(data)}).then(r=>r.json());
+      const recordId=recRes.name;
+      let linkedMatchId=null, linkedAttendId=null;
+
+      if(opponent||scoreUs!=null){
+        const mRes=await fetch(DB+'/matches.json',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({...matchData,createdAt:Date.now()})}).then(r=>r.json()).catch(()=>({}));
+        linkedMatchId=mRes.name||null;
+      }
+      if(attendIds.length>0){
+        const aRes=await fetch(DB+'/attendances.json',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({...attendData,createdAt:Date.now()})}).then(r=>r.json()).catch(()=>({}));
+        linkedAttendId=aRes.name||null;
+      }
+      if(linkedMatchId||linkedAttendId){
+        await fetch(DB+'/records/'+recordId+'.json',{method:'PATCH',headers:{'Content-Type':'application/json'},body:JSON.stringify({linkedMatchId,linkedAttendId})}).catch(()=>{});
+      }
+      allRecords.unshift({...data,id:recordId,linkedMatchId,linkedAttendId});
+    }
+    allRecords.sort((a,b)=>(b.date||'').localeCompare(a.date||''));
+    renderRecords(); closeModal();
+    const synced=[(opponent||scoreUs!=null)?'경기일정':'',(attendIds.length>0)?'참여율':''].filter(Boolean);
+    showToast('✅ 저장 완료!'+(synced.length?` (${synced.join('·')} 자동 반영)`:'')); reset();
+  } catch(e){ showToast('❌ 실패: '+e.message); reset(); }
 }
 
-/* ── REST API ── */
-const api = (path, opt={}) => fetch(DB+path+'.json', opt).then(r=>{ if(!r.ok) throw new Error('HTTP '+r.status); return r.json(); });
+/* ── 삭제 ── */
+function delRecord(id){
+  if(!confirm('이 기록을 삭제하시겠습니까?')) return;
+  fetch(DB+'/records/'+id+'.json',{method:'DELETE'})
+    .then(()=>{ allRecords=allRecords.filter(r=>r.id!==id); renderRecords(); showToast('✅ 삭제되었습니다.'); })
+    .catch(e=>showToast('❌ 실패: '+e.message));
+}
 
+/* ── 로드 ── */
 function loadRecords(){
   document.getElementById('record-list').innerHTML='<div class="loading"><div class="spinner"></div>불러오는 중...</div>';
-  api('/records').then(data=>{
+  fetch(DB+'/records.json').then(r=>r.json()).then(data=>{
     allRecords=[];
     if(data&&typeof data==='object') Object.entries(data).forEach(([k,v])=>{ if(v) allRecords.push({id:k,...v}); });
     allRecords.sort((a,b)=>(b.date||'').localeCompare(a.date||''));
@@ -424,131 +433,33 @@ function loadRecords(){
   }).catch(e=>{ document.getElementById('record-list').innerHTML=`<div class="empty">⚠️ 불러오기 실패: ${e.message}</div>`; });
 }
 
-function saveRecord(){
-  const date = document.getElementById('f-date').value;
-  if(!date){ showToast('⚠️ 날짜를 선택해 주세요.'); return; }
-  const scoreUs   = document.getElementById('f-score-us').value;
-  const scoreThem = document.getElementById('f-score-them').value;
-  const opponent  = document.getElementById('f-opponent').value.trim();
-  const scorers   = getScorerValues();
-  const attendIds = getAttendCheckedIds();
-
-  const data = {
-    date, opponent,
-    scoreUs:   scoreUs!=='' ? parseInt(scoreUs) : null,
-    scoreThem: scoreThem!=='' ? parseInt(scoreThem) : null,
-    scorers, attendIds,
-    body:    document.getElementById('f-body').value.trim(),
-    images:  getImgUrls(),
-    updatedAt: Date.now()
-  };
-
-  const btn = document.getElementById('btn-submit');
-  btn.disabled=true; btn.textContent='저장 중...';
-  const reset = () => { btn.disabled=false; btn.textContent=editId?'수정하기':'등록하기'; };
-
-  // 경기일정(/matches)에 저장할 데이터
-  const matchData = {
-    date,
-    opponent: opponent || '상대팀',
-    homeScore: data.scoreUs,
-    awayScore: data.scoreThem,
-    isHome: true,
-    memo: data.body ? data.body.substring(0,50) : '',
-    fromRecord: true
-  };
-
-  // 참여율(/attendances)에 저장할 데이터
-  const attendData = {
-    date,
-    memo: `vs ${opponent||'상대팀'}`,
-    members: attendIds,
-    fromRecord: true,
-    updatedAt: Date.now()
-  };
-
-  if(editId){
-    // 수정: records만 업데이트, matches/attendances는 linkedMatchId/linkedAttendId로 연동
-    api('/records/'+editId, {method:'PATCH',headers:{'Content-Type':'application/json'},body:JSON.stringify(data)})
-      .then(async ()=>{
-        const rec = allRecords.find(r=>r.id===editId);
-        // 연동된 경기일정 업데이트
-        if(rec && rec.linkedMatchId){
-          await api('/matches/'+rec.linkedMatchId, {method:'PATCH',headers:{'Content-Type':'application/json'},body:JSON.stringify(matchData)}).catch(()=>{});
-        }
-        // 연동된 참여율 업데이트
-        if(rec && rec.linkedAttendId){
-          await api('/attendances/'+rec.linkedAttendId, {method:'PATCH',headers:{'Content-Type':'application/json'},body:JSON.stringify(attendData)}).catch(()=>{});
-        }
-        const i=allRecords.findIndex(r=>r.id===editId);
-        if(i>-1) allRecords[i]={...allRecords[i],...data};
-        allRecords.sort((a,b)=>(b.date||'').localeCompare(a.date||''));
-        renderRecords(); closeModal(); showToast('✅ 수정되었습니다.'); reset();
-      })
-      .catch(e=>{ showToast('❌ 실패: '+e.message); reset(); });
-
-  } else {
-    data.createdAt = Date.now();
-
-    // 1) records 저장
-    api('/records',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(data)})
-      .then(async res=>{
-        const recordId = res.name;
-        let linkedMatchId = null;
-        let linkedAttendId = null;
-
-        // 2) matches 저장 (경기결과 있을 때)
-        if(opponent || scoreUs!==''){
-          try {
-            const mRes = await api('/matches',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({...matchData, createdAt:Date.now()})});
-            linkedMatchId = mRes.name;
-          } catch(e){}
-        }
-
-        // 3) attendances 저장 (참석자 있을 때)
-        if(attendIds.length > 0){
-          try {
-            const aRes = await api('/attendances',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({...attendData, createdAt:Date.now()})});
-            linkedAttendId = aRes.name;
-          } catch(e){}
-        }
-
-        // 4) records에 linkedId 업데이트
-        if(linkedMatchId || linkedAttendId){
-          await api('/records/'+recordId, {method:'PATCH',headers:{'Content-Type':'application/json'},body:JSON.stringify({linkedMatchId, linkedAttendId})}).catch(()=>{});
-        }
-
-        const fullRecord = {...data, id:recordId, linkedMatchId, linkedAttendId};
-        allRecords.unshift(fullRecord);
-        allRecords.sort((a,b)=>(b.date||'').localeCompare(a.date||''));
-        renderRecords(); closeModal();
-        const syncMsg = [linkedMatchId?'경기일정':'', linkedAttendId?'참여율':''].filter(Boolean);
-        showToast('✅ 등록 완료!' + (syncMsg.length>0 ? ` (${syncMsg.join(', ')} 자동 업데이트)` : ''));
-        reset();
-      })
-      .catch(e=>{ showToast('❌ 실패: '+e.message); reset(); });
-  }
-}
-
-function delRecord(id){
-  if(!confirm('이 기록을 삭제하시겠습니까?')) return;
-  api('/records/'+id,{method:'DELETE'})
-    .then(()=>{ allRecords=allRecords.filter(r=>r.id!==id); renderRecords(); showToast('✅ 삭제되었습니다.'); })
-    .catch(e=>showToast('❌ 실패: '+e.message));
+function loadMembers(){
+  fetch(DB+'/members.json').then(r=>r.json()).then(data=>{
+    allMembers=[];
+    if(data&&typeof data==='object') Object.entries(data).forEach(([k,v])=>{ if(v) allMembers.push({id:k,...v}); });
+    allMembers.sort((a,b)=>a.name.localeCompare(b.name,'ko'));
+  }).catch(()=>{});
 }
 
 /* ── 렌더 ── */
 function renderRecords(){
-  const list = document.getElementById('record-list');
+  const list=document.getElementById('record-list');
   if(allRecords.length===0){ list.innerHTML='<div class="empty">📝 등록된 경기기록이 없습니다.</div>'; setAdminUI(); return; }
-  list.innerHTML = allRecords.map(r=>{
-    const imgHTML = (r.images||[]).length>0 ? `
-      <div class="record-images">${(r.images||[]).map(url=>`
-        <a href="${driveLink(url)}" target="_blank">
-          <img class="record-img" src="${driveThumb(url)}" loading="lazy" onerror="this.parentElement.style.display='none'">
-        </a>`).join('')}
-      </div>
-      <div class="img-caption">📌 사진을 클릭하면 원본을 볼 수 있습니다.</div>` : '';
+  list.innerHTML=allRecords.map(r=>{
+    /* 결과 배지 */
+    let resultHTML='';
+    if(r.opponent||r.scoreUs!=null){
+      const us=r.scoreUs??'-', them=r.scoreThem??'-';
+      let badge='', bCls='';
+      if(r.scoreUs!=null&&r.scoreThem!=null){ badge=r.scoreUs>r.scoreThem?'승':r.scoreUs===r.scoreThem?'무':'패'; bCls=r.scoreUs>r.scoreThem?'W':r.scoreUs===r.scoreThem?'D':'L'; }
+      resultHTML=`<div class="result-row">
+        ${r.opponent?`<span class="vs-opponent">vs ${r.opponent}</span>`:''}
+        ${r.scoreUs!=null?`<span class="score-big">${us} : ${them}</span><span class="result-badge badge-${bCls}">${badge}</span>`:''}
+      </div>`;
+    }
+    const scorersHTML = r.scorers&&r.scorers.length>0 ? `<div class="scorers-row">🎯 득점: ${r.scorers.join(', ')}</div>` : '';
+    const attendHTML  = r.attendIds&&r.attendIds.length>0 ? `<div class="attend-row">✅ 참석: ${r.attendIds.length}명</div>` : '';
+    const imgHTML = (r.images||[]).length>0 ? `<div class="record-images">${(r.images||[]).map(url=>`<a href="${driveLink(url)}" target="_blank"><img class="record-img" src="${driveThumb(url)}" loading="lazy" onerror="this.parentElement.style.display='none'"></a>`).join('')}</div>` : '';
     return `<div class="record-card">
       <div class="record-head">
         <span class="record-date-badge">📅 ${(r.date||'').replace(/-/g,'.')}</span>
@@ -558,37 +469,35 @@ function renderRecords(){
         </div>
       </div>
       <div class="record-body">
-        ${(r.opponent||r.scoreUs!==null)?`<div class="record-result">
-          ${r.opponent?`<span style="font-size:14px;font-weight:700;color:var(--gray1);">vs ${r.opponent}</span>`:''}
-          ${r.scoreUs!==null&&r.scoreUs!==undefined?`<span class="score-display">${r.scoreUs} : ${r.scoreThem??'?'}</span>
-          <span class="result-badge result-${r.scoreUs>r.scoreThem?'W':r.scoreUs===r.scoreThem?'D':'L'}">${r.scoreUs>r.scoreThem?'승':'D'===r.scoreUs===r.scoreThem?'무':'패'}</span>`:''}`
-          .replace('D===','===')
-          }
-        </div>`:'' }
-        ${(r.scorers&&r.scorers.length>0)?`<div class="scorer-display">🎯 득점: ${r.scorers.join(', ')}</div>`:''}
-        ${(r.attendIds&&r.attendIds.length>0)?`<div class="attend-display">✅ 참석: ${r.attendIds.length}명</div>`:''}
-        <div class="record-content" style="margin-top:${r.body?'10':'0'}px;">${r.body||''}</div>
+        ${resultHTML}${scorersHTML}${attendHTML}
+        ${r.body?`<div class="record-content">${r.body}</div>`:''}
         ${imgHTML}
       </div>
     </div>`;
   }).join('');
-  list.querySelectorAll('.btn-edit-sm').forEach(b=>b.onclick=()=>{ const r=allRecords.find(x=>x.id===b.dataset.id); if(r) openModal(r); });
-  list.querySelectorAll('.btn-del-sm').forEach(b=>b.onclick=()=>delRecord(b.dataset.id));
+  list.querySelectorAll('.btn-edit-sm').forEach(b=>b.addEventListener('click',()=>{ const r=allRecords.find(x=>x.id===b.dataset.id); if(r) openModal(r); }));
+  list.querySelectorAll('.btn-del-sm').forEach(b=>b.addEventListener('click',()=>delRecord(b.dataset.id)));
   setAdminUI();
 }
 
-/* ── 버튼 ── */
-document.getElementById('btn-add').onclick = () => { if(isAdmin()) openModal(); else openPw(()=>openModal()); };
-document.getElementById('btn-modal-cancel').onclick = closeModal;
-document.getElementById('btn-submit').onclick = saveRecord;
-document.getElementById('btn-add-img').onclick = () => addImgRow();
-document.getElementById('btn-pw-cancel').onclick = closePw;
-document.getElementById('btn-pw-ok').onclick = checkPw;
-document.getElementById('pw-input').onkeydown = e => { if(e.key==='Enter') checkPw(); };
+/* ── 이벤트 ── */
+document.getElementById('btn-add').addEventListener('click',()=>{ if(isAdmin()) openModal(); else openPw(()=>openModal()); });
+document.getElementById('btn-modal-cancel').addEventListener('click',closeModal);
+document.getElementById('btn-submit').addEventListener('click',saveRecord);
+document.getElementById('btn-add-scorer').addEventListener('click',()=>addScorerRow());
+document.getElementById('btn-add-img').addEventListener('click',()=>addImgRow());
+document.getElementById('btn-check-all-attend').addEventListener('click',()=>{
+  allCheckedAttend=!allCheckedAttend;
+  document.querySelectorAll('#attend-grid .attend-item').forEach(el=>{ el.classList.toggle('on',allCheckedAttend); el.querySelector('span').textContent=allCheckedAttend?'✅':'⬜'; });
+});
+document.getElementById('btn-pw-cancel').addEventListener('click',closePw);
+document.getElementById('btn-pw-ok').addEventListener('click',checkPw);
+document.getElementById('pw-input').addEventListener('keydown',e=>{ if(e.key==='Enter') checkPw(); });
 
-function showToast(msg){ const t=document.getElementById('toast'); t.textContent=msg; t.classList.add('show'); setTimeout(()=>t.classList.remove('show'),2500); }
+function showToast(msg){ const t=document.getElementById('toast'); t.textContent=msg; t.classList.add('show'); setTimeout(()=>t.classList.remove('show'),3000); }
 
 setAdminUI();
+loadMembers();
 loadRecords();
 </script>
 </body>
