@@ -385,6 +385,62 @@ function getGames(){ return Array.from(document.querySelectorAll('#gi-container 
   return { opp_name:r.querySelector('.opp-name').value.trim(), us:r.querySelector('.g-us').value, opp:r.querySelector('.g-opp').value, starterIds, starters };
 }); }
 
+
+/* ── 날씨 ── */
+const WMO = {
+  0:'☀️ 맑음',1:'🌤️ 대체로 맑음',2:'⛅ 구름 조금',3:'☁️ 흐림',
+  45:'🌫️ 안개',48:'🌫️ 짙은 안개',
+  51:'🌦️ 이슬비',53:'🌦️ 이슬비',55:'🌦️ 강한 이슬비',
+  61:'🌧️ 약한 비',63:'🌧️ 비',65:'🌧️ 강한 비',
+  71:'🌨️ 약한 눈',73:'🌨️ 눈',75:'🌨️ 강한 눈',
+  80:'🌦️ 소나기',81:'🌧️ 소나기',82:'⛈️ 강한 소나기',
+  95:'⛈️ 뇌우',96:'⛈️ 우박 뇌우',99:'⛈️ 강한 우박 뇌우'
+};
+let weatherCache = null;
+
+async function fetchWeather(){
+  if(weatherCache) return weatherCache;
+  try {
+    // 광주 위도/경도
+    const res = await fetch('https://api.open-meteo.com/v1/forecast?latitude=35.16&longitude=126.85&current=temperature_2m,weathercode,windspeed_10m,relativehumidity_2m&timezone=Asia%2FSeoul');
+    const data = await res.json();
+    weatherCache = {
+      temp: Math.round(data.current.temperature_2m),
+      code: data.current.weathercode,
+      wind: Math.round(data.current.windspeed_10m),
+      humidity: data.current.relativehumidity_2m
+    };
+    return weatherCache;
+  } catch(e){ return null; }
+}
+
+function isToday(dateStr){
+  if(!dateStr) return false;
+  const today = new Date().toISOString().split('T')[0];
+  return dateStr === today;
+}
+
+async function addWeatherToCards(){
+  const today = new Date().toISOString().split('T')[0];
+  const todayCards = document.querySelectorAll('[data-date="'+today+'"]');
+  if(todayCards.length === 0) return;
+  const w = await fetchWeather();
+  if(!w) return;
+  const desc = WMO[w.code] || '🌤️ 날씨 정보';
+  const weatherHTML = `<div style="display:flex;align-items:center;gap:6px;padding:6px 10px;background:#f0f9ff;border-radius:8px;border:1px solid #bae6fd;font-size:12px;color:#0369a1;margin-top:8px;">
+    <span style="font-size:15px;">${desc.split(' ')[0]}</span>
+    <span><b>${w.temp}°C</b> · ${desc.split(' ').slice(1).join(' ')} · 습도 ${w.humidity}% · 바람 ${w.wind}m/s</span>
+  </div>`;
+  todayCards.forEach(card=>{
+    if(!card.querySelector('.weather-info')){
+      const div = document.createElement('div');
+      div.className='weather-info';
+      div.innerHTML = weatherHTML;
+      card.appendChild(div);
+    }
+  });
+}
+
 /* Firebase REST */
 function apiGet(path){ return fetch(DB+path+'.json').then(r=>{ if(!r.ok) throw new Error('HTTP '+r.status); return r.json(); }); }
 function apiPost(path,data){ return fetch(DB+path+'.json',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(data)}).then(r=>{ if(!r.ok) throw new Error('HTTP '+r.status); return r.json(); }); }
@@ -399,7 +455,7 @@ function loadMatches(){
       Object.entries(data).forEach(([k,v])=>{ if(v) allMatches.push({id:k,...v}); });
     }
     allMatches.sort((a,b)=>(b.date||'').localeCompare(a.date||''));
-    renderSummary(); renderList();
+    renderSummary(); renderList(); setTimeout(addWeatherToCards,300);
   }).catch(e=>{
     document.getElementById('match-list').innerHTML='<div class="empty">⚠️ 불러오기 실패: '+e.message+'</div>';
   });
@@ -417,14 +473,14 @@ function saveMatch(){
       const i=allMatches.findIndex(m=>m.id===editId);
       if(i>-1) allMatches[i]={...allMatches[i],...data};
       allMatches.sort((a,b)=>(b.date||'').localeCompare(a.date||''));
-      renderSummary(); renderList(); closeModal(); showToast('✅ 수정되었습니다.'); reset();
+      renderSummary(); renderList(); setTimeout(addWeatherToCards,300); closeModal(); showToast('✅ 수정되었습니다.'); reset();
     }).catch(e=>{ showToast('❌ 실패: '+e.message); reset(); });
   } else {
     data.createdAt=Date.now();
     apiPost('/matches', data).then(res=>{
       allMatches.unshift({id:res.name,...data});
       allMatches.sort((a,b)=>(b.date||'').localeCompare(a.date||''));
-      renderSummary(); renderList(); closeModal(); showToast('✅ 등록되었습니다.'); reset();
+      renderSummary(); renderList(); setTimeout(addWeatherToCards,300); closeModal(); showToast('✅ 등록되었습니다.'); reset();
     }).catch(e=>{ showToast('❌ 실패: '+e.message); reset(); });
   }
 }
@@ -433,7 +489,7 @@ function delMatch(id){
   if(!confirm('이 경기를 삭제하시겠습니까?')) return;
   apiDel('/matches/'+id).then(()=>{
     allMatches=allMatches.filter(m=>m.id!==id);
-    renderSummary(); renderList(); showToast('✅ 삭제되었습니다.');
+    renderSummary(); renderList(); setTimeout(addWeatherToCards,300); showToast('✅ 삭제되었습니다.');
   }).catch(e=>showToast('❌ 실패: '+e.message));
 }
 
@@ -480,7 +536,7 @@ function renderList(){
         ${g.starters?`<div style="font-size:11px;color:#6b7280;margin-top:4px;width:100%;">👕 선발: ${g.starters}</div>`:''}
       </div>`;
     }).join('');
-    return `<div class="match-card">
+    return `<div class="match-card" data-date="${m.date||''}">
       <div class="match-head">
         <span class="match-date-badge">${(m.date||'').replace(/-/g,'.')} ${day}</span>
         <span class="home-badge ${m.homeaway==='원정'?'hb-away':'hb-home'}">${m.homeaway||'홈'}</span>
