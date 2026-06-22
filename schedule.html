@@ -42,7 +42,7 @@
   .hb-home{background:#ecfdf5;color:var(--green);border:1px solid #a7f3d0;}
   .hb-away{background:#eff6ff;color:#2563eb;border:1px solid #bfdbfe;}
   .match-loc{font-size:12px;color:var(--gray2);}
-  .game-row{display:flex;align-items:center;gap:10px;padding:7px 0;border-bottom:1px solid #f3f4f6;font-size:13px;}
+  .game-row{display:flex;align-items:center;gap:10px;padding:7px 0;border-bottom:1px solid #f3f4f6;font-size:13px;flex-wrap:wrap;}
   .game-row:last-child{border-bottom:none;}
   .game-num{font-size:11px;font-weight:700;color:var(--gray2);width:44px;flex-shrink:0;}
   .team-us{font-weight:800;color:var(--green);}
@@ -436,7 +436,11 @@ function renderList(){
         const bc=us>op?'rb-w':us===op?'rb-d':'rb-l', bl=us>op?'승':us===op?'무':'패';
         sc=`<div class="score-wrap"><span class="${uc}">${us}</span><span style="color:#d1d5db;font-size:14px;">:</span><span class="${oc}">${op}</span></div><span class="r-badge ${bc}">${bl}</span>`;
       } else sc=`<span class="vs-txt">VS</span>`;
-      return `<div class="game-row"><span class="game-num">${i+1}게임</span><span class="team-us">중흥FC</span>${sc}<span class="team-opp">${g.opp_name||'상대팀'}</span></div>`;
+      return `<div class="game-row">
+        <span class="game-num">${i+1}게임</span>
+        <span class="team-us">중흥FC</span>${sc}<span class="team-opp">${g.opp_name||'상대팀'}</span>
+        ${g.starters?`<div style="font-size:11px;color:#6b7280;margin-top:3px;width:100%;padding-left:54px;">👕 ${g.starters}</div>`:''}
+      </div>`;
     }).join('');
     return `<div class="match-card">
       <div class="match-head">
