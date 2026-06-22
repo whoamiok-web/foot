@@ -574,13 +574,7 @@ function renderHomeSchedule(){
   const list = document.getElementById('home-schedule-list');
   const filtered = homeMatches.filter(m=>homeTab==='result'?hasResult(m):!hasResult(m));
   let top = [];
-  if(homeTab==='result' && filtered.length>0){
-    // 가장 최근 경기 날짜 하루만
-    const latestDate = filtered[0].date;
-    top = filtered.filter(m=>m.date===latestDate);
-  } else {
-    top = filtered.slice(0,3);
-  }
+  top = filtered.slice(0,3);
   if(top.length===0){
     list.innerHTML='<div style="text-align:center;padding:32px;color:#9ca3af;font-size:14px;">등록된 경기가 없습니다.</div>';
     return;
