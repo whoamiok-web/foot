@@ -192,7 +192,7 @@ document.querySelectorAll('.nav-links a').forEach(a=>{
 <div class="main-wrap">
   <!-- 요약 -->
   <div class="summary-cards">
-    <div class="sum-card"><div class="sum-num green" id="s-matches">-</div><div class="sum-label">총 경기 수</div></div>
+    <div class="sum-card"><div class="sum-num green" id="s-matches">-</div><div class="sum-label">총 경기일수</div></div>
     <div class="sum-card"><div class="sum-num green" id="s-members">-</div><div class="sum-label">등록 회원</div></div>
     <div class="sum-card"><div class="sum-num" id="s-avg">-</div><div class="sum-label">평균 출석률</div></div>
     <div class="sum-card"><div class="sum-num" id="s-top">-</div><div class="sum-label">최고 참여자</div></div>
@@ -216,7 +216,7 @@ document.querySelectorAll('.nav-links a').forEach(a=>{
         <div style="text-align:center;">순위</div>
         <div style="text-align:center;">포지션</div>
         <div>이름</div>
-        <div style="text-align:center;">참석</div>
+        <div style="text-align:center;">참석일수</div>
         <div>출석률</div>
         <div style="text-align:center;">등번호</div>
       </div>
@@ -349,8 +349,9 @@ async function loadAll(){
 
 /* 요약 */
 function renderSummary(){
-  const total = allAttendances.length;
-  document.getElementById('s-matches').textContent = total;
+  const total = new Set(allAttendances.map(a=>a.date||'')).size;
+  const uniqueDates = new Set(allAttendances.map(a=>a.date||'')).size;
+  document.getElementById('s-matches').textContent = uniqueDates;
   document.getElementById('s-members').textContent = allMembers.length;
   if(total===0||allMembers.length===0){ document.getElementById('s-avg').textContent='-'; document.getElementById('s-top').textContent='-'; return; }
   const rates = allMembers.map(m=>{ const cnt=allAttendances.filter(a=>(a.members||[]).includes(m.id)).length; return {name:m.name,rate:total>0?Math.round(cnt/total*100):0}; });
@@ -366,7 +367,7 @@ function renderAll(){ curTab==='rank' ? renderRank() : renderMatchAttend(); }
 function renderRank(){
   const body = document.getElementById('rank-body');
   if(allMembers.length===0){ body.innerHTML='<div class="empty">등록된 회원이 없습니다.</div>'; return; }
-  const total = allAttendances.length;
+  const total = new Set(allAttendances.map(a=>a.date||'')).size;
   const ranked = allMembers.map(m=>{
     const cnt = allAttendances.filter(a=>(a.members||[]).includes(m.id)).length;
     const rate = total>0 ? Math.round(cnt/total*100) : 0;
