@@ -429,29 +429,103 @@ function saveRecord(){
   if(!date){ showToast('⚠️ 날짜를 선택해 주세요.'); return; }
   const scoreUs   = document.getElementById('f-score-us').value;
   const scoreThem = document.getElementById('f-score-them').value;
+  const opponent  = document.getElementById('f-opponent').value.trim();
+  const scorers   = getScorerValues();
+  const attendIds = getAttendCheckedIds();
+
   const data = {
-    date,
-    opponent:  document.getElementById('f-opponent').value.trim(),
+    date, opponent,
     scoreUs:   scoreUs!=='' ? parseInt(scoreUs) : null,
     scoreThem: scoreThem!=='' ? parseInt(scoreThem) : null,
-    scorers:   getScorerValues(),
-    attendIds: getAttendCheckedIds(),
-    body:      document.getElementById('f-body').value.trim(),
-    images:    getImgUrls(),
+    scorers, attendIds,
+    body:    document.getElementById('f-body').value.trim(),
+    images:  getImgUrls(),
     updatedAt: Date.now()
   };
+
   const btn = document.getElementById('btn-submit');
   btn.disabled=true; btn.textContent='저장 중...';
   const reset = () => { btn.disabled=false; btn.textContent=editId?'수정하기':'등록하기'; };
 
+  // 경기일정(/matches)에 저장할 데이터
+  const matchData = {
+    date,
+    opponent: opponent || '상대팀',
+    homeScore: data.scoreUs,
+    awayScore: data.scoreThem,
+    isHome: true,
+    memo: data.body ? data.body.substring(0,50) : '',
+    fromRecord: true
+  };
+
+  // 참여율(/attendances)에 저장할 데이터
+  const attendData = {
+    date,
+    memo: `vs ${opponent||'상대팀'}`,
+    members: attendIds,
+    fromRecord: true,
+    updatedAt: Date.now()
+  };
+
   if(editId){
+    // 수정: records만 업데이트, matches/attendances는 linkedMatchId/linkedAttendId로 연동
     api('/records/'+editId, {method:'PATCH',headers:{'Content-Type':'application/json'},body:JSON.stringify(data)})
-      .then(()=>{ const i=allRecords.findIndex(r=>r.id===editId); if(i>-1) allRecords[i]={...allRecords[i],...data}; allRecords.sort((a,b)=>(b.date||'').localeCompare(a.date||'')); renderRecords(); closeModal(); showToast('✅ 수정되었습니다.'); reset(); })
+      .then(async ()=>{
+        const rec = allRecords.find(r=>r.id===editId);
+        // 연동된 경기일정 업데이트
+        if(rec && rec.linkedMatchId){
+          await api('/matches/'+rec.linkedMatchId, {method:'PATCH',headers:{'Content-Type':'application/json'},body:JSON.stringify(matchData)}).catch(()=>{});
+        }
+        // 연동된 참여율 업데이트
+        if(rec && rec.linkedAttendId){
+          await api('/attendances/'+rec.linkedAttendId, {method:'PATCH',headers:{'Content-Type':'application/json'},body:JSON.stringify(attendData)}).catch(()=>{});
+        }
+        const i=allRecords.findIndex(r=>r.id===editId);
+        if(i>-1) allRecords[i]={...allRecords[i],...data};
+        allRecords.sort((a,b)=>(b.date||'').localeCompare(a.date||''));
+        renderRecords(); closeModal(); showToast('✅ 수정되었습니다.'); reset();
+      })
       .catch(e=>{ showToast('❌ 실패: '+e.message); reset(); });
+
   } else {
     data.createdAt = Date.now();
+
+    // 1) records 저장
     api('/records',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(data)})
-      .then(res=>{ allRecords.unshift({id:res.name,...data}); allRecords.sort((a,b)=>(b.date||'').localeCompare(a.date||'')); renderRecords(); closeModal(); showToast('✅ 등록되었습니다.'); reset(); })
+      .then(async res=>{
+        const recordId = res.name;
+        let linkedMatchId = null;
+        let linkedAttendId = null;
+
+        // 2) matches 저장 (경기결과 있을 때)
+        if(opponent || scoreUs!==''){
+          try {
+            const mRes = await api('/matches',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({...matchData, createdAt:Date.now()})});
+            linkedMatchId = mRes.name;
+          } catch(e){}
+        }
+
+        // 3) attendances 저장 (참석자 있을 때)
+        if(attendIds.length > 0){
+          try {
+            const aRes = await api('/attendances',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({...attendData, createdAt:Date.now()})});
+            linkedAttendId = aRes.name;
+          } catch(e){}
+        }
+
+        // 4) records에 linkedId 업데이트
+        if(linkedMatchId || linkedAttendId){
+          await api('/records/'+recordId, {method:'PATCH',headers:{'Content-Type':'application/json'},body:JSON.stringify({linkedMatchId, linkedAttendId})}).catch(()=>{});
+        }
+
+        const fullRecord = {...data, id:recordId, linkedMatchId, linkedAttendId};
+        allRecords.unshift(fullRecord);
+        allRecords.sort((a,b)=>(b.date||'').localeCompare(a.date||''));
+        renderRecords(); closeModal();
+        const syncMsg = [linkedMatchId?'경기일정':'', linkedAttendId?'참여율':''].filter(Boolean);
+        showToast('✅ 등록 완료!' + (syncMsg.length>0 ? ` (${syncMsg.join(', ')} 자동 업데이트)` : ''));
+        reset();
+      })
       .catch(e=>{ showToast('❌ 실패: '+e.message); reset(); });
   }
 }
