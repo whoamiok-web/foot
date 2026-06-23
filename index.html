@@ -184,22 +184,29 @@
     padding: 10px; border: 1.5px dashed #a7f3d0; border-radius: 8px;
   }
 
-  
-  
-  
-  
+  /* ── MEMBERS ── */
+  .members-grid { display: grid; grid-template-columns: repeat(auto-fill,minmax(180px,1fr)); gap: 8px; }
+  .member-card {
+    background: var(--white); border-radius: 10px;
+    padding: 10px 14px; display: flex; align-items: center; gap: 10px;
+    box-shadow: var(--card-shadow); transition: transform .15s;
+    cursor: pointer;
+  }
+  .member-card:hover { transform: translateX(3px); }
   .avatar {
     width: 30px; height: 30px; border-radius: 50%;
     display: flex; align-items: center; justify-content: center;
     font-size: 14px; flex-shrink: 0;
   }
-  
-  
+  .member-name { font-size: 14px; font-weight: 700; flex: 1; }
+  .member-pos {
+    font-size: 10px; font-weight: 700; padding: 2px 7px; border-radius: 5px; display: inline-block; flex-shrink: 0;
+  }
   .pos-fw { background: #fff7ed; color: #ea580c; border:1px solid #fed7aa; }
   .pos-mf { background: #eff6ff; color: #2563eb; border:1px solid #bfdbfe; }
   .pos-df { background: #ecfdf5; color: var(--green); border:1px solid #a7f3d0; }
   .pos-gk { background: #fdf4ff; color: #9333ea; border:1px solid #e9d5ff; }
-  
+  .member-num { font-size: 12px; font-weight: 900; color: var(--gray3); width: 24px; text-align:center; flex-shrink:0; }
 
   /* ── GALLERY ── */
   .gallery-grid { display: grid; grid-template-columns: repeat(auto-fill,minmax(160px,1fr)); gap: 10px; }
@@ -247,7 +254,7 @@
   /* ── RESPONSIVE ── */
   @media (max-width: 768px) {
     .schedule-grid { grid-template-columns: 1fr; }
-    
+    .members-grid { grid-template-columns: 1fr; }
     .gallery-grid { grid-template-columns: repeat(2, 1fr); }
     .hero h1 { font-size: 32px; }
     .hero-stats { gap: 24px; padding: 18px 24px; }
@@ -292,6 +299,203 @@ document.querySelectorAll('.nav-links a').forEach(a=>{
   });
 });
 </script>
+<style>
+  nav{position:sticky;top:0;z-index:100;background:#111827;display:flex;align-items:center;justify-content:space-between;flex-wrap:nowrap;gap:10px;padding:0 20px;height:60px;box-shadow:0 2px 12px rgba(0,0,0,.3);}
+  .nav-logo{font-size:18px;font-weight:900;color:#fff;text-decoration:none;white-space:nowrap;flex-shrink:0;}
+  .hamburger{display:none;flex-direction:column;justify-content:center;gap:5px;width:36px;height:36px;background:none;border:none;cursor:pointer;padding:4px;flex-shrink:0;}
+  .hamburger span{display:block;height:2px;background:#fff;border-radius:2px;transition:all .3s;}
+  .hamburger.active span:nth-child(1){transform:translateY(7px) rotate(45deg);}
+  .hamburger.active span:nth-child(2){opacity:0;}
+  .hamburger.active span:nth-child(3){transform:translateY(-7px) rotate(-45deg);}
+  .nav-links{display:flex;gap:2px;list-style:none;flex-wrap:nowrap;align-items:center;}
+  .nav-links li{position:relative;}
+  .nav-links a{color:#9ca3af;font-size:12px;font-weight:500;text-decoration:none;white-space:nowrap;display:inline-flex;align-items:center;gap:2px;padding:5px 7px;border-radius:6px;transition:color .2s,background .2s;}
+  .nav-links a:hover{color:#fff;}
+  .nav-active{color:#fff!important;background:#1a7f3c!important;}
+  .nav-arrow{font-size:9px;opacity:.6;}
+  .nav-item-drop{padding-bottom:12px;margin-bottom:-12px;}
+  .nav-dropdown{position:absolute;top:100%;left:50%;transform:translateX(-50%);background:#1f2937;border-radius:10px;padding:6px 0;min-width:120px;box-shadow:0 8px 24px rgba(0,0,0,.3);opacity:0;visibility:hidden;transition:opacity .15s,visibility .15s;z-index:200;}
+  .nav-dropdown::before{content:'';position:absolute;top:-5px;left:50%;transform:translateX(-50%);border:5px solid transparent;border-bottom-color:#1f2937;border-top:none;}
+  .nav-item-drop:hover .nav-dropdown{opacity:1;visibility:visible;}
+  .nav-dropdown a{display:block;padding:9px 18px;color:#d1d5db;font-size:13px;font-weight:500;white-space:nowrap;text-decoration:none;background:none;border-radius:0;transition:background .15s,color .15s;}
+  .nav-dropdown a:hover{background:#374151!important;color:#fff!important;}
+  @media(max-width:640px){
+    .hamburger{display:flex;}
+    .nav-links{display:none;flex-direction:column;align-items:stretch;gap:0;position:absolute;top:60px;left:0;right:0;width:100%;background:#1f2937;padding:8px 0;box-shadow:0 8px 24px rgba(0,0,0,.3);z-index:99;}
+    .nav-links.open{display:flex;}
+    .nav-links li{width:100%;position:static;padding-bottom:0;margin-bottom:0;}
+    .nav-links>li>a{display:block;width:100%;padding:13px 20px;border-radius:0;font-size:15px;color:#d1d5db;box-sizing:border-box;}
+    .nav-links>li>a:hover,.nav-links>li>a.nav-active{background:#1a7f3c;color:#fff;}
+    .nav-arrow{display:none;}
+    .nav-item-drop .nav-dropdown{position:static!important;transform:none!important;opacity:1!important;visibility:visible!important;box-shadow:none;border-radius:0;padding:0;background:#111827;width:100%;}
+    .nav-dropdown::before{display:none;}
+    .nav-dropdown a{display:block;width:100%;padding:12px 20px 12px 40px;font-size:14px;color:#9ca3af;box-sizing:border-box;border-left:3px solid #1a7f3c;}
+    .nav-dropdown a:hover{background:#1f2937!important;color:#fff!important;}
+  }
+</style>
+<!-- HERO -->
+<div class="hero">
+  <div class="hero-sub">GWANGJU · SINCE 1990</div>
+  <h1>함께 뛰고<br><span>함께 성장하는</span> 중흥FC</h1>
+  <p>매주 이른 아침, 열정 하나로 뭉친 광주 북구 조기축구회</p>
+  <div class="hero-stats">
+    <div class="stat-item">
+      <div class="stat-num">50명</div>
+      <div class="stat-label">활동 회원</div>
+    </div>
+    <div class="stat-divider"></div>
+    <div class="stat-item">
+      <div class="stat-num">36년</div>
+      <div class="stat-label">창단 연혁</div>
+    </div>
+    <div class="stat-divider"></div>
+    <div class="stat-item">
+      <div class="stat-num">매주 일요일</div>
+      <div class="stat-label">정기 경기</div>
+    </div>
+    <div class="stat-divider"></div>
+    <div class="stat-item">
+      <div class="stat-num">AM 6:30</div>
+      <div class="stat-label">경기 시작</div>
+    </div>
+  </div>
+</div>
+
+<!-- NOTICE -->
+<div class="section" id="notice">
+  <div class="section-header">
+    <div class="section-title"><span>📢</span> 공지사항</div>
+    <a href="notice.html" class="more-btn">전체보기 →</a>
+  </div>
+  <div class="notice-list" id="home-notice-list">
+    <div style="text-align:center;padding:24px;color:#9ca3af;font-size:14px;">
+      <div style="width:22px;height:22px;border:2px solid #e5e7eb;border-top-color:#1a7f3c;border-radius:50%;animation:spin .7s linear infinite;margin:0 auto 8px;"></div>
+      불러오는 중...
+    </div>
+  </div>
+</div>
+
+<!-- SCHEDULE -->
+<div style="background:#fff; border-top:1px solid #e5e7eb; border-bottom:1px solid #e5e7eb;">
+<div class="section" id="schedule">
+  <div class="section-header">
+    <div class="section-title"><span>🗓</span> 경기 일정 · 결과</div>
+    <a href="schedule.html" class="more-btn">전체보기 →</a>
+  </div>
+  <div class="tab-bar">
+    <button class="tab-btn active" onclick="homeScheduleTab('result',this)">최근 결과</button>
+    <button class="tab-btn" onclick="homeScheduleTab('upcoming',this)">예정 경기</button>
+  </div>
+  <div id="home-schedule-list">
+    <div style="text-align:center;padding:32px;color:#9ca3af;font-size:14px;">
+      <div style="width:22px;height:22px;border:2px solid #e5e7eb;border-top-color:#1a7f3c;border-radius:50%;animation:spin .7s linear infinite;margin:0 auto 8px;"></div>
+      불러오는 중...
+    </div>
+  </div>
+</div>
+</div>
+
+<!-- MEMBERS -->
+<div class="section" id="members">
+  <div class="section-header">
+    <div class="section-title"><span>📝</span> 경기기록</div>
+    <a href="record.html" class="more-btn">전체보기 →</a>
+  </div>
+  <div id="home-record-preview">
+    <div style="text-align:center;padding:24px;color:#9ca3af;font-size:14px;">
+      <div style="width:22px;height:22px;border:2px solid #e5e7eb;border-top-color:#1a7f3c;border-radius:50%;animation:spin .7s linear infinite;margin:0 auto 8px;"></div>
+      불러오는 중...
+    </div>
+  </div>
+</div>
+
+<!-- RATING + ATTENDANCE -->
+<div class="section" id="rating-attend">
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:20px;">
+
+    <!-- 선발점수 TOP5 -->
+    <div>
+      <div class="section-header" style="margin-bottom:16px;">
+        <div class="section-title"><span>🏅</span> 선발점수 TOP 5</div>
+        <a href="rating.html" class="more-btn">전체보기 →</a>
+      </div>
+      <div id="home-rating-list" style="display:flex;flex-direction:column;gap:8px;">
+        <div style="text-align:center;padding:16px;color:#9ca3af;font-size:13px;">
+          <div style="width:20px;height:20px;border:2px solid #e5e7eb;border-top-color:#1a7f3c;border-radius:50%;animation:spin .7s linear infinite;margin:0 auto 6px;"></div>
+          불러오는 중...
+        </div>
+      </div>
+    </div>
+
+    <!-- 출석률 TOP5 -->
+    <div>
+      <div class="section-header" style="margin-bottom:16px;">
+        <div class="section-title"><span>📊</span> 출석률 TOP 5</div>
+        <a href="attendance.html" class="more-btn">전체보기 →</a>
+      </div>
+      <div id="home-attend-list" style="display:flex;flex-direction:column;gap:8px;">
+        <div style="text-align:center;padding:16px;color:#9ca3af;font-size:13px;">
+          <div style="width:20px;height:20px;border:2px solid #e5e7eb;border-top-color:#1a7f3c;border-radius:50%;animation:spin .7s linear infinite;margin:0 auto 6px;"></div>
+          불러오는 중...
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+
+<!-- COMMUNITY -->
+<div class="section" id="community">
+  <div class="section-header">
+    <div class="section-title"><span>💬</span> 커뮤니티</div>
+    <a href="board.html" class="more-btn">전체보기 →</a>
+  </div>
+  <div id="home-board-list" style="display:flex;flex-direction:column;gap:10px;">
+    <div style="text-align:center;padding:24px;color:#9ca3af;font-size:14px;">
+      <div style="width:22px;height:22px;border:2px solid #e5e7eb;border-top-color:#1a7f3c;border-radius:50%;animation:spin .7s linear infinite;margin:0 auto 8px;"></div>
+      불러오는 중...
+    </div>
+  </div>
+</div>
+
+<!-- GALLERY -->
+<div style="background:#fff; border-top:1px solid #e5e7eb;">
+<div class="section" id="gallery">
+  <div class="section-header">
+    <div class="section-title"><span>📸</span> 사진 갤러리</div>
+    <a href="gallery.html" class="more-btn">전체보기 →</a>
+  </div>
+  <div id="home-gallery-grid" style="display:grid;grid-template-columns:repeat(4,1fr);gap:10px;">
+    <div style="grid-column:1/-1;text-align:center;padding:24px;color:#9ca3af;font-size:14px;">
+      <div style="width:22px;height:22px;border:2px solid #e5e7eb;border-top-color:#1a7f3c;border-radius:50%;animation:spin .7s linear infinite;margin:0 auto 8px;"></div>
+      불러오는 중...
+    </div>
+  </div>
+</div>
+</div>
+
+<!-- FOOTER -->
+<div style="background:#111827;width:100%;">
+  <div style="max-width:1160px;margin:0 auto;padding:28px 40px;box-sizing:border-box;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:16px;">
+    <div style="color:#6b7280;font-size:13px;">
+      <a href="index.html" style="font-size:16px;font-weight:900;color:#fff;text-decoration:none;display:block;margin-bottom:5px;">⚽ 중흥FC</a>
+      <div>광주광역시 북구 중흥동 | 매주 일요일 AM 06:30 | 전남대학교 부설중학교 운동장</div>
+      <div style="margin-top:3px;">가입문의: 총무 010&#8209;4686&#8209;9320 | <a href="https://open.kakao.com/o/pFIIRBAi" target="_blank" style="color:#9ca3af;">💬 카카오톡 채널</a></div>
+      <div style="margin-top:3px;">회비계좌: <span onclick="copyAccount(event)" style="cursor:pointer;color:#d1d5db;border-bottom:1px dashed #6b7280;" title="클릭하면 복사됩니다">카카오뱅크 7942&#8209;2614&#8209;9821 나성균</span> <span id="copy-toast" style="display:none;font-size:11px;color:#23a852;font-weight:700;">✅ 복사 완료!</span></div>
+    </div>
+    <div style="font-size:12px;color:#4b5563;white-space:nowrap;align-self:flex-end;">© 2026 중흥FC. All rights reserved.</div>
+  </div>
+</div>
+<script>
+function copyAccount(e){
+  if(e) e.preventDefault();
+  navigator.clipboard.writeText('79422614982').then(()=>{
+    const t=document.getElementById('copy-toast');
+    t.style.display='inline'; setTimeout(()=>t.style.display='none',2000);
+  });
+}
+</script>
 </div>
 <script>
 function copyAccount(e){
@@ -317,7 +521,7 @@ function copyAccount(e){
   });
 
   // Active nav highlight on scroll
-  const sections = ['notice','schedule','gallery'];
+  const sections = ['notice','schedule','members','gallery'];
   window.addEventListener('scroll', () => {
     let cur = '';
     sections.forEach(id => {
@@ -428,12 +632,30 @@ function homeScheduleTab(tab, btn){
   renderHomeSchedule();
 }
 
-
+/* ── 회원명단 ── */
 const posEmoji = {FW:'🔥',MF:'⚡',DF:'🛡',GK:'🧤'};
 const posColor  = {FW:'#fff7ed',MF:'#eff6ff',DF:'#ecfdf5',GK:'#fdf4ff'};
 const posCls    = {FW:'pos-fw',MF:'pos-mf',DF:'pos-df',GK:'pos-gk'};
 
-
+function loadHomeMembers(){
+  fetch(DB+'/members.json')
+    .then(r=>r.json())
+    .then(data=>{
+      let members=[];
+      if(data&&typeof data==='object') Object.entries(data).forEach(([k,v])=>{ if(v) members.push({id:k,...v}); });
+      members.sort((a,b)=>(parseInt(a.num)||999)-(parseInt(b.num)||999)||a.name.localeCompare(b.name,'ko'));
+      const grid = document.getElementById('home-members-grid');
+      if(!grid) return;
+      if(members.length===0){ grid.innerHTML='<div style="grid-column:1/-1;text-align:center;padding:24px;color:#9ca3af;">등록된 회원이 없습니다.</div>'; return; }
+      grid.innerHTML = members.map(m=>`
+        <div class="member-card">
+          <div class="member-num">${m.num||'-'}</div>
+          <div class="avatar" style="background:${posColor[m.pos]||'#f3f4f6'};">${posEmoji[m.pos]||'⚽'}</div>
+          <div class="member-name">${m.name}</div>
+          <span class="member-pos ${posCls[m.pos]||''}">${m.pos||'?'}</span>
+        </div>`).join('');
+    }).catch(()=>{});
+}
 
 
 /* ── 경기기록 미리보기 ── */
