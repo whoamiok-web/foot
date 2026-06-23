@@ -1,0 +1,666 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<title>회비 현황 - 중흥FC</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex, nofollow">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700;900&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+:root {
+  --green: #1a7f3c; --green2: #23a852; --dark: #111827;
+  --gray1: #374151; --gray2: #6b7280; --gray3: #d1d5db;
+  --bg: #f4f6f8; --white: #ffffff;
+  --card-shadow: 0 2px 16px rgba(0,0,0,.07); --radius: 14px;
+}
+body { font-family: 'Noto Sans KR','Apple SD Gothic Neo','Malgun Gothic',sans-serif; background:var(--bg); color:var(--dark); min-height:100vh; }
+
+/* NAV */
+nav { position:sticky; top:0; z-index:100; background:#111827; display:flex; align-items:center; justify-content:space-between; flex-wrap:nowrap; gap:10px; padding:0 20px; height:60px; box-shadow:0 2px 12px rgba(0,0,0,.3); }
+.nav-logo { font-size:18px; font-weight:900; color:#fff; text-decoration:none; white-space:nowrap; flex-shrink:0; }
+.hamburger { display:none; flex-direction:column; justify-content:center; gap:5px; width:36px; height:36px; background:none; border:none; cursor:pointer; padding:4px; flex-shrink:0; }
+.hamburger span { display:block; height:2px; background:#fff; border-radius:2px; transition:all .3s; }
+.hamburger.active span:nth-child(1) { transform:translateY(7px) rotate(45deg); }
+.hamburger.active span:nth-child(2) { opacity:0; }
+.hamburger.active span:nth-child(3) { transform:translateY(-7px) rotate(-45deg); }
+.nav-links { display:flex; gap:2px; list-style:none; flex-wrap:nowrap; align-items:center; }
+.nav-links li { position:relative; }
+.nav-links a { color:#9ca3af; font-size:12px; font-weight:500; text-decoration:none; white-space:nowrap; display:inline-flex; align-items:center; gap:2px; padding:5px 7px; border-radius:6px; transition:color .2s,background .2s; }
+.nav-links a:hover { color:#fff; }
+.nav-active { color:#fff!important; background:#1a7f3c!important; }
+.nav-arrow { font-size:9px; opacity:.6; }
+.nav-item-drop { padding-bottom:12px; margin-bottom:-12px; }
+.nav-dropdown { position:absolute; top:100%; left:50%; transform:translateX(-50%); background:#1f2937; border-radius:10px; padding:6px 0; min-width:120px; box-shadow:0 8px 24px rgba(0,0,0,.3); opacity:0; visibility:hidden; transition:opacity .15s,visibility .15s; z-index:200; }
+.nav-dropdown::before { content:''; position:absolute; top:-5px; left:50%; transform:translateX(-50%); border:5px solid transparent; border-bottom-color:#1f2937; border-top:none; }
+.nav-item-drop:hover .nav-dropdown { opacity:1; visibility:visible; }
+.nav-dropdown a { display:block; padding:9px 18px; color:#d1d5db; font-size:13px; font-weight:500; white-space:nowrap; text-decoration:none; background:none; border-radius:0; transition:background .15s,color .15s; }
+.nav-dropdown a:hover { background:#374151!important; color:#fff!important; }
+@media(max-width:640px){
+  .hamburger{display:flex;}
+  .nav-links{display:none;flex-direction:column;align-items:stretch;gap:0;position:absolute;top:60px;left:0;right:0;width:100%;background:#1f2937;padding:8px 0;box-shadow:0 8px 24px rgba(0,0,0,.3);z-index:99;}
+  .nav-links.open{display:flex;}
+  .nav-links li{width:100%;position:static;padding-bottom:0;margin-bottom:0;}
+  .nav-links>li>a{display:block;width:100%;padding:13px 20px;border-radius:0;font-size:15px;color:#d1d5db;box-sizing:border-box;}
+  .nav-links>li>a:hover,.nav-links>li>a.nav-active{background:#1a7f3c;color:#fff;}
+  .nav-arrow{display:none;}
+  .nav-item-drop .nav-dropdown{position:static!important;transform:none!important;opacity:1!important;visibility:visible!important;box-shadow:none;border-radius:0;padding:0;background:#111827;width:100%;}
+  .nav-dropdown::before{display:none;}
+  .nav-dropdown a{display:block;width:100%;padding:12px 20px 12px 40px;font-size:14px;color:#9ca3af;box-sizing:border-box;border-left:3px solid #1a7f3c;}
+  .nav-dropdown a:hover{background:#1f2937!important;color:#fff!important;}
+}
+
+/* GATE (로그인 전) */
+#gate {
+  min-height: calc(100vh - 60px);
+  display: flex; align-items: center; justify-content: center;
+  padding: 40px 20px;
+}
+.gate-card {
+  background: var(--white); border-radius: 20px;
+  padding: 48px 40px; max-width: 420px; width: 100%;
+  box-shadow: 0 8px 40px rgba(0,0,0,.12); text-align: center;
+}
+.gate-icon { font-size: 52px; margin-bottom: 16px; }
+.gate-title { font-size: 22px; font-weight: 900; margin-bottom: 8px; }
+.gate-desc { font-size: 14px; color: var(--gray2); margin-bottom: 32px; line-height: 1.6; }
+.google-btn {
+  display: flex; align-items: center; justify-content: center; gap: 12px;
+  width: 100%; padding: 14px 20px;
+  background: var(--white); border: 2px solid var(--gray3);
+  border-radius: 12px; font-size: 15px; font-weight: 700;
+  cursor: pointer; transition: all .2s; color: var(--dark);
+}
+.google-btn:hover { border-color: #4285f4; background: #f8faff; transform: translateY(-1px); box-shadow: 0 4px 16px rgba(66,133,244,.15); }
+.google-btn img { width: 22px; height: 22px; }
+.gate-notice { margin-top: 20px; font-size: 12px; color: var(--gray2); }
+
+/* DENIED */
+#denied {
+  min-height: calc(100vh - 60px);
+  display: flex; align-items: center; justify-content: center;
+  padding: 40px 20px;
+}
+.denied-card {
+  background: var(--white); border-radius: 20px;
+  padding: 48px 40px; max-width: 420px; width: 100%;
+  box-shadow: 0 8px 40px rgba(0,0,0,.12); text-align: center;
+}
+.signout-btn {
+  margin-top: 24px; padding: 10px 24px;
+  background: #f3f4f6; border: none; border-radius: 8px;
+  font-size: 14px; font-weight: 600; cursor: pointer; color: var(--gray1);
+  transition: background .2s;
+}
+.signout-btn:hover { background: var(--gray3); }
+
+/* MAIN APP */
+#app { display: none; }
+.page-header {
+  background: linear-gradient(135deg, #0f2027 0%, #1a4a2e 60%, #203a43 100%);
+  padding: 40px 24px 32px; text-align: center;
+}
+.page-header h1 { font-size: 28px; font-weight: 900; color: #fff; margin-bottom: 6px; }
+.page-header p { font-size: 14px; color: #9ca3af; }
+.user-bar {
+  max-width: 1100px; margin: 0 auto; padding: 14px 24px;
+  display: flex; align-items: center; justify-content: space-between; gap: 12px;
+  flex-wrap: wrap;
+}
+.user-info { display: flex; align-items: center; gap: 10px; }
+.user-avatar { width: 32px; height: 32px; border-radius: 50%; border: 2px solid var(--green); }
+.user-name { font-size: 14px; font-weight: 600; color: var(--dark); }
+.user-badge {
+  font-size: 11px; font-weight: 700; padding: 2px 8px; border-radius: 5px;
+}
+.badge-admin { background: #fef3c7; color: #d97706; border: 1px solid #fde68a; }
+.badge-member { background: #ecfdf5; color: var(--green); border: 1px solid #a7f3d0; }
+.btn-sm {
+  padding: 6px 14px; border-radius: 8px; font-size: 13px; font-weight: 600;
+  border: 1.5px solid var(--gray3); background: var(--white); cursor: pointer;
+  transition: all .2s; color: var(--gray1);
+}
+.btn-sm:hover { border-color: var(--gray2); background: #f9fafb; }
+
+/* SECTION */
+.section { padding: 32px 24px; max-width: 1100px; margin: 0 auto; }
+
+/* SUMMARY CARDS */
+.summary-grid { display: grid; grid-template-columns: repeat(4,1fr); gap: 14px; margin-bottom: 32px; }
+.summary-card {
+  background: var(--white); border-radius: var(--radius);
+  padding: 20px; box-shadow: var(--card-shadow); text-align: center;
+}
+.summary-num { font-size: 26px; font-weight: 900; margin-bottom: 4px; }
+.summary-label { font-size: 12px; color: var(--gray2); font-weight: 500; }
+@media(max-width:640px){ .summary-grid { grid-template-columns: repeat(2,1fr); } }
+
+/* YEAR SELECTOR */
+.year-bar {
+  display: flex; align-items: center; gap: 10px; margin-bottom: 20px; flex-wrap: wrap;
+}
+.year-btn {
+  padding: 7px 18px; border-radius: 8px; border: 1.5px solid var(--gray3);
+  background: var(--white); font-size: 13px; font-weight: 700; color: var(--gray2);
+  cursor: pointer; transition: all .2s;
+}
+.year-btn.active { background: var(--dark); color: #fff; border-color: var(--dark); }
+
+/* TABLE */
+.table-wrap { overflow-x: auto; border-radius: var(--radius); box-shadow: var(--card-shadow); }
+table { width: 100%; border-collapse: collapse; background: var(--white); min-width: 700px; }
+thead tr { background: var(--dark); color: #fff; }
+thead th { padding: 12px 8px; font-size: 12px; font-weight: 700; text-align: center; white-space: nowrap; }
+thead th:first-child { text-align: left; padding-left: 20px; min-width: 100px; position:sticky; left:0; background:var(--dark); z-index:2; }
+tbody tr { border-bottom: 1px solid #f3f4f6; transition: background .15s; }
+tbody tr:hover { background: #f9fafb; }
+tbody td { padding: 10px 8px; text-align: center; font-size: 13px; }
+tbody td:first-child { text-align:left; padding-left:20px; font-weight:700; font-size:14px; position:sticky; left:0; background:var(--white); z-index:1; }
+tbody tr:hover td:first-child { background: #f9fafb; }
+
+/* CELL STATUS */
+.cell-paid {
+  width: 28px; height: 28px; border-radius: 50%;
+  background: #dcfce7; color: #16a34a;
+  display: inline-flex; align-items: center; justify-content: center;
+  font-size: 14px; font-weight: 900; cursor: default;
+}
+.cell-unpaid {
+  width: 28px; height: 28px; border-radius: 50%;
+  background: #fee2e2; color: #dc2626;
+  display: inline-flex; align-items: center; justify-content: center;
+  font-size: 14px; cursor: default;
+}
+.cell-na {
+  width: 28px; height: 28px; border-radius: 50%;
+  background: #f3f4f6; color: #d1d5db;
+  display: inline-flex; align-items: center; justify-content: center;
+  font-size: 12px; cursor: default;
+}
+/* 총무 편집 모드 */
+.cell-paid.editable, .cell-unpaid.editable, .cell-na.editable { cursor: pointer; transition: transform .1s, box-shadow .1s; }
+.cell-paid.editable:hover { transform: scale(1.15); box-shadow: 0 2px 8px rgba(22,163,74,.3); }
+.cell-unpaid.editable:hover { transform: scale(1.15); box-shadow: 0 2px 8px rgba(220,38,38,.3); }
+.cell-na.editable:hover { transform: scale(1.15); box-shadow: 0 2px 8px rgba(0,0,0,.1); }
+
+/* ADMIN TOOLBAR */
+#admin-toolbar {
+  background: #fffbeb; border: 1.5px solid #fde68a; border-radius: 12px;
+  padding: 14px 20px; margin-bottom: 20px;
+  display: flex; align-items: center; gap: 14px; flex-wrap: wrap;
+}
+.toolbar-label { font-size: 13px; font-weight: 700; color: #92400e; }
+.btn-primary {
+  padding: 8px 18px; border-radius: 8px; border: none;
+  background: var(--green); color: #fff; font-size: 13px; font-weight: 700;
+  cursor: pointer; transition: background .2s;
+}
+.btn-primary:hover { background: #15693a; }
+.btn-danger {
+  padding: 8px 18px; border-radius: 8px; border: none;
+  background: #ef4444; color: #fff; font-size: 13px; font-weight: 700;
+  cursor: pointer; transition: background .2s;
+}
+.btn-danger:hover { background: #dc2626; }
+
+/* TOAST */
+#toast {
+  position: fixed; bottom: 28px; left: 50%; transform: translateX(-50%) translateY(100px);
+  background: #1f2937; color: #fff; font-size: 14px; font-weight: 600;
+  padding: 12px 24px; border-radius: 12px; z-index: 9999;
+  transition: transform .3s; pointer-events: none; white-space: nowrap;
+}
+#toast.show { transform: translateX(-50%) translateY(0); }
+
+/* LEGEND */
+.legend { display:flex; gap:16px; flex-wrap:wrap; margin-top:16px; font-size:12px; color:var(--gray2); align-items:center; }
+.legend-item { display:flex; align-items:center; gap:6px; }
+
+/* SPINNER */
+@keyframes spin { to { transform:rotate(360deg); } }
+.spinner { width:24px; height:24px; border:3px solid #e5e7eb; border-top-color:var(--green); border-radius:50%; animation:spin .7s linear infinite; margin:40px auto; }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <a class="nav-logo" href="index.html">⚽ 중흥FC</a>
+  <button class="hamburger" id="hamburger" aria-label="메뉴"><span></span><span></span><span></span></button>
+  <ul class="nav-links" id="nav-links">
+    <li class="nav-item-drop">
+      <a href="intro.html">소개 <span class="nav-arrow">▾</span></a>
+      <div class="nav-dropdown"><a href="intro.html">팀 소개</a><a href="members.html">회원명단</a><a href="rules.html">회칙</a></div>
+    </li>
+    <li><a href="notice.html">공지사항</a></li>
+    <li><a href="schedule.html">경기일정</a></li>
+    <li><a href="record.html">경기기록</a></li>
+    <li><a href="rating.html">선발점수</a></li>
+    <li><a href="attendance.html">출석률</a></li>
+    <li><a href="board.html">커뮤니티</a></li>
+    <li><a href="gallery.html">갤러리</a></li>
+    <li><a href="dues.html" class="nav-active">회비</a></li>
+  </ul>
+</nav>
+<script>
+document.getElementById('hamburger').addEventListener('click',function(){
+  document.getElementById('nav-links').classList.toggle('open');
+  this.classList.toggle('active');
+});
+document.querySelectorAll('.nav-links a').forEach(a=>{
+  a.addEventListener('click',()=>{
+    document.getElementById('nav-links').classList.remove('open');
+    document.getElementById('hamburger').classList.remove('active');
+  });
+});
+</script>
+
+<!-- GATE: 로그인 전 -->
+<div id="gate">
+  <div class="gate-card">
+    <div class="gate-icon">🔒</div>
+    <div class="gate-title">회원 전용 페이지</div>
+    <div class="gate-desc">회비 현황은 중흥FC 회원만 열람할 수 있습니다.<br>구글 계정으로 로그인 후 이용해 주세요.</div>
+    <button class="google-btn" id="btn-login">
+      <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" alt="Google">
+      Google 계정으로 로그인
+    </button>
+    <div class="gate-notice">승인된 회원 계정만 접근 가능합니다.</div>
+  </div>
+</div>
+
+<!-- DENIED: 미승인 계정 -->
+<div id="denied" style="display:none;">
+  <div class="denied-card">
+    <div class="gate-icon">🚫</div>
+    <div class="gate-title">접근 권한 없음</div>
+    <div class="gate-desc" id="denied-msg">승인되지 않은 계정입니다.<br>총무에게 문의해 주세요.<br><br><span style="font-size:12px;color:#9ca3af;">가입문의: 010-4686-9320</span></div>
+    <button class="signout-btn" id="btn-denied-signout">다른 계정으로 로그인</button>
+  </div>
+</div>
+
+<!-- APP: 승인된 회원 -->
+<div id="app">
+  <div class="page-header">
+    <h1>💰 회비 현황</h1>
+    <p>중흥FC 회원 회비 납부 현황</p>
+  </div>
+
+  <div class="section">
+    <div class="user-bar" style="padding:14px 0;">
+      <div class="user-info">
+        <img class="user-avatar" id="user-avatar" src="" alt="">
+        <span class="user-name" id="user-name"></span>
+        <span class="user-badge" id="user-badge"></span>
+      </div>
+      <button class="btn-sm" id="btn-signout">로그아웃</button>
+    </div>
+
+    <!-- 요약 카드 -->
+    <div class="summary-grid" id="summary-grid">
+      <div class="summary-card"><div class="summary-num" id="s-total" style="color:var(--dark);">-</div><div class="summary-label">전체 회원</div></div>
+      <div class="summary-card"><div class="summary-num" id="s-paid" style="color:#16a34a;">-</div><div class="summary-label">이번 달 납부</div></div>
+      <div class="summary-card"><div class="summary-num" id="s-unpaid" style="color:#dc2626;">-</div><div class="summary-label">이번 달 미납</div></div>
+      <div class="summary-card"><div class="summary-num" id="s-rate" style="color:var(--green);">-%</div><div class="summary-label">이번 달 납부율</div></div>
+    </div>
+
+    <!-- 연도 선택 -->
+    <div class="year-bar" id="year-bar"></div>
+
+    <!-- 총무 편집 툴바 (총무만 표시) -->
+    <div id="admin-toolbar" style="display:none;">
+      <span class="toolbar-label">⚙️ 총무 모드</span>
+      <span style="font-size:13px;color:#92400e;">셀을 클릭하면 납부↔미납 전환됩니다.</span>
+      <button class="btn-sm" id="btn-manage-members" style="margin-left:auto;">회원 승인 관리</button>
+    </div>
+
+    <!-- 테이블 -->
+    <div class="table-wrap" id="table-wrap">
+      <div class="spinner"></div>
+    </div>
+
+    <!-- 범례 -->
+    <div class="legend">
+      <div class="legend-item"><span class="cell-paid">✓</span> 납부 완료</div>
+      <div class="legend-item"><span class="cell-unpaid">✗</span> 미납</div>
+      <div class="legend-item"><span class="cell-na">—</span> 해당없음 (미가입)</div>
+    </div>
+  </div>
+</div>
+
+<!-- 총무: 회원 승인 모달 -->
+<div id="modal-members" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:500;align-items:center;justify-content:center;">
+  <div style="background:#fff;border-radius:16px;padding:28px;max-width:480px;width:90%;max-height:80vh;overflow-y:auto;">
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:20px;">
+      <h3 style="font-size:17px;font-weight:800;">회원 승인 관리</h3>
+      <button onclick="document.getElementById('modal-members').style.display='none'" style="background:none;border:none;font-size:20px;cursor:pointer;color:#6b7280;">✕</button>
+    </div>
+    <div style="font-size:13px;color:#6b7280;margin-bottom:16px;">Google 로그인한 사용자의 UID를 승인하면 회원으로 접근 가능합니다.<br>총무 UID는 Firebase 콘솔에서 직접 설정하세요.</div>
+    <div id="pending-list" style="display:flex;flex-direction:column;gap:8px;margin-bottom:20px;"></div>
+    <div id="approved-list" style="display:flex;flex-direction:column;gap:8px;"></div>
+  </div>
+</div>
+
+<div id="toast"></div>
+
+<!-- FOOTER -->
+<div style="background:#111827;width:100%;margin-top:48px;">
+  <div style="max-width:1100px;margin:0 auto;padding:24px 24px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px;">
+    <div style="color:#6b7280;font-size:13px;">
+      <a href="index.html" style="font-size:16px;font-weight:900;color:#fff;text-decoration:none;display:block;margin-bottom:4px;">⚽ 중흥FC</a>
+      <div>광주광역시 북구 중흥동 | 매주 일요일 AM 06:30</div>
+    </div>
+    <div style="font-size:12px;color:#4b5563;">© 2026 중흥FC. All rights reserved.</div>
+  </div>
+</div>
+
+<!-- Firebase -->
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+import { getAuth, GoogleAuthProvider, signInWithPopup, signOut, onAuthStateChanged }
+  from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
+import { getDatabase, ref, get, set, update, onValue }
+  from "https://www.gstatic.com/firebasejs/10.12.0/firebase-database.js";
+
+const firebaseConfig = {
+  apiKey: "AIzaSyDZjopLNSgnaqMOt4vml-GG-kha2OT8JEU",
+  authDomain: "joonghung-9a14c.firebaseapp.com",
+  databaseURL: "https://joonghung-9a14c-default-rtdb.asia-southeast1.firebasedatabase.app",
+  projectId: "joonghung-9a14c",
+  storageBucket: "joonghung-9a14c.firebasestorage.app",
+  messagingSenderId: "659824116086",
+  appId: "1:659824116086:web:placeholder"
+};
+
+const app = initializeApp(firebaseConfig);
+const auth = getAuth(app);
+const db = getDatabase(app);
+
+// ── 상태 ──────────────────────────────────────────
+let currentUser = null;
+let isAdmin = false;
+let isMember = false;
+let allMembers = [];
+let duesData = {};
+let selectedYear = new Date().getFullYear();
+const MONTHS = ['1월','2월','3월','4월','5월','6월','7월','8월','9월','10월','11월','12월'];
+
+// ── UI 헬퍼 ──────────────────────────────────────
+function showToast(msg, dur=2200){
+  const t = document.getElementById('toast');
+  t.textContent = msg; t.classList.add('show');
+  setTimeout(()=>t.classList.remove('show'), dur);
+}
+function $(id){ return document.getElementById(id); }
+function show(id){ $(id).style.display=''; }
+function hide(id){ $(id).style.display='none'; }
+function flex(id){ $(id).style.display='flex'; }
+
+// ── 로그인 / 로그아웃 ─────────────────────────────
+$('btn-login').onclick = async () => {
+  try {
+    const provider = new GoogleAuthProvider();
+    await signInWithPopup(auth, provider);
+  } catch(e) {
+    if(e.code !== 'auth/popup-closed-by-user') showToast('로그인 실패: ' + e.message);
+  }
+};
+$('btn-signout').onclick = () => signOut(auth);
+$('btn-denied-signout').onclick = () => signOut(auth);
+
+// ── 인증 상태 감지 ────────────────────────────────
+onAuthStateChanged(auth, async (user) => {
+  currentUser = user;
+  if (!user) {
+    // 로그아웃 상태
+    hide('app'); hide('denied'); show('gate');
+    return;
+  }
+
+  // 접근 권한 확인
+  const [adminSnap, memberSnap] = await Promise.all([
+    get(ref(db, `duesAccess/admins/${user.uid}`)),
+    get(ref(db, `duesAccess/members/${user.uid}`))
+  ]);
+
+  isAdmin = adminSnap.exists() && adminSnap.val() === true;
+  isMember = memberSnap.exists() && memberSnap.val() === true;
+
+  if (!isAdmin && !isMember) {
+    // 미승인 → 대기 목록에 등록
+    await set(ref(db, `duesAccess/pending/${user.uid}`), {
+      name: user.displayName || '이름없음',
+      email: user.email || '',
+      photo: user.photoURL || '',
+      requestedAt: Date.now()
+    });
+    hide('gate'); hide('app'); flex('denied');
+    $('denied-msg').innerHTML = `<b>${user.displayName}</b> 계정은 아직 승인되지 않았습니다.<br>총무에게 문의해 주세요.<br><br><span style="font-size:12px;color:#9ca3af;">가입문의: 010-4686-9320</span>`;
+    return;
+  }
+
+  // 승인된 회원 → 앱 표시
+  hide('gate'); hide('denied'); show('app');
+  $('user-avatar').src = user.photoURL || '';
+  $('user-name').textContent = user.displayName || user.email;
+  if (isAdmin) {
+    $('user-badge').textContent = '총무'; $('user-badge').className = 'user-badge badge-admin';
+    show('admin-toolbar');
+  } else {
+    $('user-badge').textContent = '회원'; $('user-badge').className = 'user-badge badge-member';
+  }
+
+  loadData();
+});
+
+// ── 데이터 로드 ───────────────────────────────────
+async function loadData() {
+  const [mSnap, dSnap] = await Promise.all([
+    get(ref(db, 'members')),
+    get(ref(db, 'dues'))
+  ]);
+
+  allMembers = [];
+  if (mSnap.exists()) {
+    mSnap.forEach(c => { if(c.val()) allMembers.push({id: c.key, ...c.val()}); });
+    allMembers.sort((a,b) => (parseInt(a.num)||999)-(parseInt(b.num)||999) || a.name.localeCompare(b.name,'ko'));
+  }
+
+  duesData = dSnap.exists() ? dSnap.val() : {};
+
+  buildYearBar();
+  renderTable();
+  updateSummary();
+}
+
+// ── 연도 탭 ──────────────────────────────────────
+function buildYearBar() {
+  const years = new Set([selectedYear, new Date().getFullYear()]);
+  Object.keys(duesData).forEach(y => years.add(parseInt(y)));
+  const bar = $('year-bar');
+  bar.innerHTML = '';
+  [...years].sort((a,b)=>b-a).forEach(y => {
+    const btn = document.createElement('button');
+    btn.className = 'year-btn' + (y===selectedYear?' active':'');
+    btn.textContent = y + '년';
+    btn.onclick = () => { selectedYear = y; buildYearBar(); renderTable(); updateSummary(); };
+    bar.appendChild(btn);
+  });
+  if(isAdmin){
+    const addBtn = document.createElement('button');
+    addBtn.className = 'year-btn';
+    addBtn.textContent = '+ 연도 추가';
+    addBtn.style.borderStyle = 'dashed';
+    addBtn.onclick = () => {
+      const y = prompt('추가할 연도를 입력하세요 (예: 2027)');
+      if(y && !isNaN(y)){ selectedYear=parseInt(y); buildYearBar(); renderTable(); updateSummary(); }
+    };
+    bar.appendChild(addBtn);
+  }
+}
+
+// ── 테이블 렌더링 ─────────────────────────────────
+function renderTable() {
+  const wrap = $('table-wrap');
+  if(allMembers.length === 0){
+    wrap.innerHTML = '<div style="text-align:center;padding:40px;color:#9ca3af;">회원 데이터가 없습니다.</div>';
+    return;
+  }
+
+  const yearData = (duesData[selectedYear] || {});
+
+  let html = `<table>
+    <thead><tr>
+      <th>이름</th>
+      ${MONTHS.map((m,i)=>`<th>${m}</th>`).join('')}
+      <th>납부율</th>
+    </tr></thead>
+    <tbody>`;
+
+  allMembers.forEach(member => {
+    const mData = yearData[member.id] || {};
+    let paidCnt = 0;
+    const cells = MONTHS.map((m,i) => {
+      const mo = i + 1;
+      const status = mData[mo] || 'unpaid'; // paid | unpaid | na
+      if(status==='paid') paidCnt++;
+      let cls, icon;
+      if(status==='paid'){ cls='cell-paid'; icon='✓'; }
+      else if(status==='na'){ cls='cell-na'; icon='—'; }
+      else { cls='cell-unpaid'; icon='✗'; }
+      const editable = isAdmin ? ' editable' : '';
+      const onclick = isAdmin ? ` onclick="toggleCell('${member.id}',${mo},this)"` : '';
+      return `<td><span class="${cls}${editable}"${onclick} data-status="${status}" title="${isAdmin?'클릭하여 변경':''}">${icon}</span></td>`;
+    }).join('');
+
+    const total = MONTHS.length;
+    const rate = Math.round(paidCnt/total*100);
+    const rateColor = rate>=80?'#16a34a':rate>=50?'#d97706':'#dc2626';
+
+    html += `<tr>
+      <td>${member.name}</td>
+      ${cells}
+      <td><span style="font-weight:800;color:${rateColor};">${rate}%</span></td>
+    </tr>`;
+  });
+
+  html += '</tbody></table>';
+  wrap.innerHTML = html;
+}
+
+// ── 셀 토글 (총무 전용) ───────────────────────────
+window.toggleCell = async (memberId, month, el) => {
+  if(!isAdmin) return;
+  const cur = el.dataset.status || 'unpaid';
+  const next = cur==='unpaid' ? 'paid' : cur==='paid' ? 'na' : 'unpaid';
+
+  const path = `dues/${selectedYear}/${memberId}/${month}`;
+  await set(ref(db, path), next);
+
+  duesData[selectedYear] = duesData[selectedYear] || {};
+  duesData[selectedYear][memberId] = duesData[selectedYear][memberId] || {};
+  duesData[selectedYear][memberId][month] = next;
+
+  el.dataset.status = next;
+  if(next==='paid'){ el.className='cell-paid editable'; el.textContent='✓'; }
+  else if(next==='na'){ el.className='cell-na editable'; el.textContent='—'; }
+  else { el.className='cell-unpaid editable'; el.textContent='✗'; }
+
+  updateSummary();
+  showToast(next==='paid'?'✅ 납부 완료 처리':next==='na'?'⬜ 해당없음 처리':'❌ 미납 처리');
+};
+
+// ── 요약 업데이트 ─────────────────────────────────
+function updateSummary() {
+  const now = new Date();
+  const curMonth = now.getMonth() + 1;
+  const yearData = (duesData[selectedYear] || {});
+  let paid=0, unpaid=0;
+
+  allMembers.forEach(m => {
+    const status = (yearData[m.id]||{})[curMonth] || 'unpaid';
+    if(status==='paid') paid++;
+    else if(status!=='na') unpaid++;
+  });
+
+  const total = allMembers.length;
+  const rate = total>0 ? Math.round(paid/total*100) : 0;
+  $('s-total').textContent = total + '명';
+  $('s-paid').textContent = paid + '명';
+  $('s-unpaid').textContent = unpaid + '명';
+  $('s-rate').textContent = rate + '%';
+}
+
+// ── 총무: 회원 승인 관리 ──────────────────────────
+$('btn-manage-members').onclick = async () => {
+  const modal = $('modal-members');
+  modal.style.display = 'flex';
+
+  const [pendingSnap, approvedSnap] = await Promise.all([
+    get(ref(db, 'duesAccess/pending')),
+    get(ref(db, 'duesAccess/members'))
+  ]);
+
+  // 대기중
+  const pendingEl = $('pending-list');
+  pendingEl.innerHTML = '<div style="font-size:12px;font-weight:700;color:#92400e;margin-bottom:8px;">⏳ 승인 대기</div>';
+  if(!pendingSnap.exists()){
+    pendingEl.innerHTML += '<div style="font-size:13px;color:#9ca3af;padding:8px 0;">대기 중인 사용자 없음</div>';
+  } else {
+    pendingSnap.forEach(c => {
+      const u = c.val(); const uid = c.key;
+      const div = document.createElement('div');
+      div.style.cssText = 'display:flex;align-items:center;gap:10px;padding:10px;background:#fffbeb;border-radius:10px;border:1px solid #fde68a;';
+      div.innerHTML = `
+        <img src="${u.photo||''}" style="width:32px;height:32px;border-radius:50%;flex-shrink:0;" onerror="this.style.display='none'">
+        <div style="flex:1;min-width:0;">
+          <div style="font-size:13px;font-weight:700;">${u.name}</div>
+          <div style="font-size:11px;color:#9ca3af;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">${u.email}</div>
+        </div>
+        <button class="btn-primary" style="padding:6px 12px;font-size:12px;" onclick="approveUser('${uid}','${u.name}',this)">승인</button>
+      `;
+      pendingEl.appendChild(div);
+    });
+  }
+
+  // 승인된 회원
+  const approvedEl = $('approved-list');
+  approvedEl.innerHTML = '<div style="font-size:12px;font-weight:700;color:var(--green);margin-bottom:8px;margin-top:16px;">✅ 승인된 회원</div>';
+  if(!approvedSnap.exists()){
+    approvedEl.innerHTML += '<div style="font-size:13px;color:#9ca3af;padding:8px 0;">승인된 회원 없음</div>';
+  } else {
+    approvedSnap.forEach(c => {
+      const info = typeof c.val()==='object' ? c.val() : {name:'회원'};
+      const uid = c.key;
+      const div = document.createElement('div');
+      div.style.cssText = 'display:flex;align-items:center;gap:10px;padding:10px;background:#f0fdf4;border-radius:10px;border:1px solid #bbf7d0;';
+      div.innerHTML = `
+        <div style="flex:1;font-size:13px;font-weight:700;">✅ ${info.name||uid}</div>
+        <button class="btn-sm" style="font-size:11px;padding:4px 10px;color:#dc2626;border-color:#fca5a5;" onclick="revokeUser('${uid}',this)">취소</button>
+      `;
+      approvedEl.appendChild(div);
+    });
+  }
+};
+
+window.approveUser = async (uid, name, btn) => {
+  btn.disabled = true; btn.textContent = '처리중...';
+  await update(ref(db, 'duesAccess'), {
+    [`members/${uid}`]: { name, approvedAt: Date.now() },
+    [`pending/${uid}`]: null
+  });
+  showToast(`✅ ${name} 승인 완료!`);
+  $('btn-manage-members').click();
+};
+
+window.revokeUser = async (uid, btn) => {
+  if(!confirm('이 회원의 접근 권한을 취소하시겠습니까?')) return;
+  btn.disabled = true;
+  await set(ref(db, `duesAccess/members/${uid}`), null);
+  showToast('접근 권한 취소 완료');
+  $('btn-manage-members').click();
+};
+
+</script>
+</body>
+</html>
