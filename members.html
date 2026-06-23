@@ -1,0 +1,515 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<title>회원명단 - 중흥FC | 광주 조기축구회</title>
+<meta name="description" content="중흥FC 활동 회원 명단입니다.">
+<meta name="keywords" content="중흥FC 회원, 광주 축구 동호회 회원">
+<meta name="author" content="중흥FC">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="중흥FC">
+<meta property="og:title" content="회원명단 - 중흥FC | 광주 조기축구회">
+<meta property="og:description" content="중흥FC 활동 회원 명단입니다.">
+<meta property="og:image" content="https://jhfc.kr/og-image.png">
+<meta property="og:url" content="https://jhfc.kr/">
+<meta property="og:locale" content="ko_KR">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="회원명단 - 중흥FC | 광주 조기축구회">
+<meta name="twitter:description" content="중흥FC 활동 회원 명단입니다.">
+<meta name="twitter:image" content="https://jhfc.kr/og-image.png">
+<meta name="naver-site-verification" content="1847479c54800558c19e2fd620b5ded3">
+<link rel="canonical" href="https://jhfc.kr/members.html">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700;900&display=swap" rel="stylesheet">
+<style>
+  *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+  :root{--green:#1a7f3c;--green2:#23a852;--dark:#111827;--gray1:#374151;--gray2:#6b7280;--gray3:#d1d5db;--bg:#f4f6f8;--white:#fff;--shadow:0 2px 16px rgba(0,0,0,.07);--radius:14px;}
+  body{font-family:'Noto Sans KR','Apple SD Gothic Neo','Malgun Gothic',sans-serif;background:var(--bg);color:var(--dark);min-height:100vh;}
+  .page-header{background:linear-gradient(135deg,#0f2027 0%,#1a4a2e 60%,#203a43 100%);padding:40px 40px 36px;}
+  .page-header-inner{max-width:1100px;margin:0 auto;}
+  .breadcrumb{font-size:12px;color:#6b7280;margin-bottom:10px;display:flex;align-items:center;gap:6px;}
+  .breadcrumb .cur{color:var(--green2);font-weight:600;}
+  .page-header h1{font-size:28px;font-weight:900;color:#fff;}
+  .page-header p{font-size:14px;color:#9ca3af;margin-top:6px;}
+  .summary-bar{max-width:1100px;margin:0 auto;padding:24px 40px 0;}
+  .sum-cards{display:flex;gap:12px;flex-wrap:wrap;}
+  .sum-card{background:#fff;border-radius:12px;padding:14px 20px;box-shadow:var(--shadow);display:flex;align-items:center;gap:12px;}
+  .sum-num{font-size:22px;font-weight:900;color:var(--dark);}
+  .sum-label{font-size:12px;color:var(--gray2);}
+  .main-wrap{max-width:1100px;margin:0 auto;padding:24px 40px 60px;}
+  .top-bar{display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;flex-wrap:wrap;gap:10px;}
+  .left-bar{display:flex;align-items:center;gap:8px;flex-wrap:wrap;}
+  .pos-tabs{display:flex;gap:6px;flex-wrap:wrap;}
+  .pos-btn{padding:6px 12px;border-radius:8px;border:1.5px solid var(--gray3);background:#fff;font-size:13px;font-weight:600;color:var(--gray2);cursor:pointer;font-family:inherit;transition:all .2s;}
+  .pos-btn.active{background:var(--green);color:#fff;border-color:var(--green);}
+  .search-box{display:flex;align-items:center;gap:6px;background:#fff;border:1.5px solid var(--gray3);border-radius:8px;padding:6px 12px;}
+  .search-box input{border:none;outline:none;font-size:13px;font-family:inherit;width:120px;color:var(--dark);}
+  .add-btn{background:var(--green);color:#fff;border:none;border-radius:9px;padding:9px 18px;font-size:14px;font-weight:700;cursor:pointer;font-family:inherit;}
+  .admin-badge{display:inline-flex;align-items:center;gap:5px;background:#ecfdf5;color:var(--green);border:1px solid #a7f3d0;font-size:12px;font-weight:700;padding:4px 10px;border-radius:6px;cursor:pointer;}
+  .members-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:8px;}
+  .member-card{background:#fff;border-radius:10px;box-shadow:var(--shadow);padding:10px 14px;display:flex;align-items:center;gap:8px;flex-wrap:wrap;transition:transform .15s;position:relative;}
+  .member-card:hover{transform:translateX(3px);}
+  .member-num{font-size:13px;font-weight:900;color:var(--gray3);width:26px;text-align:center;flex-shrink:0;}
+  .member-avatar{width:30px;height:30px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:14px;flex-shrink:0;}
+  .member-name{font-size:13px;font-weight:700;flex:1;min-width:0;}
+  .role-tag{font-size:10px;color:#6b7280;font-weight:600;}
+  .pos-badge{font-size:10px;font-weight:700;padding:2px 6px;border-radius:4px;flex-shrink:0;}
+  .pos-fw{background:#fff7ed;color:#ea580c;border:1px solid #fed7aa;}
+  .pos-mf{background:#eff6ff;color:#2563eb;border:1px solid #bfdbfe;}
+  .pos-df{background:#ecfdf5;color:var(--green);border:1px solid #a7f3d0;}
+  .pos-gk{background:#fdf4ff;color:#9333ea;border:1px solid #e9d5ff;}
+  .phone-btn{font-size:11px;font-weight:600;color:var(--green);background:#ecfdf5;border:1px solid #a7f3d0;border-radius:5px;padding:2px 7px;cursor:pointer;white-space:nowrap;width:100%;margin-top:2px;}
+  .phone-reveal{font-size:12px;font-weight:700;color:var(--dark);width:100%;margin-top:2px;display:none;}
+  .card-actions{display:none;position:absolute;top:6px;right:6px;gap:4px;}
+  .card-actions.show{display:flex;}
+  .btn-icon{width:24px;height:24px;border-radius:5px;border:none;font-size:11px;cursor:pointer;display:flex;align-items:center;justify-content:center;}
+  .btn-icon-edit{background:#f0fdf4;color:var(--green);}
+  .btn-icon-del{background:#fef2f2;color:#ef4444;}
+  .empty{text-align:center;padding:48px;color:var(--gray2);font-size:14px;grid-column:1/-1;}
+  .loading{text-align:center;padding:48px;color:var(--gray2);grid-column:1/-1;}
+  .spinner{width:32px;height:32px;border:3px solid #e5e7eb;border-top-color:var(--green);border-radius:50%;animation:spin .7s linear infinite;margin:0 auto 12px;}
+  @keyframes spin{to{transform:rotate(360deg);}}
+  .overlay{position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:200;display:flex;align-items:center;justify-content:center;backdrop-filter:blur(4px);}
+  .mbox{background:#fff;border-radius:16px;padding:28px;width:360px;max-width:95vw;box-shadow:0 8px 40px rgba(0,0,0,.2);}
+  .mbox h3{font-size:18px;font-weight:800;margin-bottom:18px;}
+  .fg{margin-bottom:14px;}
+  .fg label{font-size:13px;font-weight:700;color:var(--gray1);margin-bottom:5px;display:block;}
+  .fg input,.fg select{width:100%;padding:10px 13px;border:1.5px solid var(--gray3);border-radius:8px;font-size:14px;font-family:inherit;outline:none;}
+  .fg input:focus,.fg select:focus{border-color:var(--green);}
+  .frow2{display:grid;grid-template-columns:1fr 1fr;gap:12px;}
+  .mbtns{display:flex;gap:8px;justify-content:flex-end;margin-top:18px;}
+  .mbtn-ok{padding:10px 24px;border-radius:9px;background:var(--green);color:#fff;border:none;font-size:14px;font-weight:700;cursor:pointer;font-family:inherit;}
+  .mbtn-cancel{padding:10px 18px;border-radius:9px;border:1.5px solid var(--gray3);background:#fff;font-size:14px;font-weight:600;color:var(--gray2);cursor:pointer;font-family:inherit;}
+  .pw-input{width:100%;padding:11px 16px;border:1.5px solid var(--gray3);border-radius:9px;font-size:15px;font-family:inherit;outline:none;letter-spacing:3px;margin-bottom:6px;}
+  .pw-err{font-size:12px;color:#ef4444;min-height:18px;margin-bottom:10px;}
+  .toast{position:fixed;bottom:30px;left:50%;transform:translateX(-50%) translateY(20px);background:var(--dark);color:#fff;padding:12px 24px;border-radius:10px;font-size:14px;font-weight:600;opacity:0;transition:all .3s;pointer-events:none;z-index:999;}
+  .toast.show{opacity:1;transform:translateX(-50%) translateY(0);}
+  @media(max-width:640px){.main-wrap,.summary-bar{padding-left:16px;padding-right:16px;}.page-header{padding:28px 20px;}.members-grid{grid-template-columns:1fr 1fr;}}
+  footer{background:#111827;color:#6b7280;padding:32px 40px;font-size:13px;}
+  .footer-inner{max-width:1160px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;gap:24px;flex-wrap:wrap;}
+  .footer-left{flex:1;}
+  .footer-right{font-size:12px;color:#4b5563;white-space:nowrap;flex-shrink:0;}
+  .footer-logo{font-size:17px;font-weight:900;color:#fff;}
+</style>
+</head>
+<body>
+<nav>
+  <a class="nav-logo" href="index.html">⚽ 중흥FC</a>
+  <button class="hamburger" id="hamburger" aria-label="메뉴"><span></span><span></span><span></span></button>
+  <ul class="nav-links" id="nav-links">
+    <li class="nav-item-drop">
+      <a href="intro.html" class="nav-active">소개 <span class="nav-arrow">▾</span></a>
+      <div class="nav-dropdown"><a href="intro.html">팀 소개</a><a href="members.html">회원명단</a><a href="rules.html">회칙</a></div>
+    </li>
+    <li><a href="notice.html" class="">공지사항</a></li>
+    <li><a href="schedule.html" class="">경기일정</a></li>
+    <li><a href="record.html" class="">경기기록</a></li>
+    <li><a href="rating.html" class="">선발점수</a></li>
+    <li><a href="attendance.html" class="">출석률</a></li>
+    <li><a href="board.html" class="">커뮤니티</a></li>
+    <li><a href="gallery.html" class="">갤러리</a></li>
+    <li><a href="dues.html" class="">회비</a></li>
+  </ul>
+</nav>
+<script>
+document.getElementById('hamburger').addEventListener('click',function(){
+  document.getElementById('nav-links').classList.toggle('open');
+  this.classList.toggle('active');
+});
+document.querySelectorAll('.nav-links a').forEach(a=>{
+  a.addEventListener('click',()=>{
+    document.getElementById('nav-links').classList.remove('open');
+    document.getElementById('hamburger').classList.remove('active');
+  });
+});
+</script>
+<style>
+  nav{position:sticky;top:0;z-index:100;background:#111827;display:flex;align-items:center;justify-content:space-between;flex-wrap:nowrap;gap:10px;padding:0 20px;height:60px;box-shadow:0 2px 12px rgba(0,0,0,.3);}
+  .nav-logo{font-size:18px;font-weight:900;color:#fff;text-decoration:none;white-space:nowrap;flex-shrink:0;}
+  .hamburger{display:none;flex-direction:column;justify-content:center;gap:5px;width:36px;height:36px;background:none;border:none;cursor:pointer;padding:4px;flex-shrink:0;}
+  .hamburger span{display:block;height:2px;background:#fff;border-radius:2px;transition:all .3s;}
+  .hamburger.active span:nth-child(1){transform:translateY(7px) rotate(45deg);}
+  .hamburger.active span:nth-child(2){opacity:0;}
+  .hamburger.active span:nth-child(3){transform:translateY(-7px) rotate(-45deg);}
+  .nav-links{display:flex;gap:2px;list-style:none;flex-wrap:nowrap;align-items:center;}
+  .nav-links li{position:relative;}
+  .nav-links a{color:#9ca3af;font-size:12px;font-weight:500;text-decoration:none;white-space:nowrap;display:inline-flex;align-items:center;gap:2px;padding:5px 7px;border-radius:6px;transition:color .2s,background .2s;}
+  .nav-links a:hover{color:#fff;}
+  .nav-active{color:#fff!important;background:#1a7f3c!important;}
+  .nav-arrow{font-size:9px;opacity:.6;}
+  .nav-item-drop{padding-bottom:12px;margin-bottom:-12px;}
+  .nav-dropdown{position:absolute;top:100%;left:50%;transform:translateX(-50%);background:#1f2937;border-radius:10px;padding:6px 0;min-width:120px;box-shadow:0 8px 24px rgba(0,0,0,.3);opacity:0;visibility:hidden;transition:opacity .15s,visibility .15s;z-index:200;}
+  .nav-dropdown::before{content:'';position:absolute;top:-5px;left:50%;transform:translateX(-50%);border:5px solid transparent;border-bottom-color:#1f2937;border-top:none;}
+  .nav-item-drop:hover .nav-dropdown{opacity:1;visibility:visible;}
+  .nav-dropdown a{display:block;padding:9px 18px;color:#d1d5db;font-size:13px;font-weight:500;white-space:nowrap;text-decoration:none;background:none;border-radius:0;transition:background .15s,color .15s;}
+  .nav-dropdown a:hover{background:#374151!important;color:#fff!important;}
+  @media(max-width:640px){
+    .hamburger{display:flex;}
+    .nav-links{display:none;flex-direction:column;align-items:stretch;gap:0;position:absolute;top:60px;left:0;right:0;width:100%;background:#1f2937;padding:8px 0;box-shadow:0 8px 24px rgba(0,0,0,.3);z-index:99;}
+    .nav-links.open{display:flex;}
+    .nav-links li{width:100%;position:static;padding-bottom:0;margin-bottom:0;}
+    .nav-links>li>a{display:block;width:100%;padding:13px 20px;border-radius:0;font-size:15px;color:#d1d5db;box-sizing:border-box;}
+    .nav-links>li>a:hover,.nav-links>li>a.nav-active{background:#1a7f3c;color:#fff;}
+    .nav-arrow{display:none;}
+    .nav-item-drop .nav-dropdown{position:static!important;transform:none!important;opacity:1!important;visibility:visible!important;box-shadow:none;border-radius:0;padding:0;background:#111827;width:100%;}
+    .nav-dropdown::before{display:none;}
+    .nav-dropdown a{display:block;width:100%;padding:12px 20px 12px 40px;font-size:14px;color:#9ca3af;box-sizing:border-box;border-left:3px solid #1a7f3c;}
+    .nav-dropdown a:hover{background:#1f2937!important;color:#fff!important;}
+  }
+</style>
+<div class="page-header">
+  <div class="page-header-inner">
+    <div class="breadcrumb"><span onclick="location.href='index.html'" style="cursor:pointer;">홈</span><span>›</span><span class="cur">회원명단</span></div>
+    <h1>👥 회원 명단</h1>
+    <p>중흥FC 활동 회원을 소개합니다.</p>
+  </div>
+</div>
+
+<div class="summary-bar">
+  <div class="sum-cards">
+    <div class="sum-card"><span style="font-size:22px;">👥</span><div><div class="sum-num" id="s-total">-</div><div class="sum-label">전체 회원</div></div></div>
+    <div class="sum-card"><span style="font-size:22px;color:#ef4444;">🔥</span><div><div class="sum-num" id="s-fw">-</div><div class="sum-label">FW</div></div></div>
+    <div class="sum-card"><span style="font-size:22px;color:#2563eb;">⚡</span><div><div class="sum-num" id="s-mf">-</div><div class="sum-label">MF</div></div></div>
+    <div class="sum-card"><span style="font-size:22px;color:var(--green);">🛡</span><div><div class="sum-num" id="s-df">-</div><div class="sum-label">DF</div></div></div>
+    <div class="sum-card"><span style="font-size:22px;color:#9333ea;">🧤</span><div><div class="sum-num" id="s-gk">-</div><div class="sum-label">GK</div></div></div>
+  </div>
+</div>
+
+<div class="main-wrap">
+  <div class="top-bar">
+    <div class="left-bar">
+      <div class="pos-tabs">
+        <button class="pos-btn active" data-pos="전체">전체</button>
+        <button class="pos-btn" data-pos="FW">FW</button>
+        <button class="pos-btn" data-pos="MF">MF</button>
+        <button class="pos-btn" data-pos="DF">DF</button>
+        <button class="pos-btn" data-pos="GK">GK</button>
+        <button class="pos-btn" data-pos="고문">고문</button>
+        <button class="pos-btn" data-pos="집행부">집행부</button>
+        <button class="pos-btn" data-pos="준회원">준회원</button>
+      </div>
+      <div class="search-box">🔍<input type="text" id="search-input" placeholder="이름 검색..."></div>
+      <span id="admin-ui"></span>
+    </div>
+    <button class="add-btn" id="btn-add">+ 회원 추가</button>
+  </div>
+  <div class="members-grid" id="members-grid">
+    <div class="loading"><div class="spinner"></div>불러오는 중...</div>
+  </div>
+</div>
+
+<!-- 회원 등록 모달 -->
+<div class="overlay" id="member-modal" style="display:none;">
+  <div class="mbox">
+    <h3 id="modal-title">회원 추가</h3>
+    <div class="frow2">
+      <div class="fg"><label>이름 *</label><input type="text" id="f-name" placeholder="홍길동"></div>
+      <div class="fg"><label>등번호</label><input type="number" id="f-num" placeholder="10" min="1" max="99"></div>
+    </div>
+    <div class="fg"><label>포지션</label>
+      <select id="f-pos">
+        <option value="FW">FW (공격수)</option>
+        <option value="MF">MF (미드필더)</option>
+        <option value="DF">DF (수비수)</option>
+        <option value="GK">GK (골키퍼)</option>
+      </select>
+    </div>
+    <div class="fg"><label>역할 <span style="font-size:11px;color:var(--gray2);">(이름 옆 표시)</span></label>
+      <select id="f-role">
+        <option value="">없음</option>
+        <option value="고문">고문</option>
+        <option value="회장">회장</option>
+        <option value="감독">감독</option>
+        <option value="총무">총무</option>
+        <option value="수석">수석코치</option>
+        <option value="코치">코치</option>
+        <option value="대외">대외</option>
+        <option value="준회원">준회원</option>
+      </select>
+    </div>
+    <div class="fg"><label>휴대번호</label><input type="tel" id="f-phone" placeholder="010-0000-0000"></div>
+    <div class="mbtns">
+      <button class="mbtn-cancel" id="btn-modal-cancel">취소</button>
+      <button class="mbtn-ok" id="btn-submit">추가하기</button>
+    </div>
+  </div>
+</div>
+
+<!-- 비번 모달 (관리자) -->
+<div class="overlay" id="pw-modal" style="display:none;">
+  <div class="mbox" style="width:320px;">
+    <h3>🔐 관리자 확인</h3>
+    <p style="font-size:13px;color:var(--gray2);margin-bottom:16px;">관리자만 회원을 추가할 수 있습니다.</p>
+    <input class="pw-input" type="password" id="pw-input" placeholder="비밀번호" maxlength="20">
+    <div class="pw-err" id="pw-err"></div>
+    <div class="mbtns">
+      <button class="mbtn-cancel" id="btn-pw-cancel">취소</button>
+      <button class="mbtn-ok" id="btn-pw-ok">확인</button>
+    </div>
+  </div>
+</div>
+
+<!-- 전화번호 확인 모달 -->
+<div class="overlay" id="phone-modal" style="display:none;">
+  <div class="mbox" style="width:300px;">
+    <h3>📱 휴대번호 확인</h3>
+    <p style="font-size:13px;color:var(--gray2);margin-bottom:14px;" id="phone-modal-desc">비밀번호를 입력하세요.</p>
+    <input class="pw-input" type="password" id="phone-pw" placeholder="비밀번호" maxlength="20">
+    <div class="pw-err" id="phone-pw-err"></div>
+    <div class="mbtns">
+      <button class="mbtn-cancel" id="btn-phone-cancel">취소</button>
+      <button class="mbtn-ok" id="btn-phone-ok">확인</button>
+    </div>
+  </div>
+</div>
+
+<div style="background:#111827;width:100%;">
+  <div style="max-width:1160px;margin:0 auto;padding:28px 40px;box-sizing:border-box;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:16px;">
+    <div style="color:#6b7280;font-size:13px;">
+      <a href="index.html" style="font-size:16px;font-weight:900;color:#fff;text-decoration:none;display:block;margin-bottom:5px;">⚽ 중흥FC</a>
+      <div>광주광역시 북구 중흥동 | 매주 일요일 AM 06:30 | 전남대학교 부설중학교 운동장</div>
+      <div style="margin-top:3px;">가입문의: 총무 010&#8209;4686&#8209;9320 | <a href="https://open.kakao.com/o/pFIIRBAi" target="_blank" style="color:#9ca3af;">💬 카카오톡 채널</a></div>
+      <div style="margin-top:3px;">회비계좌: <span onclick="copyAccount(event)" style="cursor:pointer;color:#d1d5db;border-bottom:1px dashed #6b7280;" title="클릭하면 복사됩니다">카카오뱅크 7942&#8209;2614&#8209;9821 나성균</span> <span id="copy-toast" style="display:none;font-size:11px;color:#23a852;font-weight:700;">✅ 복사 완료!</span></div>
+    </div>
+    <div style="font-size:12px;color:#4b5563;white-space:nowrap;align-self:flex-end;">© 2026 중흥FC. All rights reserved.</div>
+  </div>
+</div>
+<script>
+function copyAccount(e){
+  if(e) e.preventDefault();
+  navigator.clipboard.writeText('79422614982').then(()=>{
+    const t=document.getElementById('copy-toast');
+    t.style.display='inline'; setTimeout(()=>t.style.display='none',2000);
+  });
+}
+</script>
+</div>
+<script>
+function copyAccount(e){
+  if(e) e.preventDefault();
+  navigator.clipboard.writeText('79422614982').then(()=>{
+    const t=document.getElementById('copy-toast');
+    t.style.display='inline'; setTimeout(()=>t.style.display='none',2000);
+  });
+}
+</script>
+<div class="toast" id="toast"></div>
+
+<script>
+const DB = 'https://joonghung-9a14c-default-rtdb.asia-southeast1.firebasedatabase.app';
+const ADMIN_PW = 'joonghung2015';
+const PHONE_PW = '2026';
+const ADMIN_KEY = 'jfc_admin';
+const EXEC_ROLES = ['회장','총무','감독','수석','코치','대외'];
+const EXEC_ORDER = ['회장','총무','감독','수석','코치','대외'];
+
+let allMembers = [];
+let curPos = '전체';
+let curSearch = '';
+let editId = null;
+let pwCb = null;
+let phoneCb = null;
+
+const posEmoji = {FW:'🔥',MF:'⚡',DF:'🛡',GK:'🧤'};
+const posColor  = {FW:'#fff7ed',MF:'#eff6ff',DF:'#ecfdf5',GK:'#fdf4ff'};
+const posCls    = {FW:'pos-fw',MF:'pos-mf',DF:'pos-df',GK:'pos-gk'};
+
+const isAdmin = () => sessionStorage.getItem(ADMIN_KEY) === '1';
+const api = (path, opt={}) => fetch(DB+path+'.json', opt).then(r=>{ if(!r.ok) throw new Error('HTTP '+r.status); return r.json(); });
+
+/* 관리자 UI */
+function setAdminUI(){
+  const el = document.getElementById('admin-ui');
+  if(isAdmin()){
+    el.innerHTML = '<span class="admin-badge" id="logout-btn">✅ 관리자 · 로그아웃</span>';
+    document.getElementById('logout-btn').onclick = () => { sessionStorage.removeItem(ADMIN_KEY); setAdminUI(); renderMembers(); };
+  } else el.innerHTML = '';
+  document.querySelectorAll('.card-actions').forEach(b => b.classList.toggle('show', isAdmin()));
+}
+
+/* 관리자 비번 */
+function openPw(cb){ pwCb=cb; document.getElementById('pw-input').value=''; document.getElementById('pw-err').textContent=''; document.getElementById('pw-modal').style.display='flex'; setTimeout(()=>document.getElementById('pw-input').focus(),100); }
+function closePw(){ document.getElementById('pw-modal').style.display='none'; }
+function checkPw(){
+  if(document.getElementById('pw-input').value===ADMIN_PW){ sessionStorage.setItem(ADMIN_KEY,'1'); closePw(); setAdminUI(); if(pwCb){pwCb();pwCb=null;} }
+  else{ document.getElementById('pw-err').textContent='❌ 비밀번호가 틀렸습니다.'; document.getElementById('pw-input').value=''; }
+}
+
+/* 전화번호 비번 */
+/* ── 전화번호 하이픈 포맷 ── */
+function formatPhone(num){
+  if(!num) return '';
+  const n = num.replace(/[^0-9]/g, '');
+  if(n.length===11) return n.replace(/(\d{3})(\d{4})(\d{4})/, '$1-$2-$3');
+  if(n.length===10) return n.replace(/(\d{3})(\d{3})(\d{4})/, '$1-$2-$3');
+  return num;
+}
+
+function openPhoneModal(name, phone, memberId){
+  document.getElementById('phone-modal-desc').textContent = name + '님의 휴대번호를 확인하려면 비밀번호를 입력하세요.';
+  document.getElementById('phone-pw').value='';
+  document.getElementById('phone-pw-err').textContent='';
+  document.getElementById('phone-modal').style.display='flex';
+  setTimeout(()=>document.getElementById('phone-pw').focus(),100);
+  phoneCb = function(){
+    const reveal = document.getElementById('ph-'+memberId);
+    const btn    = document.getElementById('pb-'+memberId);
+    if(reveal){ const fp=formatPhone(phone); reveal.innerHTML = '<a href="tel:'+phone+'" style="color:var(--dark);text-decoration:none;font-weight:700;font-size:12px;">📞 '+fp+'</a>'; reveal.style.display='block'; }
+    if(btn) btn.style.display='none';
+  };
+}
+function closePhoneModal(){ document.getElementById('phone-modal').style.display='none'; }
+function checkPhonePw(){
+  if(document.getElementById('phone-pw').value===PHONE_PW){ closePhoneModal(); if(phoneCb){phoneCb();phoneCb=null;} }
+  else{ document.getElementById('phone-pw-err').textContent='❌ 비밀번호가 틀렸습니다.'; document.getElementById('phone-pw').value=''; }
+}
+
+/* 회원 모달 */
+function openModal(m){
+  editId = m ? m.id : null;
+  document.getElementById('modal-title').textContent = m ? '회원 수정' : '회원 추가';
+  document.getElementById('btn-submit').textContent  = m ? '수정하기' : '추가하기';
+  document.getElementById('f-name').value  = m ? m.name : '';
+  document.getElementById('f-num').value   = m ? (m.num||'') : '';
+  document.getElementById('f-pos').value   = m ? (m.pos||'MF') : 'MF';
+  document.getElementById('f-role').value  = m ? (m.role||'') : '';
+  document.getElementById('f-phone').value = m ? (m.phone||'') : '';
+  document.getElementById('member-modal').style.display='flex';
+  setTimeout(()=>document.getElementById('f-name').focus(),100);
+}
+function closeModal(){ document.getElementById('member-modal').style.display='none'; }
+
+/* CRUD */
+function loadMembers(){
+  fetch(DB+'/members.json').then(r=>r.json()).then(data=>{
+    allMembers=[];
+    if(data && typeof data==='object'){
+      Object.entries(data).forEach(([k,v])=>{ if(v) allMembers.push({id:k,...v}); });
+    }
+    allMembers.sort((a,b)=>(parseInt(a.num)||999)-(parseInt(b.num)||999)||a.name.localeCompare(b.name,'ko'));
+    renderSummary();
+    renderMembers();
+  }).catch(e=>{
+    document.getElementById('members-grid').innerHTML='<div class="empty">⚠️ 불러오기 실패: '+e.message+'</div>';
+  });
+}
+
+function saveMember(){
+  const name = document.getElementById('f-name').value.trim();
+  if(!name){ showToast('⚠️ 이름을 입력해 주세요.'); return; }
+  const data = {
+    name,
+    num:   document.getElementById('f-num').value,
+    pos:   document.getElementById('f-pos').value,
+    role:  document.getElementById('f-role').value,
+    phone: document.getElementById('f-phone').value.trim()
+  };
+  const btn = document.getElementById('btn-submit');
+  btn.disabled=true; btn.textContent='저장 중...';
+  const reset = ()=>{ btn.disabled=false; btn.textContent=editId?'수정하기':'추가하기'; };
+
+  if(editId){
+    fetch(DB+'/members/'+editId+'.json',{method:'PATCH',headers:{'Content-Type':'application/json'},body:JSON.stringify(data)})
+      .then(()=>{ const i=allMembers.findIndex(m=>m.id===editId); if(i>-1) allMembers[i]={...allMembers[i],...data};
+        allMembers.sort((a,b)=>(parseInt(a.num)||999)-(parseInt(b.num)||999)||a.name.localeCompare(b.name,'ko'));
+        renderSummary(); renderMembers(); closeModal(); showToast('✅ 수정되었습니다.'); reset(); })
+      .catch(e=>{ showToast('❌ 실패: '+e.message); reset(); });
+  } else {
+    fetch(DB+'/members.json',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({...data,createdAt:Date.now()})})
+      .then(r=>r.json()).then(res=>{ allMembers.push({id:res.name,...data});
+        allMembers.sort((a,b)=>(parseInt(a.num)||999)-(parseInt(b.num)||999)||a.name.localeCompare(b.name,'ko'));
+        renderSummary(); renderMembers(); closeModal(); showToast('✅ 추가되었습니다.'); reset(); })
+      .catch(e=>{ showToast('❌ 실패: '+e.message); reset(); });
+  }
+}
+
+function delMember(id){
+  if(!confirm('이 회원을 삭제하시겠습니까?')) return;
+  fetch(DB+'/members/'+id+'.json',{method:'DELETE'})
+    .then(()=>{ allMembers=allMembers.filter(m=>m.id!==id); renderSummary(); renderMembers(); showToast('✅ 삭제되었습니다.'); })
+    .catch(e=>showToast('❌ 실패: '+e.message));
+}
+
+/* 렌더 */
+function renderSummary(){
+  document.getElementById('s-total').textContent = allMembers.length;
+  ['FW','MF','DF','GK'].forEach(p=>{ document.getElementById('s-'+p.toLowerCase()).textContent = allMembers.filter(m=>m.pos===p).length; });
+}
+
+function renderMembers(){
+  const grid = document.getElementById('members-grid');
+  let filtered = allMembers.filter(m=>{
+    let posOk = false;
+    if(curPos==='전체') posOk=true;
+    else if(curPos==='고문') posOk=(m.role==='고문');
+    else if(curPos==='집행부') posOk=EXEC_ROLES.includes(m.role);
+    else if(curPos==='준회원') posOk=(m.role==='준회원');
+    else posOk=(m.pos===curPos);
+    return posOk && (!curSearch || m.name.includes(curSearch));
+  });
+  if(curPos==='전체'){
+    filtered = filtered.slice().sort((a,b)=>a.name.localeCompare(b.name,'ko'));
+  } else if(curPos==='집행부'){
+    filtered = filtered.sort((a,b)=>(EXEC_ORDER.indexOf(a.role)===-1?99:EXEC_ORDER.indexOf(a.role))-(EXEC_ORDER.indexOf(b.role)===-1?99:EXEC_ORDER.indexOf(b.role)));
+  }
+  if(filtered.length===0){ grid.innerHTML='<div class="empty">👤 등록된 회원이 없습니다.</div>'; setAdminUI(); return; }
+
+  grid.innerHTML = filtered.map(m=>`
+    <div class="member-card">
+      <div class="card-actions${isAdmin()?' show':''}">
+        <button class="btn-icon btn-icon-edit" data-id="${m.id}">✏️</button>
+        <button class="btn-icon btn-icon-del" data-id="${m.id}">🗑</button>
+      </div>
+      <div class="member-num">${m.num||'-'}</div>
+      <div class="member-avatar" style="background:${posColor[m.pos]||'#f3f4f6'};">${posEmoji[m.pos]||'⚽'}</div>
+      <div style="flex:1;min-width:0;">
+        <div class="member-name">${m.name}${m.role?` <span class="role-tag">(${m.role})</span>`:''}</div>
+        <span class="pos-badge ${posCls[m.pos]||''}">${m.pos||'?'}</span>
+      </div>
+      ${m.phone?`<button class="phone-btn" id="pb-${m.id}" data-id="${m.id}">📱 휴대번호</button><div class="phone-reveal" id="ph-${m.id}"></div>`:''}
+    </div>`).join('');
+
+  /* 이벤트 */
+  grid.querySelectorAll('.btn-icon-edit').forEach(b=>b.addEventListener('click',e=>{
+    e.stopPropagation();
+    const m=allMembers.find(x=>x.id===b.dataset.id); if(m) openModal(m);
+  }));
+  grid.querySelectorAll('.btn-icon-del').forEach(b=>b.addEventListener('click',e=>{
+    e.stopPropagation(); delMember(b.dataset.id);
+  }));
+  grid.querySelectorAll('.phone-btn').forEach(b=>b.addEventListener('click',e=>{
+    e.stopPropagation();
+    const m=allMembers.find(x=>x.id===b.dataset.id);
+    if(m) openPhoneModal(m.name, m.phone, m.id);
+  }));
+
+  setAdminUI();
+}
+
+/* 탭·검색 */
+document.querySelectorAll('.pos-btn').forEach(b=>b.addEventListener('click',function(){
+  curPos=this.dataset.pos;
+  document.querySelectorAll('.pos-btn').forEach(x=>x.classList.remove('active'));
+  this.classList.add('active'); renderMembers();
+}));
+document.getElementById('search-input').addEventListener('input',function(){ curSearch=this.value.trim(); renderMembers(); });
+
+/* 버튼 이벤트 */
+document.getElementById('btn-add').addEventListener('click',()=>{ if(isAdmin()) openModal(); else openPw(()=>openModal()); });
+document.getElementById('btn-modal-cancel').addEventListener('click',closeModal);
+document.getElementById('btn-submit').addEventListener('click',saveMember);
+document.getElementById('btn-pw-cancel').addEventListener('click',closePw);
+document.getElementById('btn-pw-ok').addEventListener('click',checkPw);
+document.getElementById('pw-input').addEventListener('keydown',e=>{ if(e.key==='Enter') checkPw(); });
+document.getElementById('btn-phone-cancel').addEventListener('click',closePhoneModal);
+document.getElementById('btn-phone-ok').addEventListener('click',checkPhonePw);
+document.getElementById('phone-pw').addEventListener('keydown',e=>{ if(e.key==='Enter') checkPhonePw(); });
+
+function copyAcc(e){ e.preventDefault(); navigator.clipboard.writeText('79422614982').then(()=>{ const t=document.getElementById('copy-toast'); t.style.display='inline'; setTimeout(()=>t.style.display='none',2000); }); }
+function showToast(msg){ const t=document.getElementById('toast'); t.textContent=msg; t.classList.add('show'); setTimeout(()=>t.classList.remove('show'),2500); }
+
+setAdminUI();
+loadMembers();
+</script>
+</body>
+</html>
