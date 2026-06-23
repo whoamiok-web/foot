@@ -443,6 +443,21 @@ document.querySelectorAll('.nav-links a').forEach(a=>{
   </div>
 </div>
 
+
+<!-- COMMUNITY -->
+<div class="section" id="community">
+  <div class="section-header">
+    <div class="section-title"><span>💬</span> 커뮤니티</div>
+    <a href="board.html" class="more-btn">전체보기 →</a>
+  </div>
+  <div id="home-board-list" style="display:flex;flex-direction:column;gap:10px;">
+    <div style="text-align:center;padding:24px;color:#9ca3af;font-size:14px;">
+      <div style="width:22px;height:22px;border:2px solid #e5e7eb;border-top-color:#1a7f3c;border-radius:50%;animation:spin .7s linear infinite;margin:0 auto 8px;"></div>
+      불러오는 중...
+    </div>
+  </div>
+</div>
+
 <!-- GALLERY -->
 <div style="background:#fff; border-top:1px solid #e5e7eb;">
 <div class="section" id="gallery">
@@ -793,11 +808,51 @@ function loadHomeGallery(){
     });
 }
 
+
+/* ── 커뮤니티 최신 2개 ── */
+function loadHomeBoard(){
+  const list = document.getElementById('home-board-list');
+  if(!list) return;
+  fetch(DB+'/board.json?orderBy="$key"&limitToLast=2')
+    .then(r=>r.json())
+    .then(data=>{
+      if(!data||typeof data!=='object'){
+        list.innerHTML='<div style="text-align:center;padding:24px;color:#9ca3af;">등록된 게시글이 없습니다.</div>';
+        return;
+      }
+      const posts = Object.entries(data)
+        .map(([k,v])=>({id:k,...v}))
+        .sort((a,b)=>(b.createdAt||0)-(a.createdAt||0));
+      list.innerHTML = posts.map(p=>{
+        const date = p.createdAt ? new Date(p.createdAt).toLocaleDateString('ko-KR',{month:'2-digit',day:'2-digit'}).replace(/ /g,'') : '';
+        const commentCnt = p.comments ? Object.keys(p.comments).length : 0;
+        const likeCnt = p.likes || 0;
+        const preview = (p.body||'').replace(/<[^>]*>/g,'').substring(0,60);
+        return `<div class="notice-item" onclick="location.href='board.html?id=${p.id}'" style="cursor:pointer;flex-direction:column;align-items:flex-start;gap:8px;">
+          <div style="display:flex;align-items:center;gap:10px;width:100%;">
+            <span class="notice-badge badge-info" style="flex-shrink:0;">자유</span>
+            <span class="notice-title" style="font-size:15px;font-weight:700;flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">${p.title||'(제목 없음)'}</span>
+            <span style="font-size:12px;color:#9ca3af;white-space:nowrap;">${date}</span>
+          </div>
+          ${preview ? `<div style="font-size:13px;color:#6b7280;line-height:1.5;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;width:100%;">${preview}</div>` : ''}
+          <div style="display:flex;gap:12px;font-size:12px;color:#9ca3af;">
+            <span>✍️ ${p.author||'익명'}</span>
+            ${commentCnt>0?`<span>💬 ${commentCnt}</span>`:''}
+            ${likeCnt>0?`<span>❤️ ${likeCnt}</span>`:''}
+          </div>
+        </div>`;
+      }).join('');
+    }).catch(()=>{
+      list.innerHTML='<div style="text-align:center;padding:24px;color:#9ca3af;">게시글을 불러올 수 없습니다.</div>';
+    });
+}
+
 loadHomeNotice();
 loadHomeSchedule();
 loadHomeRecord();
 loadHomeRating();
 loadHomeAttend();
+loadHomeBoard();
 loadHomeGallery();
 </script>
 
