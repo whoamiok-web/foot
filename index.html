@@ -719,7 +719,7 @@ function loadHomeRecord(){
         .filter((v,i,a)=>a.indexOf(v)===i); // 중복 제거
       const attendUID = 'home-att-' + Math.random().toString(36).slice(2,8);
       const attendHTML2 = attendNames.length>0
-        ? `<div style="margin-top:12px;">
+        ? `<div style="margin-top:12px;" onclick="event.stopPropagation()">
             <span onclick="toggleHomeAttend('${attendUID}')"
               style="display:inline-flex;align-items:center;gap:5px;padding:4px 10px;background:#f0fdf4;border:1.5px solid #bbf7d0;border-radius:7px;cursor:pointer;font-size:12px;font-weight:700;color:#1a7f3c;">
               ✅ 참석: ${attendNames.length}명 <span id="btn-${attendUID}">▼</span>
