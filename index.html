@@ -733,7 +733,7 @@ function loadHomeRecord(){
         imgs.map(url=>`<img src="${driveThumbRec(url)}" style="width:100%;aspect-ratio:4/3;object-fit:cover;border-radius:8px;" onerror="this.style.display='none'" loading="lazy">`).join('')
       }</div>` : '';
       const hw = r0.homeaway||'홈';
-      el.innerHTML = `<div style="background:#fff;border-radius:14px;box-shadow:0 2px 16px rgba(0,0,0,.07);padding:20px 24px;cursor:pointer;" onclick="location.href='record.html'">
+      el.innerHTML = `<div style="background:#fff;border-radius:14px;box-shadow:0 2px 16px rgba(0,0,0,.07);padding:20px 24px;">
         <div style="display:flex;align-items:center;gap:8px;margin-bottom:14px;">
           <span style="background:#111827;color:#fff;font-size:12px;font-weight:700;padding:4px 10px;border-radius:6px;">📅 ${(latestDate||'').replace(/-/g,'.')}</span>
           <span style="font-size:11px;font-weight:700;padding:3px 8px;border-radius:5px;${hw==='홈'?'background:#ecfdf5;color:#1a7f3c;border:1px solid #a7f3d0;':'background:#eff6ff;color:#2563eb;border:1px solid #bfdbfe;'}">${hw==='홈'?'🏠 홈':'✈️ 원정'}</span>
@@ -743,7 +743,7 @@ function loadHomeRecord(){
         ${r0.location?`<div style="margin-top:10px;font-size:12px;color:#9ca3af;">📍 ${r0.location}</div>`:''}
         ${imgHTML}
         ${r0.body?`<div style="margin-top:12px;font-size:13px;line-height:1.7;color:#374151;display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden;">${r0.body}</div>`:''}
-        <div style="margin-top:14px;font-size:13px;font-weight:600;color:#1a7f3c;">더 보기 →</div>
+        <div onclick="location.href='record.html'" style="margin-top:14px;font-size:13px;font-weight:600;color:#1a7f3c;cursor:pointer;">더 보기 →</div>
       </div>`;
     }).catch(()=>{
       const el=document.getElementById('home-record-preview');
