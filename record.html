@@ -505,113 +505,131 @@ async function saveRecord(){
   const body      = document.getElementById('f-body').value.trim();
   const images    = getImgUrls();
   const firstGame = games[0]||{};
-  const homeaway = getHomeAway();
-  const location = document.getElementById('f-loc') ? document.getElementById('f-loc').value.trim() : '';
-  const data = { date, homeaway, location, games, attendIds, body, images,
-    opponent:  firstGame.opponent||'',
-    scoreUs:   firstGame.scoreUs!=null?firstGame.scoreUs:null,
-    scoreThem: firstGame.scoreThem!=null?firstGame.scoreThem:null,
-    scorers:   firstGame.scorers||[],
-    updatedAt: Date.now() };
+  const homeaway  = getHomeAway();
+  const location  = document.getElementById('f-loc') ? document.getElementById('f-loc').value.trim() : '';
   const btn = document.getElementById('btn-submit');
   btn.disabled=true; btn.textContent='저장 중...';
   const reset=()=>{ btn.disabled=false; btn.textContent=editId?'수정하기':'등록하기'; };
 
-  // 출석자 이름 목록 (attendIds → 이름)
+  // 출석자 이름 목록
   const attendNames = attendIds.map(id=>{ const m=allMembers.find(x=>x.id===id); return m?m.name:id; }).filter(Boolean);
 
-  /* ── /matches 노드 (경기일정 페이지) ── */
-  const matchGames = games.map(g=>({
-    opp_name:   g.opponent||'상대팀',
-    us:         g.scoreUs!=null  ? String(g.scoreUs)  : '',
-    opp:        g.scoreThem!=null? String(g.scoreThem): '',
+  // 게임 데이터 통합 포맷 (모든 노드 공통)
+  const buildGames = () => games.map(g=>({
+    opp_name:   g.opponent||'무등FC',
+    opponent:   g.opponent||'무등FC',
+    us:         g.scoreUs!=null   ? String(g.scoreUs)   : '',
+    opp:        g.scoreThem!=null ? String(g.scoreThem) : '',
+    scoreUs:    g.scoreUs!=null   ? g.scoreUs   : null,
+    scoreThem:  g.scoreThem!=null ? g.scoreThem : null,
     starters:   g.starters||'',
     starterIds: g.starterIds||[],
-    players:    (g.starterIds||[]).map(id=>{ const m=allMembers.find(x=>x.id===id); return m?m.name:id; }).filter(Boolean)
+    players:    (g.starterIds||[]).map(id=>{ const m=allMembers.find(x=>x.id===id); return m?m.name:id; }).filter(Boolean),
+    scorers:    g.scorers||[]
   }));
+
+  const builtGames = buildGames();
+  const first = builtGames[0]||{};
+
+  // /records 저장용
+  const recordData = {
+    date, homeaway, location, body, images,
+    games:     builtGames,
+    attendIds,
+    attendees: attendNames,
+    opponent:  first.opponent||'',
+    scoreUs:   first.scoreUs!=null ? first.scoreUs : null,
+    scoreThem: first.scoreThem!=null ? first.scoreThem : null,
+    updatedAt: Date.now()
+  };
+
+  // /matches 저장용 (경기일정 페이지)
   const matchData = {
     date, homeaway, location,
-    note: body ? body.substring(0,50) : '',
-    games: matchGames,
+    games: builtGames,
     attendees: attendNames,
+    note: body ? body.substring(0,50) : '',
     fromRecord: true,
     updatedAt: Date.now()
   };
 
-  /* ── /schedule 노드 (선발점수·출석률 페이지) ── */
-  const scheduleGames = games.map(g=>({
-    opp_name:   g.opponent||'상대팀',
-    us:         g.scoreUs!=null  ? String(g.scoreUs)  : '',
-    opp:        g.scoreThem!=null? String(g.scoreThem): '',
-    starters:   g.starters||'',
-    starterIds: g.starterIds||[],
-    players:    (g.starterIds||[]).map(id=>{ const m=allMembers.find(x=>x.id===id); return m?m.name:id; }).filter(Boolean)
-  }));
+  // /schedule 저장용 (선발점수·출석률 페이지) - 날짜 키
   const scheduleData = {
     date, homeaway, location,
-    opponent: firstGame.opponent||'',
-    games: scheduleGames,
+    opponent:  first.opponent||'',
+    games:     builtGames,
     attendees: attendNames,
     fromRecord: true,
     updatedAt: Date.now()
   };
 
-  /* ── /attendances 노드 (구버전 호환) ── */
-  const attendData = {
-    date,
-    memo: games.length>0 ? `vs ${games.map(g=>g.opponent||'상대팀').join(', ')}` : '경기',
-    members: attendIds,
-    fromRecord: true,
-    updatedAt: Date.now()
-  };
+  const H = {'Content-Type':'application/json'};
+  const pf = (url,method,body2)=>fetch(url,{method,headers:H,body:JSON.stringify(body2)}).catch(()=>{});
 
   try {
     if(editId){
-      // 경기기록 수정
-      await fetch(DB+'/records/'+editId+'.json',{method:'PATCH',headers:{'Content-Type':'application/json'},body:JSON.stringify(data)});
+      // ① /records 수정
+      await pf(DB+'/records/'+editId+'.json','PATCH',recordData);
+
+      // ② /matches - linkedMatchId 있으면 PATCH, 없으면 날짜로 찾아서 PATCH
       const rec = allRecords.find(r=>r.id===editId);
-      if(rec){
-        // /matches 업데이트
-        if(rec.linkedMatchId){
-          await fetch(DB+'/matches/'+rec.linkedMatchId+'.json',{method:'PATCH',headers:{'Content-Type':'application/json'},body:JSON.stringify(matchData)}).catch(()=>{});
-        }
-        // /schedule 업데이트 (날짜 키로)
-        await fetch(DB+'/schedule/'+date+'.json',{method:'PATCH',headers:{'Content-Type':'application/json'},body:JSON.stringify(scheduleData)}).catch(()=>{});
-        // /attendances 업데이트
-        if(rec.linkedAttendId){
-          await fetch(DB+'/attendances/'+rec.linkedAttendId+'.json',{method:'PATCH',headers:{'Content-Type':'application/json'},body:JSON.stringify(attendData)}).catch(()=>{});
-        }
+      if(rec?.linkedMatchId){
+        await pf(DB+'/matches/'+rec.linkedMatchId+'.json','PATCH',matchData);
+      } else {
+        // 날짜로 matches 검색해서 업데이트
+        const mAll = await fetch(DB+'/matches.json').then(r=>r.json()).catch(()=>({}));
+        const mKey = Object.entries(mAll||{}).find(([k,v])=>v&&v.date===date)?.[0];
+        if(mKey) await pf(DB+'/matches/'+mKey+'.json','PATCH',matchData);
+        else await pf(DB+'/matches.json','POST',{...matchData,createdAt:Date.now()});
       }
+
+      // ③ /schedule - 날짜 키로 PATCH
+      await pf(DB+'/schedule/'+date+'.json','PATCH',scheduleData);
+
+      // ④ /attendances
+      if(rec?.linkedAttendId){
+        await pf(DB+'/attendances/'+rec.linkedAttendId+'.json','PATCH',{
+          date, members:attendIds, attendees:attendNames, fromRecord:true, updatedAt:Date.now()
+        });
+      }
+
       const i=allRecords.findIndex(r=>r.id===editId);
-      if(i>-1) allRecords[i]={...allRecords[i],...data};
+      if(i>-1) allRecords[i]={...allRecords[i],...recordData};
+
     } else {
-      data.createdAt = Date.now();
-      // 경기기록 신규 등록
-      const recRes = await fetch(DB+'/records.json',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(data)}).then(r=>r.json());
+      recordData.createdAt = Date.now();
+
+      // ① /records 신규
+      const recRes = await fetch(DB+'/records.json',{method:'POST',headers:H,body:JSON.stringify(recordData)}).then(r=>r.json());
       const recordId = recRes.name;
       let linkedMatchId=null, linkedAttendId=null;
 
-      // /matches 신규 등록
+      // ② /matches 신규
       if(games.length>0){
-        const mRes = await fetch(DB+'/matches.json',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({...matchData,createdAt:Date.now()})}).then(r=>r.json()).catch(()=>({}));
+        const mRes = await fetch(DB+'/matches.json',{method:'POST',headers:H,body:JSON.stringify({...matchData,createdAt:Date.now()})}).then(r=>r.json()).catch(()=>({}));
         linkedMatchId = mRes.name||null;
       }
-      // /schedule 날짜 키로 저장 (PUT - 날짜별 덮어쓰기)
-      await fetch(DB+'/schedule/'+date+'.json',{method:'PUT',headers:{'Content-Type':'application/json'},body:JSON.stringify({...scheduleData,createdAt:Date.now()})}).catch(()=>{});
 
-      // /attendances 신규 등록
+      // ③ /schedule 날짜 키로 PUT (덮어쓰기)
+      await pf(DB+'/schedule/'+date+'.json','PUT',{...scheduleData,createdAt:Date.now()});
+
+      // ④ /attendances 신규
       if(attendIds.length>0){
-        const aRes = await fetch(DB+'/attendances.json',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({...attendData,createdAt:Date.now()})}).then(r=>r.json()).catch(()=>({}));
+        const aRes = await fetch(DB+'/attendances.json',{method:'POST',headers:H,body:JSON.stringify({
+          date, members:attendIds, attendees:attendNames, fromRecord:true, createdAt:Date.now()
+        })}).then(r=>r.json()).catch(()=>({}));
         linkedAttendId = aRes.name||null;
       }
-      if(linkedMatchId||linkedAttendId){
-        await fetch(DB+'/records/'+recordId+'.json',{method:'PATCH',headers:{'Content-Type':'application/json'},body:JSON.stringify({linkedMatchId,linkedAttendId})}).catch(()=>{});
-      }
-      allRecords.unshift({...data,id:recordId,linkedMatchId,linkedAttendId});
+
+      // linkedId 저장
+      await pf(DB+'/records/'+recordId+'.json','PATCH',{linkedMatchId,linkedAttendId});
+      allRecords.unshift({...recordData,id:recordId,linkedMatchId,linkedAttendId});
     }
+
     allRecords.sort((a,b)=>(b.date||'').localeCompare(a.date||''));
     renderRecords(); closeModal();
-    showToast('✅ 저장 완료! (경기일정·선발점수·출석률 자동 반영)'); reset();
+    showToast('✅ 저장 완료! (경기일정·선발점수·출석률 자동 반영)');
+    reset();
   } catch(e){ showToast('❌ 실패: '+e.message); reset(); }
 }
 
