@@ -350,13 +350,21 @@ const api=(path,opt={})=>fetch(DB+path+'.json',opt).then(r=>{ if(!r.ok) throw ne
 /* 데이터 로드 */
 async function loadAll(){
   try{
-    const [mData, aData] = await Promise.all([api('/members'), api('/attendances')]);
+    // schedule 노드에서 attendees(이름배열) 직접 읽기
+    const sData = await api('/schedule');
     allMembers=[];
-    if(mData&&typeof mData==='object') Object.entries(mData).forEach(([k,v])=>{ if(v) allMembers.push({id:k,...v}); });
-    allMembers.sort((a,b)=>(parseInt(a.num)||999)-(parseInt(b.num)||999)||a.name.localeCompare(b.name,'ko'));
     allAttendances=[];
-    if(aData&&typeof aData==='object') Object.entries(aData).forEach(([k,v])=>{ if(v) allAttendances.push({id:k,...v}); });
-    allAttendances.sort((a,b)=>(b.date||'').localeCompare(a.date||''));
+    if(sData&&typeof sData==='object'){
+      // 출석자 이름 전체 수집 → 고유 회원 목록 생성
+      const nameSet = new Set();
+      Object.entries(sData).forEach(([k,v])=>{ if(v&&v.attendees) v.attendees.forEach(n=>nameSet.add(n)); });
+      allMembers = [...nameSet].sort((a,b)=>a.localeCompare(b,'ko')).map((name,i)=>({id:name, name, num:i+1}));
+      // 출석 기록 생성 (members 필드에 이름 배열)
+      Object.entries(sData).forEach(([k,v])=>{
+        if(v&&v.date) allAttendances.push({id:k, date:v.date, members:v.attendees||[], memo:''});
+      });
+      allAttendances.sort((a,b)=>(b.date||'').localeCompare(a.date||''));
+    }
     renderSummary();
     renderAll();
   } catch(e){
