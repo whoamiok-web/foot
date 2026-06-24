@@ -714,9 +714,12 @@ function loadHomeRecord(){
           ${starterHTML}
         </div>`;
       }).join('');
-      // 참석자 명단 (dayRecords 전체에서 수집)
-      const attendNames = dayRecords.flatMap(r=>r.attendees||r.attendIds||[])
-        .filter((v,i,a)=>a.indexOf(v)===i); // 중복 제거
+      // 참석자 명단: attendees(이름배열) 우선, 없으면 attendIds 그대로
+      const rawAttend = dayRecords.flatMap(r=>{
+        if(r.attendees&&r.attendees.length>0) return r.attendees;
+        return r.attendIds||[];
+      });
+      const attendNames = rawAttend.filter((v,i,a)=>a.indexOf(v)===i);
       const attendUID = 'home-att-' + Math.random().toString(36).slice(2,8);
       const attendHTML2 = attendNames.length>0
         ? `<div style="margin-top:12px;" onclick="event.stopPropagation()">
