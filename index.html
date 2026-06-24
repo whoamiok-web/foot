@@ -588,9 +588,9 @@ function hasResult(m){ return m.games&&m.games.some(g=>g.us!==''&&g.us!=null&&g.
 function renderHomeSchedule(){
   const list = document.getElementById('home-schedule-list');
   const filtered = homeMatches.filter(m=>homeTab==='result'?hasResult(m):!hasResult(m));
-  // 가장 최근 날짜 하루치만 표시
-  const latestDate = filtered.length>0 ? filtered[0].date : null;
-  const top = latestDate ? filtered.filter(m=>m.date===latestDate) : [];
+  // 최근 3일치 표시
+  const uniqueDates = [...new Set(filtered.map(m=>m.date))].slice(0,3);
+  const top = filtered.filter(m=>uniqueDates.includes(m.date));
   if(top.length===0){
     list.innerHTML='<div style="text-align:center;padding:32px;color:#9ca3af;font-size:14px;">등록된 경기가 없습니다.</div>';
     return;
@@ -672,18 +672,40 @@ function loadHomeRecord(){
       let records=[];
       if(data&&typeof data==='object') Object.entries(data).forEach(([k,v])=>{ if(v) records.push({id:k,...v}); });
       records.sort((a,b)=>(b.date||'').localeCompare(a.date||''));
-      const r = records[0];
-      if(!r){ el.innerHTML='<div style="text-align:center;padding:24px;color:#9ca3af;">등록된 경기기록이 없습니다.</div>'; return; }
-      const imgs = (r.images||[]).slice(0,3);
-      const imgHTML = imgs.length>0 ? `<div style="display:grid;grid-template-columns:repeat(${imgs.length},1fr);gap:8px;margin-top:14px;">${
+      if(records.length===0){ el.innerHTML='<div style="text-align:center;padding:24px;color:#9ca3af;">등록된 경기기록이 없습니다.</div>'; return; }
+      // 가장 최근 날짜 하루치 전체
+      const latestDate = records[0].date;
+      const dayRecords = records.filter(r=>r.date===latestDate);
+      const r0 = dayRecords[0];
+      // 모든 게임 합치기
+      const allGames = dayRecords.flatMap(r=>r.games||[]);
+      const gHTML = allGames.map((g,i)=>{
+        const us=parseInt(g.us??g.scoreUs), op=parseInt(g.opp??g.scoreThem);
+        const ok=!isNaN(us)&&!isNaN(op);
+        const badge = ok ? (us>op?'<span style="background:#dcfce7;color:#16a34a;font-size:10px;font-weight:700;padding:2px 6px;border-radius:4px;">승</span>' : us<op?'<span style="background:#fee2e2;color:#dc2626;font-size:10px;font-weight:700;padding:2px 6px;border-radius:4px;">패</span>' : '<span style="background:#fef9c3;color:#92400e;font-size:10px;font-weight:700;padding:2px 6px;border-radius:4px;">무</span>') : '';
+        const score = ok ? `<b style="color:${us>op?'#16a34a':us<op?'#dc2626':'#374151'}">${us}:${op}</b>` : 'VS';
+        return `<div style="display:flex;align-items:center;gap:8px;padding:5px 0;border-bottom:1px solid #f3f4f6;font-size:13px;">
+          <span style="color:#9ca3af;width:32px;flex-shrink:0;">${i+1}게임</span>
+          <span style="font-weight:700;color:#1a7f3c;">중흥FC</span>
+          <span>${score}</span>
+          <span style="font-weight:700;">${g.opp_name||g.opponent||'상대팀'}</span>
+          ${badge}
+        </div>`;
+      }).join('');
+      const imgs = (r0.images||[]).slice(0,3);
+      const imgHTML = imgs.length>0 ? `<div style="display:grid;grid-template-columns:repeat(${imgs.length},1fr);gap:8px;margin-top:12px;">${
         imgs.map(url=>`<img src="${driveThumbRec(url)}" style="width:100%;aspect-ratio:4/3;object-fit:cover;border-radius:8px;" onerror="this.style.display='none'" loading="lazy">`).join('')
       }</div>` : '';
+      const hw = r0.homeaway||'홈';
       el.innerHTML = `<div style="background:#fff;border-radius:14px;box-shadow:0 2px 16px rgba(0,0,0,.07);padding:20px 24px;cursor:pointer;" onclick="location.href='record.html'">
-        <div style="display:flex;align-items:center;gap:10px;margin-bottom:12px;">
-          <span style="background:#111827;color:#fff;font-size:12px;font-weight:700;padding:4px 10px;border-radius:6px;">📅 ${(r.date||'').replace(/-/g,'.')}</span>
+        <div style="display:flex;align-items:center;gap:8px;margin-bottom:14px;">
+          <span style="background:#111827;color:#fff;font-size:12px;font-weight:700;padding:4px 10px;border-radius:6px;">📅 ${(latestDate||'').replace(/-/g,'.')}</span>
+          <span style="font-size:11px;font-weight:700;padding:3px 8px;border-radius:5px;${hw==='홈'?'background:#ecfdf5;color:#1a7f3c;border:1px solid #a7f3d0;':'background:#eff6ff;color:#2563eb;border:1px solid #bfdbfe;'}">${hw==='홈'?'🏠 홈':'✈️ 원정'}</span>
         </div>
-        <div style="font-size:14px;line-height:1.85;color:#374151;white-space:pre-wrap;display:-webkit-box;-webkit-line-clamp:4;-webkit-box-orient:vertical;overflow:hidden;">${r.body||''}</div>
+        <div>${gHTML||'<div style="font-size:13px;color:#9ca3af;">게임 정보 없음</div>'}</div>
+        ${r0.location?`<div style="margin-top:10px;font-size:12px;color:#9ca3af;">📍 ${r0.location}</div>`:''}
         ${imgHTML}
+        ${r0.body?`<div style="margin-top:12px;font-size:13px;line-height:1.7;color:#374151;display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden;">${r0.body}</div>`:''}
         <div style="margin-top:14px;font-size:13px;font-weight:600;color:#1a7f3c;">더 보기 →</div>
       </div>`;
     }).catch(()=>{
