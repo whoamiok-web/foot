@@ -676,19 +676,21 @@ function driveThumbRec(url){
   return m ? `https://drive.google.com/thumbnail?id=${m[1]}&sz=w400` : url;
 }
 function loadHomeRecord(){
-  fetch(DB+'/records.json')
-    .then(r=>r.json())
-    .then(data=>{
+  Promise.all([
+    fetch(DB+'/records.json').then(r=>r.json()).catch(()=>({})),
+    fetch(DB+'/schedule.json').then(r=>r.json()).catch(()=>({}))
+  ]).then(([data, sData])=>{
       const el = document.getElementById('home-record-preview');
       if(!el) return;
       let records=[];
       if(data&&typeof data==='object') Object.entries(data).forEach(([k,v])=>{ if(v) records.push({id:k,...v}); });
       records.sort((a,b)=>(b.date||'').localeCompare(a.date||''));
       if(records.length===0){ el.innerHTML='<div style="text-align:center;padding:24px;color:#9ca3af;">등록된 경기기록이 없습니다.</div>'; return; }
-      // PC:최근 1일치, 모바일:최근 1일치 (동일하게 하루치)
       const isMobileRec = window.innerWidth < 768;
       const latestDate = records[0].date;
       const dayRecords = records.filter(r=>r.date===latestDate);
+      // schedule에서 attendees 보강
+      const schedAtt = (sData&&sData[latestDate]&&sData[latestDate].attendees)||[];
       const r0 = dayRecords[0];
       // 모든 게임 합치기
       const allGames = dayRecords.flatMap(r=>r.games||[]);
@@ -714,12 +716,15 @@ function loadHomeRecord(){
           ${starterHTML}
         </div>`;
       }).join('');
-      // 참석자 명단: attendees(이름배열) 우선, 없으면 attendIds 그대로
+      // 참석자 명단: records.attendees → records.attendIds → schedule.attendees 순으로 fallback
       const rawAttend = dayRecords.flatMap(r=>{
         if(r.attendees&&r.attendees.length>0) return r.attendees;
-        return r.attendIds||[];
+        if(r.attendIds&&r.attendIds.length>0) return r.attendIds;
+        return [];
       });
-      const attendNames = rawAttend.filter((v,i,a)=>a.indexOf(v)===i);
+      const attendNames = rawAttend.length>0
+        ? rawAttend.filter((v,i,a)=>a.indexOf(v)===i)
+        : schedAtt;
       const attendUID = 'home-att-' + Math.random().toString(36).slice(2,8);
       const attendHTML2 = attendNames.length>0
         ? `<div style="margin-top:12px;" onclick="event.stopPropagation()">
