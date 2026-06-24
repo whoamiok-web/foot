@@ -86,6 +86,10 @@
   .badge-L{background:#fef2f2;color:#ef4444;border:1px solid #fecaca;}
   .scorers-row{font-size:13px;color:var(--gray1);margin-bottom:8px;}
   .attend-row{font-size:12px;color:var(--gray2);margin-bottom:8px;}
+.attend-toggle{display:inline-flex;align-items:center;gap:5px;padding:4px 10px;background:#f0fdf4;border:1.5px solid #bbf7d0;border-radius:7px;cursor:pointer;font-size:12px;font-weight:700;color:#1a7f3c;user-select:none;transition:background .15s;}
+.attend-toggle:hover{background:#dcfce7;}
+.attend-names{display:none;margin-top:8px;padding:10px 12px;background:#f9fafb;border-radius:8px;border:1px solid #e5e7eb;font-size:12px;color:#374151;line-height:1.8;}
+.attend-names.open{display:block;}
   .record-content{font-size:14px;line-height:1.85;color:var(--gray1);white-space:pre-wrap;}
   .record-images{display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:8px;margin-top:12px;}
   .record-img{width:100%;aspect-ratio:4/3;object-fit:cover;border-radius:8px;cursor:pointer;}
@@ -636,6 +640,15 @@ async function delRecord(id){
   } catch(e){ showToast('❌ 실패: '+e.message); }
 }
 
+/* ── 참석자 토글 ── */
+function toggleAttend(uid){
+  const el = document.getElementById(uid);
+  const arr = document.getElementById('arr-'+uid);
+  if(!el) return;
+  el.classList.toggle('open');
+  if(arr) arr.textContent = el.classList.contains('open') ? '▲' : '▼';
+}
+
 /* ── 로드 ── */
 function loadRecords(){
   document.getElementById('record-list').innerHTML='<div class="loading"><div class="spinner"></div>불러오는 중...</div>';
@@ -681,7 +694,17 @@ function renderRecords(){
       }).join('')}</div>`;
     }
     const scorersHTML='';
-    const attendHTML  = r.attendIds&&r.attendIds.length>0 ? `<div class="attend-row">✅ 참석: ${r.attendIds.length}명</div>` : '';
+    // 참석자 이름 목록 (attendIds → 이름, 없으면 id 그대로)
+    const attendNameList = (r.attendIds||[]).map(id=>{ const m=allMembers.find(x=>x.id===id); return m?m.name:id; }).filter(Boolean);
+    const attendUID = 'att-'+r.id;
+    const attendHTML = attendNameList.length>0
+      ? `<div class="attend-row">
+          <span class="attend-toggle" onclick="toggleAttend('${attendUID}')">
+            ✅ 참석: ${attendNameList.length}명 <span id="arr-${attendUID}">▼</span>
+          </span>
+          <div class="attend-names" id="${attendUID}">${attendNameList.join(' · ')}</div>
+        </div>`
+      : '';
     const imgHTML = (r.images||[]).length>0 ? `<div class="record-images">${(r.images||[]).map(url=>`<a href="${driveLink(url)}" target="_blank"><img class="record-img" src="${driveThumb(url)}" loading="lazy" onerror="this.parentElement.style.display='none'"></a>`).join('')}</div>` : '';
     return `<div class="record-card">
       <div class="record-head">
