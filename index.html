@@ -716,15 +716,15 @@ function loadHomeRecord(){
           ${starterHTML}
         </div>`;
       }).join('');
-      // 참석자 명단: records.attendees → records.attendIds → schedule.attendees 순으로 fallback
-      const rawAttend = dayRecords.flatMap(r=>{
-        if(r.attendees&&r.attendees.length>0) return r.attendees;
-        if(r.attendIds&&r.attendIds.length>0) return r.attendIds;
+      // 참석자 명단: schedule 우선, 없으면 records.attendees, records.attendIds 순
+      const fromSchedule = schedAtt && schedAtt.length > 0 ? schedAtt : [];
+      const fromRecords = dayRecords.flatMap(r=>{
+        if(r.attendees && r.attendees.length > 0) return r.attendees;
+        if(r.attendIds && r.attendIds.length > 0) return r.attendIds;
         return [];
       });
-      const attendNames = rawAttend.length>0
-        ? rawAttend.filter((v,i,a)=>a.indexOf(v)===i)
-        : schedAtt;
+      const merged = fromSchedule.length > 0 ? fromSchedule : fromRecords;
+      const attendNames = merged.filter((v,i,a) => v && a.indexOf(v) === i);
       const attendUID = 'home-att-' + Math.random().toString(36).slice(2,8);
       const attendHTML2 = attendNames.length>0
         ? `<div style="margin-top:12px;" onclick="event.stopPropagation()">
