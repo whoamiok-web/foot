@@ -634,6 +634,16 @@ function homeScheduleTab(tab, btn){
   renderHomeSchedule();
 }
 
+/* ── 참석자 토글 (메인페이지) ── */
+function toggleHomeAttend(id){
+  const el = document.getElementById(id);
+  const btn = document.getElementById('btn-'+id);
+  if(!el) return;
+  const isOpen = el.style.display === 'block';
+  el.style.display = isOpen ? 'none' : 'block';
+  if(btn) btn.textContent = isOpen ? '▼' : '▲';
+}
+
 /* ── 회원명단 ── */
 const posEmoji = {FW:'🔥',MF:'⚡',DF:'🛡',GK:'🧤'};
 const posColor  = {FW:'#fff7ed',MF:'#eff6ff',DF:'#ecfdf5',GK:'#fdf4ff'};
@@ -707,14 +717,14 @@ function loadHomeRecord(){
       // 참석자 명단 (dayRecords 전체에서 수집)
       const attendNames = dayRecords.flatMap(r=>r.attendees||r.attendIds||[])
         .filter((v,i,a)=>a.indexOf(v)===i); // 중복 제거
-      const attendUID = 'home-att-'+Date.now();
+      const attendUID = 'home-att-' + Math.random().toString(36).slice(2,8);
       const attendHTML2 = attendNames.length>0
         ? `<div style="margin-top:12px;">
-            <span onclick="this.nextElementSibling.style.display=this.nextElementSibling.style.display==='none'?'block':'none';this.querySelector('.harr').textContent=this.nextElementSibling.style.display==='none'?'▼':'▲';"
+            <span onclick="toggleHomeAttend('${attendUID}')"
               style="display:inline-flex;align-items:center;gap:5px;padding:4px 10px;background:#f0fdf4;border:1.5px solid #bbf7d0;border-radius:7px;cursor:pointer;font-size:12px;font-weight:700;color:#1a7f3c;">
-              ✅ 참석: ${attendNames.length}명 <span class="harr">▼</span>
+              ✅ 참석: ${attendNames.length}명 <span id="btn-${attendUID}">▼</span>
             </span>
-            <div style="display:none;margin-top:8px;padding:10px 12px;background:#f9fafb;border-radius:8px;border:1px solid #e5e7eb;font-size:12px;color:#374151;line-height:1.8;">
+            <div id="${attendUID}" style="display:none;margin-top:8px;padding:10px 12px;background:#f9fafb;border-radius:8px;border:1px solid #e5e7eb;font-size:12px;color:#374151;line-height:1.8;">
               ${attendNames.join(' · ')}
             </div>
            </div>` : '';
