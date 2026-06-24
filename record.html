@@ -712,8 +712,10 @@ function renderRecords(){
       }).join('')}</div>`;
     }
     const scorersHTML='';
-    // 참석자 이름 목록 (attendIds → 이름, 없으면 id 그대로)
-    const attendNameList = (r.attendIds||[]).map(id=>{ const m=allMembers.find(x=>x.id===id); return m?m.name:id; }).filter(Boolean);
+    // 참석자 이름 목록: attendees(이름배열) 우선, 없으면 attendIds→이름 변환
+    const attendNameList = (r.attendees&&r.attendees.length>0)
+      ? r.attendees
+      : (r.attendIds||[]).map(id=>{ const m=allMembers.find(x=>x.id===id); return m?m.name:id; }).filter(Boolean);
     const attendUID = 'att-'+r.id;
     const attendHTML = attendNameList.length>0
       ? `<div class="attend-row">
