@@ -588,8 +588,9 @@ function hasResult(m){ return m.games&&m.games.some(g=>g.us!==''&&g.us!=null&&g.
 function renderHomeSchedule(){
   const list = document.getElementById('home-schedule-list');
   const filtered = homeMatches.filter(m=>homeTab==='result'?hasResult(m):!hasResult(m));
-  let top = [];
-  top = filtered.slice(0,3);
+  // 가장 최근 날짜 하루치만 표시
+  const latestDate = filtered.length>0 ? filtered[0].date : null;
+  const top = latestDate ? filtered.filter(m=>m.date===latestDate) : [];
   if(top.length===0){
     list.innerHTML='<div style="text-align:center;padding:32px;color:#9ca3af;font-size:14px;">등록된 경기가 없습니다.</div>';
     return;
