@@ -253,13 +253,16 @@ async function loadAll(){
       });
     }
 
-    // 경기일정에서 (record에서 연동된 것 제외 - fromRecord:true)
+    // schedule 노드 - players(이름배열)를 starterIds로 활용
     if(sData&&typeof sData==='object'){
       Object.entries(sData).forEach(([k,v])=>{
-        if(!v||!v.games||v.fromRecord) return; // 경기기록에서 연동된 건 중복 방지
+        if(!v||!v.games) return;
         v.games.forEach((g,i)=>{
-          if(g.starterIds&&g.starterIds.length>0){
-            allGames.push({ date:v.date, source:'schedule', info:`vs ${g.opp_name||'상대팀'}`, gameNum:i+1, starterIds:g.starterIds });
+          // players(이름배열) 또는 starterIds(id배열) 모두 지원
+          const starters = g.players||g.starterIds||[];
+          if(starters.length>0){
+            const res = (g.us!==undefined&&g.opp!==undefined) ? `${g.us}:${g.opp}` : '';
+            allGames.push({ date:v.date, source:'schedule', info:`vs ${g.opp_name||'무등FC'}`, gameNum:i+1, result:res, starterIds:starters });
           }
         });
       });
@@ -339,7 +342,7 @@ function renderDetail(){
       </div>
       <div class="game-detail-body">
         ${d.games.map(g=>{
-          const names = g.starterIds.map(id=>{ const m=allMembers.find(x=>x.id===id); return m?m.name:id; });
+          const names = g.starterIds.map(id=>{ const m=allMembers.find(x=>x.id===id||x.name===id); return m?m.name:id; });
           return `<div style="margin-bottom:12px;">
             <div style="font-size:12px;font-weight:700;color:var(--gray2);margin-bottom:5px;">${g.gameNum}게임 선발 (${names.length}명)</div>
             <div class="starter-chips">${names.map(n=>`<span class="starter-chip">👕 ${n}</span>`).join('')}</div>
