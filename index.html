@@ -588,8 +588,10 @@ function hasResult(m){ return m.games&&m.games.some(g=>g.us!==''&&g.us!=null&&g.
 function renderHomeSchedule(){
   const list = document.getElementById('home-schedule-list');
   const filtered = homeMatches.filter(m=>homeTab==='result'?hasResult(m):!hasResult(m));
-  // 최근 3일치 표시
-  const uniqueDates = [...new Set(filtered.map(m=>m.date))].slice(0,3);
+  // PC:3일치, 모바일:1일치
+  const isMobile = window.innerWidth < 768;
+  const dayLimit = isMobile ? 1 : 3;
+  const uniqueDates = [...new Set(filtered.map(m=>m.date))].slice(0, dayLimit);
   const top = filtered.filter(m=>uniqueDates.includes(m.date));
   if(top.length===0){
     list.innerHTML='<div style="text-align:center;padding:32px;color:#9ca3af;font-size:14px;">등록된 경기가 없습니다.</div>';
@@ -673,7 +675,8 @@ function loadHomeRecord(){
       if(data&&typeof data==='object') Object.entries(data).forEach(([k,v])=>{ if(v) records.push({id:k,...v}); });
       records.sort((a,b)=>(b.date||'').localeCompare(a.date||''));
       if(records.length===0){ el.innerHTML='<div style="text-align:center;padding:24px;color:#9ca3af;">등록된 경기기록이 없습니다.</div>'; return; }
-      // 가장 최근 날짜 하루치 전체
+      // PC:최근 1일치, 모바일:최근 1일치 (동일하게 하루치)
+      const isMobileRec = window.innerWidth < 768;
       const latestDate = records[0].date;
       const dayRecords = records.filter(r=>r.date===latestDate);
       const r0 = dayRecords[0];
@@ -886,6 +889,7 @@ function loadHomeBoard(){
 
 loadHomeNotice();
 loadHomeSchedule();
+window.addEventListener('resize', ()=>{ renderHomeSchedule(); });
 loadHomeRecord();
 loadHomeRating();
 loadHomeAttend();
