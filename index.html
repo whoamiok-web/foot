@@ -697,30 +697,21 @@ async function loadHomeRating(){
   const el = document.getElementById('home-rating-list');
   if(!el) return;
   try {
-    const [mData, rData, sData] = await Promise.all([
-      fetch(DB+'/members.json').then(r=>r.json()),
-      fetch(DB+'/records.json').then(r=>r.json()),
-      fetch(DB+'/matches.json').then(r=>r.json())
-    ]);
-    let members=[];
-    if(mData&&typeof mData==='object') Object.entries(mData).forEach(([k,v])=>{if(v) members.push({id:k,...v});});
-
-    // 선발 횟수 집계
-    let games=[];
-    if(rData&&typeof rData==='object') Object.entries(rData).forEach(([k,v])=>{
-      if(!v||!v.games) return;
-      v.games.forEach(g=>{ if(g.starterIds&&g.starterIds.length>0) games.push(g.starterIds); });
-    });
-    if(sData&&typeof sData==='object') Object.entries(sData).forEach(([k,v])=>{
-      if(!v||!v.games||v.fromRecord) return;
-      v.games.forEach(g=>{ if(g.starterIds&&g.starterIds.length>0) games.push(g.starterIds); });
-    });
-
-    const scores = members.map(m=>({
-      name: m.name,
-      score: games.filter(ids=>ids.includes(m.id)).length
-    })).sort((a,b)=>b.score-a.score).slice(0,5);
-
+    const sData = await fetch(DB+'/schedule.json').then(r=>r.json()).catch(()=>null);
+    // schedule.games.players(이름배열)에서 선발 횟수 집계
+    const scoreMap = {};
+    if(sData&&typeof sData==='object'){
+      Object.values(sData).forEach(v=>{
+        if(!v||!v.games) return;
+        v.games.forEach(g=>{
+          const starters = g.players||g.starterIds||[];
+          starters.forEach(name=>{ scoreMap[name]=(scoreMap[name]||0)+1; });
+        });
+      });
+    }
+    const scores = Object.entries(scoreMap)
+      .map(([name,score])=>({name,score}))
+      .sort((a,b)=>b.score-a.score).slice(0,5);
     const maxScore = scores[0]?.score||1;
     const medals = ['🥇','🥈','🥉','4','5'];
     el.innerHTML = scores.length===0
@@ -744,22 +735,21 @@ async function loadHomeAttend(){
   const el = document.getElementById('home-attend-list');
   if(!el) return;
   try {
-    const [mData, aData] = await Promise.all([
-      fetch(DB+'/members.json').then(r=>r.json()),
-      fetch(DB+'/attendances.json').then(r=>r.json())
-    ]);
-    let members=[], attendances=[];
-    if(mData&&typeof mData==='object') Object.entries(mData).forEach(([k,v])=>{if(v) members.push({id:k,...v});});
-    if(aData&&typeof aData==='object') Object.entries(aData).forEach(([k,v])=>{if(v) attendances.push({id:k,...v});});
-
-    const totalDays = new Set(attendances.map(a=>a.date||'')).size||1;
+    const sData = await fetch(DB+'/schedule.json').then(r=>r.json()).catch(()=>null);
+    // schedule.attendees(이름배열)에서 출석률 집계
+    const cntMap = {};
+    let totalDays = 0;
+    if(sData&&typeof sData==='object'){
+      totalDays = Object.keys(sData).length || 1;
+      Object.values(sData).forEach(v=>{
+        if(!v||!v.attendees) return;
+        v.attendees.forEach(name=>{ cntMap[name]=(cntMap[name]||0)+1; });
+      });
+    }
     const medals = ['🥇','🥈','🥉','4','5'];
-
-    const rates = members.map(m=>{
-      const cnt = attendances.filter(a=>(a.members||[]).includes(m.id)).length;
-      return { name:m.name, cnt, rate: Math.round(cnt/totalDays*100) };
-    }).sort((a,b)=>b.rate-a.rate||b.cnt-a.cnt).slice(0,5);
-
+    const rates = Object.entries(cntMap)
+      .map(([name,cnt])=>({ name, cnt, rate: Math.round(cnt/totalDays*100) }))
+      .sort((a,b)=>b.rate-a.rate||b.cnt-a.cnt).slice(0,5);
     el.innerHTML = rates.length===0
       ? '<div style="text-align:center;padding:16px;color:#9ca3af;font-size:13px;">데이터 없음</div>'
       : rates.map((m,i)=>`
