@@ -500,10 +500,10 @@ async function saveRecord(){
   const attendIds = getAttendIds();
   const body      = document.getElementById('f-body').value.trim();
   const images    = getImgUrls();
-  // 대표 게임(첫번째)
   const firstGame = games[0]||{};
   const homeaway = getHomeAway();
-  const data = { date, homeaway, games, attendIds, body, images,
+  const location = document.getElementById('f-loc') ? document.getElementById('f-loc').value.trim() : '';
+  const data = { date, homeaway, location, games, attendIds, body, images,
     opponent:  firstGame.opponent||'',
     scoreUs:   firstGame.scoreUs!=null?firstGame.scoreUs:null,
     scoreThem: firstGame.scoreThem!=null?firstGame.scoreThem:null,
@@ -513,50 +513,92 @@ async function saveRecord(){
   btn.disabled=true; btn.textContent='저장 중...';
   const reset=()=>{ btn.disabled=false; btn.textContent=editId?'수정하기':'등록하기'; };
 
-  /* 경기일정 데이터 */
-  // schedule.html 형식으로 변환: games = [{opp_name, us, opp}]
-  const scheduleGames = games.map(g=>({
-    opp_name: g.opponent||'상대팀',
-    us:  g.scoreUs!=null  ? String(g.scoreUs)  : '',
-    opp: g.scoreThem!=null? String(g.scoreThem): '',
+  // 출석자 이름 목록 (attendIds → 이름)
+  const attendNames = attendIds.map(id=>{ const m=allMembers.find(x=>x.id===id); return m?m.name:id; }).filter(Boolean);
+
+  /* ── /matches 노드 (경기일정 페이지) ── */
+  const matchGames = games.map(g=>({
+    opp_name:   g.opponent||'상대팀',
+    us:         g.scoreUs!=null  ? String(g.scoreUs)  : '',
+    opp:        g.scoreThem!=null? String(g.scoreThem): '',
     starters:   g.starters||'',
-    starterIds: g.starterIds||[]
+    starterIds: g.starterIds||[],
+    players:    (g.starterIds||[]).map(id=>{ const m=allMembers.find(x=>x.id===id); return m?m.name:id; }).filter(Boolean)
   }));
   const matchData = {
-    date,
-    homeaway: homeaway,
-    location: '',
+    date, homeaway, location,
     note: body ? body.substring(0,50) : '',
-    games: scheduleGames,
+    games: matchGames,
+    attendees: attendNames,
     fromRecord: true,
     updatedAt: Date.now()
   };
-  /* 출석률 데이터 */
-  const attendData = { date, memo:games.length>0?`vs ${games.map(g=>g.opponent||'상대팀').join(', ')}`:'경기', members:attendIds, fromRecord:true, updatedAt:Date.now() };
+
+  /* ── /schedule 노드 (선발점수·출석률 페이지) ── */
+  const scheduleGames = games.map(g=>({
+    opp_name:   g.opponent||'상대팀',
+    us:         g.scoreUs!=null  ? String(g.scoreUs)  : '',
+    opp:        g.scoreThem!=null? String(g.scoreThem): '',
+    starters:   g.starters||'',
+    starterIds: g.starterIds||[],
+    players:    (g.starterIds||[]).map(id=>{ const m=allMembers.find(x=>x.id===id); return m?m.name:id; }).filter(Boolean)
+  }));
+  const scheduleData = {
+    date, homeaway, location,
+    opponent: firstGame.opponent||'',
+    games: scheduleGames,
+    attendees: attendNames,
+    fromRecord: true,
+    updatedAt: Date.now()
+  };
+
+  /* ── /attendances 노드 (구버전 호환) ── */
+  const attendData = {
+    date,
+    memo: games.length>0 ? `vs ${games.map(g=>g.opponent||'상대팀').join(', ')}` : '경기',
+    members: attendIds,
+    fromRecord: true,
+    updatedAt: Date.now()
+  };
 
   try {
     if(editId){
+      // 경기기록 수정
       await fetch(DB+'/records/'+editId+'.json',{method:'PATCH',headers:{'Content-Type':'application/json'},body:JSON.stringify(data)});
-      const rec=allRecords.find(r=>r.id===editId);
+      const rec = allRecords.find(r=>r.id===editId);
       if(rec){
-        if(rec.linkedMatchId){ const mPatch={...matchData,games:games.map(g=>({opp_name:g.opponent||'상대팀',us:g.scoreUs!=null?String(g.scoreUs):'',opp:g.scoreThem!=null?String(g.scoreThem):''}))}; await fetch(DB+'/matches/'+rec.linkedMatchId+'.json',{method:'PATCH',headers:{'Content-Type':'application/json'},body:JSON.stringify(mPatch)}).catch(()=>{}); }
-        if(rec.linkedAttendId) await fetch(DB+'/attendances/'+rec.linkedAttendId+'.json',{method:'PATCH',headers:{'Content-Type':'application/json'},body:JSON.stringify(attendData)}).catch(()=>{});
+        // /matches 업데이트
+        if(rec.linkedMatchId){
+          await fetch(DB+'/matches/'+rec.linkedMatchId+'.json',{method:'PATCH',headers:{'Content-Type':'application/json'},body:JSON.stringify(matchData)}).catch(()=>{});
+        }
+        // /schedule 업데이트 (날짜 키로)
+        await fetch(DB+'/schedule/'+date+'.json',{method:'PATCH',headers:{'Content-Type':'application/json'},body:JSON.stringify(scheduleData)}).catch(()=>{});
+        // /attendances 업데이트
+        if(rec.linkedAttendId){
+          await fetch(DB+'/attendances/'+rec.linkedAttendId+'.json',{method:'PATCH',headers:{'Content-Type':'application/json'},body:JSON.stringify(attendData)}).catch(()=>{});
+        }
       }
       const i=allRecords.findIndex(r=>r.id===editId);
       if(i>-1) allRecords[i]={...allRecords[i],...data};
     } else {
-      data.createdAt=Date.now();
-      const recRes=await fetch(DB+'/records.json',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(data)}).then(r=>r.json());
-      const recordId=recRes.name;
+      data.createdAt = Date.now();
+      // 경기기록 신규 등록
+      const recRes = await fetch(DB+'/records.json',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(data)}).then(r=>r.json());
+      const recordId = recRes.name;
       let linkedMatchId=null, linkedAttendId=null;
 
+      // /matches 신규 등록
       if(games.length>0){
-        const mRes=await fetch(DB+'/matches.json',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({...matchData,createdAt:Date.now()})}).then(r=>r.json()).catch(()=>({}));
-        linkedMatchId=mRes.name||null;
+        const mRes = await fetch(DB+'/matches.json',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({...matchData,createdAt:Date.now()})}).then(r=>r.json()).catch(()=>({}));
+        linkedMatchId = mRes.name||null;
       }
+      // /schedule 날짜 키로 저장 (PUT - 날짜별 덮어쓰기)
+      await fetch(DB+'/schedule/'+date+'.json',{method:'PUT',headers:{'Content-Type':'application/json'},body:JSON.stringify({...scheduleData,createdAt:Date.now()})}).catch(()=>{});
+
+      // /attendances 신규 등록
       if(attendIds.length>0){
-        const aRes=await fetch(DB+'/attendances.json',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({...attendData,createdAt:Date.now()})}).then(r=>r.json()).catch(()=>({}));
-        linkedAttendId=aRes.name||null;
+        const aRes = await fetch(DB+'/attendances.json',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({...attendData,createdAt:Date.now()})}).then(r=>r.json()).catch(()=>({}));
+        linkedAttendId = aRes.name||null;
       }
       if(linkedMatchId||linkedAttendId){
         await fetch(DB+'/records/'+recordId+'.json',{method:'PATCH',headers:{'Content-Type':'application/json'},body:JSON.stringify({linkedMatchId,linkedAttendId})}).catch(()=>{});
@@ -565,30 +607,32 @@ async function saveRecord(){
     }
     allRecords.sort((a,b)=>(b.date||'').localeCompare(a.date||''));
     renderRecords(); closeModal();
-    const synced=[(games.length>0)?'경기일정':'',(attendIds.length>0)?'출석률':''].filter(Boolean);
-    showToast('✅ 저장 완료!'+(synced.length?` (${synced.join('·')} 자동 반영)`:'')); reset();
+    showToast('✅ 저장 완료! (경기일정·선발점수·출석률 자동 반영)'); reset();
   } catch(e){ showToast('❌ 실패: '+e.message); reset(); }
 }
 
 /* ── 삭제 ── */
 async function delRecord(id){
-  if(!confirm('이 기록을 삭제하시겠습니까?\n연동된 경기일정·출석률 데이터도 함께 삭제됩니다.')) return;
+  if(!confirm('이 기록을 삭제하시겠습니까?\n연동된 경기일정·선발점수·출석률 데이터도 함께 삭제됩니다.')) return;
   try {
     const rec = allRecords.find(r=>r.id===id);
-    // 1) 연동된 경기일정 삭제
+    // 1) /matches 삭제
     if(rec && rec.linkedMatchId){
       await fetch(DB+'/matches/'+rec.linkedMatchId+'.json', {method:'DELETE'}).catch(()=>{});
     }
-    // 2) 연동된 출석률 삭제
+    // 2) /schedule 삭제 (날짜 키)
+    if(rec && rec.date){
+      await fetch(DB+'/schedule/'+rec.date+'.json', {method:'DELETE'}).catch(()=>{});
+    }
+    // 3) /attendances 삭제
     if(rec && rec.linkedAttendId){
       await fetch(DB+'/attendances/'+rec.linkedAttendId+'.json', {method:'DELETE'}).catch(()=>{});
     }
-    // 3) 경기기록 삭제
+    // 4) 경기기록 삭제
     await fetch(DB+'/records/'+id+'.json', {method:'DELETE'});
     allRecords = allRecords.filter(r=>r.id!==id);
     renderRecords();
-    const deleted = [rec&&rec.linkedMatchId?'경기일정':'', rec&&rec.linkedAttendId?'출석률':''].filter(Boolean);
-    showToast('✅ 삭제 완료!' + (deleted.length ? ` (${deleted.join('·')} 함께 삭제)` : ''));
+    showToast('✅ 삭제 완료! (경기일정·선발점수·출석률 함께 삭제)');
   } catch(e){ showToast('❌ 실패: '+e.message); }
 }
 
