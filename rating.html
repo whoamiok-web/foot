@@ -243,28 +243,40 @@ async function loadAll(){
     });
     allMembers.sort((a,b)=>(parseInt(a.num)||999)-(parseInt(b.num)||999)||a.name.localeCompare(b.name,'ko'));
 
-    // 게임별 선발 데이터 수집
+    // id → 이름 변환 헬퍼 (Firebase ID면 이름으로, 이름이면 그대로)
+    const idMap = {}; // firebase key → name
+    if(mRaw&&typeof mRaw==='object'){
+      Object.entries(mRaw).forEach(([k,v])=>{ if(v&&v.name) idMap[k]=v.name; });
+    }
+    function toNames(arr){
+      return (arr||[]).map(x=>{
+        if(idMap[x]) return idMap[x]; // Firebase ID → 이름
+        return x; // 이미 이름
+      }).filter(Boolean);
+    }
+
+    // 게임별 선발 데이터 수집 (모두 이름 기반으로 통일)
     allGames=[];
 
-    // 경기기록에서
+    // /records 노드 - starterIds(Firebase ID) → 이름으로 변환
     if(rData&&typeof rData==='object'){
       Object.entries(rData).forEach(([k,v])=>{
         if(!v||!v.games) return;
         v.games.forEach((g,i)=>{
-          if(g.starterIds&&g.starterIds.length>0){
-            allGames.push({ date:v.date, source:'record', info:`vs ${g.opponent||'상대팀'}`, gameNum:i+1, starterIds:g.starterIds });
+          const starters = toNames(g.starterIds||[]);
+          if(starters.length>0){
+            allGames.push({ date:v.date, source:'record', info:`vs ${g.opponent||'상대팀'}`, gameNum:i+1, starterIds:starters });
           }
         });
       });
     }
 
-    // schedule 노드 - players(이름배열)를 starterIds로 활용
+    // /schedule 노드 - players(이름) 또는 starterIds(ID) 모두 지원
     if(sData&&typeof sData==='object'){
       Object.entries(sData).forEach(([k,v])=>{
         if(!v||!v.games) return;
         v.games.forEach((g,i)=>{
-          // players(이름배열) 또는 starterIds(id배열) 모두 지원
-          const starters = g.players||g.starterIds||[];
+          const starters = toNames(g.players||g.starterIds||[]);
           if(starters.length>0){
             const res = (g.us!==undefined&&g.opp!==undefined) ? `${g.us}:${g.opp}` : '';
             allGames.push({ date:v.date, source:'schedule', info:`vs ${g.opp_name||'무등FC'}`, gameNum:i+1, result:res, starterIds:starters });
