@@ -610,7 +610,7 @@ function renderHomeSchedule(){
         <span style="font-size:11px;color:#9ca3af;width:36px;flex-shrink:0;">${i+1}게임</span>
         <span style="font-size:13px;font-weight:800;color:#1a7f3c;flex-shrink:0;">중흥FC</span>${sc}
         <span style="font-size:13px;font-weight:700;flex-shrink:0;">${g.opp_name||'상대팀'}</span>
-        ${(g.starterIds&&g.starterIds.length>0)?`<span style="font-size:11px;color:#9ca3af;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;max-width:160px;flex:1;">👕 ${g.starters||''}</span>`:''}
+
       </div>`;
     }).join('');
     return `<div class="match-card" onclick="location.href='schedule.html'" style="cursor:pointer;flex-direction:column;gap:10px;padding:18px 20px;">
