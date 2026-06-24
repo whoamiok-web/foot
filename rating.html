@@ -218,13 +218,16 @@ const posCls = {FW:'pos-fw',MF:'pos-mf',DF:'pos-df',GK:'pos-gk'};
 /* 데이터 로드 */
 async function loadAll(){
   try {
-    const [rData, sData] = await Promise.all([
+    const [rData, sData, mRaw] = await Promise.all([
       fetch(DB+'/records.json').then(r=>r.json()).catch(()=>null),
-      fetch(DB+'/schedule.json').then(r=>r.json()).catch(()=>null)
+      fetch(DB+'/schedule.json').then(r=>r.json()).catch(()=>null),
+      fetch(DB+'/members.json').then(r=>r.json()).catch(()=>null)
     ]);
-    const mData = null; // members는 schedule에서 수집
-
-    // 회원
+    // members 노드에서 포지션·등번호 가져오기
+    const memberMap = {};
+    if(mRaw&&typeof mRaw==='object'){
+      Object.entries(mRaw).forEach(([k,v])=>{ if(v&&v.name) memberMap[v.name]={pos:v.pos||'',num:v.num||''}; });
+    }
     // schedule의 games[].players(이름배열)에서 회원 수집
     const nameSet = new Set();
     if(sData&&typeof sData==='object'){
@@ -234,9 +237,11 @@ async function loadAll(){
       });
     }
     allMembers=[];
-    [...nameSet].sort((a,b)=>a.localeCompare(b,'ko')).forEach((name,i)=>{
-      allMembers.push({id:name, name, num:i+1});
+    [...nameSet].forEach(name=>{
+      const info = memberMap[name]||{};
+      allMembers.push({id:name, name, pos:info.pos||'', num:info.num||''});
     });
+    allMembers.sort((a,b)=>(parseInt(a.num)||999)-(parseInt(b.num)||999)||a.name.localeCompare(b.name,'ko'));
 
     // 게임별 선발 데이터 수집
     allGames=[];
