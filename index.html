@@ -636,6 +636,7 @@ function homeScheduleTab(tab, btn){
 
 /* ── 참석자 토글 (메인페이지) ── */
 function toggleHomeAttend(id){
+  event.stopPropagation();
   const el = document.getElementById(id);
   const btn = document.getElementById('btn-'+id);
   if(!el) return;
@@ -727,15 +728,15 @@ function loadHomeRecord(){
       const attendNames = merged.filter((v,i,a) => v && a.indexOf(v) === i);
       const attendUID = 'home-att-' + Math.random().toString(36).slice(2,8);
       const attendHTML2 = attendNames.length>0
-        ? `<div style="margin-top:12px;" onclick="event.stopPropagation()">
-            <span onclick="toggleHomeAttend('${attendUID}')"
-              style="display:inline-flex;align-items:center;gap:5px;padding:4px 10px;background:#f0fdf4;border:1.5px solid #bbf7d0;border-radius:7px;cursor:pointer;font-size:12px;font-weight:700;color:#1a7f3c;">
-              ✅ 참석: ${attendNames.length}명 <span id="btn-${attendUID}">▼</span>
-            </span>
-            <div id="${attendUID}" style="display:none;margin-top:8px;padding:10px 12px;background:#f9fafb;border-radius:8px;border:1px solid #e5e7eb;font-size:12px;color:#374151;line-height:1.8;">
+        ? `<div style="margin-top:14px;border-top:1px solid #f3f4f6;padding-top:12px;">
+            <div onclick="toggleHomeAttend('${attendUID}')"
+              style="display:inline-flex;align-items:center;gap:5px;padding:6px 12px;background:#f0fdf4;border:1.5px solid #bbf7d0;border-radius:8px;cursor:pointer;font-size:13px;font-weight:700;color:#1a7f3c;user-select:none;">
+              ✅ 참석: ${attendNames.length}명 <span id="btn-${attendUID}" style="font-size:11px;">▼</span>
+            </div>
+            <div id="${attendUID}" style="display:none;margin-top:8px;padding:10px 12px;background:#f9fafb;border-radius:8px;border:1px solid #e5e7eb;font-size:12px;color:#374151;line-height:2;">
               ${attendNames.join(' · ')}
             </div>
-           </div>` : '';
+           </div>` : `<div style="margin-top:14px;border-top:1px solid #f3f4f6;padding-top:12px;font-size:12px;color:#9ca3af;">참석 정보 없음</div>`;
       const imgs = (r0.images||[]).slice(0,3);
       const imgHTML = imgs.length>0 ? `<div style="display:grid;grid-template-columns:repeat(${imgs.length},1fr);gap:8px;margin-top:12px;">${
         imgs.map(url=>`<img src="${driveThumbRec(url)}" style="width:100%;aspect-ratio:4/3;object-fit:cover;border-radius:8px;" onerror="this.style.display='none'" loading="lazy">`).join('')
