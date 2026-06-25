@@ -235,6 +235,8 @@ document.querySelectorAll('.nav-links a').forEach(a=>{
   <div class="mbox">
     <h3 id="modal-title">경기기록 작성</h3>
     <div class="fg"><label>경기 날짜 *</label><input type="date" id="f-date"></div>
+<div class="fg"><label>📍 경기장소</label><input type="text" id="f-loc" placeholder="예) 전대사대부중 운동장"></div>
+<div class="fg"><label>📝 메모</label><input type="text" id="f-note" placeholder="예) 우천으로 단축 경기 등 특이사항"></div>
 
     <div class="fg">
       <label>홈 / 원정</label>
@@ -379,8 +381,10 @@ function openModal(r){
   editId = r ? r.id : null;
   document.getElementById('modal-title').textContent = r ? '경기기록 수정' : '경기기록 작성';
   document.getElementById('btn-submit').textContent  = r ? '수정하기' : '등록하기';
-  document.getElementById('f-date').value      = r ? (r.date||'') : '';
-  document.getElementById('f-body').value = r ? (r.body||'') : '';
+  document.getElementById('f-date').value  = r ? (r.date||'') : '';
+  document.getElementById('f-loc').value   = r ? (r.location||'') : '';
+  document.getElementById('f-note').value  = r ? (r.note||'') : '';
+  document.getElementById('f-body').value  = r ? (r.body||'') : '';
   setHomeAway(r ? (r.homeaway||'') : '');
   buildGameList(r ? (r.games||[]) : []);
   buildImgInputs(r ? (r.images||[]) : []);
@@ -507,6 +511,7 @@ async function saveRecord(){
   const firstGame = games[0]||{};
   const homeaway  = getHomeAway();
   const location  = document.getElementById('f-loc') ? document.getElementById('f-loc').value.trim() : '';
+  const note      = document.getElementById('f-note') ? document.getElementById('f-note').value.trim() : '';
   const btn = document.getElementById('btn-submit');
   btn.disabled=true; btn.textContent='저장 중...';
   const reset=()=>{ btn.disabled=false; btn.textContent=editId?'수정하기':'등록하기'; };
@@ -533,7 +538,7 @@ async function saveRecord(){
 
   // /records 저장용
   const recordData = {
-    date, homeaway, location, body, images,
+    date, homeaway, location, note, body, images,
     games:     builtGames,
     attendIds,
     attendees: attendNames,
@@ -716,6 +721,7 @@ function renderRecords(){
     const attendNameList = (r.attendees&&r.attendees.length>0)
       ? r.attendees
       : (r.attendIds||[]).map(id=>{ const m=allMembers.find(x=>x.id===id); return m?m.name:id; }).filter(Boolean);
+    const locNoteHTML = [r.location, r.note].filter(Boolean).map(t=>`<span style="font-size:12px;color:#6b7280;">${t}</span>`).join('<span style="color:#d1d5db;margin:0 4px;">|</span>');
     const attendUID = 'att-'+r.id;
     const attendHTML = attendNameList.length>0
       ? `<div class="attend-row">
