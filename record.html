@@ -553,7 +553,7 @@ async function saveRecord(){
     date, homeaway, location,
     games: builtGames,
     attendees: attendNames,
-    note: body ? body.substring(0,50) : '',
+    note: note || (body ? body.substring(0,50) : ''),
     fromRecord: true,
     updatedAt: Date.now()
   };
@@ -742,6 +742,7 @@ function renderRecords(){
         </div>
       </div>
       <div class="record-body">
+        ${r.location||r.note ? `<div style='font-size:12px;color:#6b7280;margin-bottom:6px;display:flex;gap:6px;flex-wrap:wrap;'>${r.location?`<span>📍 ${r.location}</span>`:''} ${r.note?`<span style='color:#9ca3af;'>💬 ${r.note}</span>`:''}</div>` : ''}
         ${resultHTML}${scorersHTML}${attendHTML}
         ${r.body?`<div class="record-content">${r.body}</div>`:''}
         ${imgHTML}
