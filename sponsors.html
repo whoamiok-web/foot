@@ -253,8 +253,11 @@ function filterCat(cat, btn) {
 }
 
 function driveThumb(url) {
-  var m = url.match(/\/d\/([^\/]+)/);
-  return m ? 'https://drive.google.com/thumbnail?id=' + m[1] + '&sz=w400' : url;
+  if (!url) return '';
+  // /file/d/ID/view 형태
+  var m = url.match(/[\/=]([A-Za-z0-9_-]{25,})/);
+  if (m) return 'https://lh3.googleusercontent.com/d/' + m[1] + '=w400';
+  return url;
 }
 
 function renderSponsors() {
@@ -280,7 +283,7 @@ function renderSponsors() {
   grid.innerHTML = list.map(function(s){
     var catStyle = catColors[s.category] || catColors.etc;
     var imgHTML = s.img
-      ? '<div class="sp-thumb"><img src="' + driveThumb(s.img) + '" loading="lazy" onerror="this.parentElement.innerHTML='<span style=&quot;font-size:48px;&quot;>&#127978;</span>'"></div>'
+      ? '<div class="sp-thumb"><img src="' + driveThumb(s.img) + '" loading="lazy" onerror="this.onerror=null;this.parentElement.innerHTML='<span style=&quot;font-size:48px;&quot;>🏪</span>'"></div>'
       : '<div class="sp-thumb"><span>🏪</span></div>';
     var benefitHTML = s.benefit
       ? '<div class="sp-benefit">🎁 회원 혜택 — <span style="font-weight:400;color:#374151;">' + s.benefit + '</span></div>' : '';
