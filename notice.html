@@ -37,6 +37,11 @@
   .nav-links { display:flex;gap:18px;list-style:none;flex-wrap:nowrap; }
   .nav-links a { color:#9ca3af;font-size:13px;font-weight:500;text-decoration:none;cursor:pointer;transition:color .2s;white-space:nowrap; }
   .nav-links a:hover,.nav-links a.active { color:#fff; }
+  .nav-item-drop { position:relative; }
+  .nav-dropdown { display:none; position:absolute; top:calc(100% + 12px); left:50%; transform:translateX(-50%); background:#1f2937; border-radius:10px; padding:6px 0; min-width:130px; box-shadow:0 8px 24px rgba(0,0,0,.3); z-index:200; }
+  .nav-item-drop.open .nav-dropdown { display:block; }
+  .nav-dropdown a { display:block; padding:9px 18px; color:#d1d5db; font-size:13px; text-decoration:none; white-space:nowrap; }
+  .nav-dropdown a:hover { background:#374151 !important; color:#fff !important; }
 
   .page-header { background:linear-gradient(135deg,#0f2027 0%,#1a4a2e 60%,#203a43 100%);padding:40px 40px 36px; }
   .page-header-inner { max-width:900px;margin:0 auto; }
