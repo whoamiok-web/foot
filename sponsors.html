@@ -117,6 +117,22 @@ nav{position:sticky;top:0;z-index:100;background:#111827;display:flex;align-item
     a.addEventListener('click', function(){ nl.classList.remove('open'); });
   });
 })();
+// 소개 드롭다운 클릭 토글
+document.querySelectorAll('.nav-item-drop').forEach(function(drop){
+  var toggle = drop.querySelector('a');
+  if(!toggle) return;
+  toggle.addEventListener('click',function(e){
+    e.preventDefault();
+    var isOpen = drop.classList.contains('open');
+    document.querySelectorAll('.nav-item-drop').forEach(function(d){ d.classList.remove('open'); });
+    if(!isOpen) drop.classList.add('open');
+  });
+});
+document.addEventListener('click',function(e){
+  if(!e.target.closest('.nav-item-drop')){
+    document.querySelectorAll('.nav-item-drop').forEach(function(d){ d.classList.remove('open'); });
+  }
+});
 </script>
 
 <div class="page-header">
