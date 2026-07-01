@@ -114,7 +114,11 @@ nav{position:sticky;top:0;z-index:100;background:#111827;display:flex;align-item
   var nl = document.getElementById('nav-links');
   hm.addEventListener('click', function(){ nl.classList.toggle('open'); });
   nl.querySelectorAll('a').forEach(function(a){
-    a.addEventListener('click', function(){ nl.classList.remove('open'); });
+    a.addEventListener('click', function(){
+      // 드롭다운 토글 버튼은 닫지 않음
+      if(a.closest('.nav-item-drop') && !a.closest('.nav-dropdown')) return;
+      nl.classList.remove('open');
+    });
   });
 })();
 // 소개 드롭다운 클릭 토글
