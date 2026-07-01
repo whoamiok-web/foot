@@ -1,0 +1,431 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<title>협찬·제휴 - 중흥FC</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700;900&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+:root{
+  --green:#1a7f3c;--green2:#23a852;--dark:#111827;
+  --gray1:#374151;--gray2:#6b7280;--gray3:#d1d5db;
+  --bg:#f4f6f8;--white:#ffffff;
+  --card-shadow:0 2px 16px rgba(0,0,0,.07);--radius:14px;
+}
+body{font-family:'Noto Sans KR','Apple SD Gothic Neo','Malgun Gothic',sans-serif;background:var(--bg);color:var(--dark);min-height:100vh;}
+
+/* NAV - notice.html과 동일 */
+nav{position:sticky;top:0;z-index:100;background:#111827;display:flex;align-items:center;justify-content:space-between;padding:0 24px;height:60px;box-shadow:0 2px 12px rgba(0,0,0,.3);gap:16px;}
+.nav-logo{display:flex;align-items:center;gap:10px;font-size:20px;font-weight:900;color:#fff;cursor:pointer;white-space:nowrap;text-decoration:none;}
+.nav-links{display:flex;gap:18px;list-style:none;flex-wrap:nowrap;}
+.nav-links a{color:#9ca3af;font-size:13px;font-weight:500;text-decoration:none;cursor:pointer;transition:color .2s;white-space:nowrap;}
+.nav-links a:hover,.nav-links a.active{color:#fff;}
+.nav-item-drop{position:relative;padding-bottom:12px;margin-bottom:-12px;}
+.nav-dropdown{position:absolute;top:100%;left:50%;transform:translateX(-50%);background:#1f2937;border-radius:10px;padding:6px 0;min-width:120px;box-shadow:0 8px 24px rgba(0,0,0,.3);opacity:0;visibility:hidden;transition:opacity .15s,visibility .15s;z-index:200;}
+.nav-item-drop:hover .nav-dropdown{opacity:1;visibility:visible;}
+.nav-dropdown a{display:block;padding:9px 18px;color:#d1d5db;font-size:13px;font-weight:500;white-space:nowrap;text-decoration:none;}
+.nav-dropdown a:hover{background:#374151!important;color:#fff!important;}
+.hamburger{display:none;flex-direction:column;justify-content:center;gap:5px;width:36px;height:36px;background:none;border:none;cursor:pointer;padding:4px;}
+.hamburger span{display:block;height:2px;background:#fff;border-radius:2px;transition:all .3s;}
+@media(max-width:640px){
+  .hamburger{display:flex;}
+  .nav-links{display:none;flex-direction:column;align-items:stretch;gap:0;position:absolute;top:60px;left:0;right:0;background:#1f2937;padding:8px 0;box-shadow:0 8px 24px rgba(0,0,0,.3);z-index:99;}
+  .nav-links.open{display:flex;}
+  .nav-links li{width:100%;}
+  .nav-links>li>a{display:block;padding:13px 20px;font-size:15px;color:#d1d5db;}
+  .nav-links>li>a:hover,.nav-links>li>a.active{background:#1a7f3c;color:#fff;}
+  .nav-item-drop .nav-dropdown{position:static;transform:none;opacity:1;visibility:visible;box-shadow:none;border-radius:0;padding:0;background:#111827;width:100%;}
+  .nav-dropdown a{padding:12px 20px 12px 40px;font-size:14px;color:#9ca3af;border-left:3px solid #1a7f3c;}
+}
+
+/* PAGE HEADER */
+.page-header{background:linear-gradient(135deg,#0f2027 0%,#1a4a2e 60%,#203a43 100%);padding:40px 24px 36px;}
+.page-header-inner{max-width:960px;margin:0 auto;}
+.breadcrumb{font-size:12px;color:#6b7280;margin-bottom:10px;display:flex;align-items:center;gap:6px;}
+.breadcrumb .cur{color:#23a852;font-weight:600;}
+.page-header h1{font-size:28px;font-weight:900;color:#fff;}
+.page-header p{font-size:14px;color:#9ca3af;margin-top:6px;}
+
+/* MAIN */
+.main-wrap{max-width:960px;margin:0 auto;padding:36px 24px 80px;}
+
+/* ADMIN BAR */
+.admin-bar{background:#fffbeb;border:1.5px solid #fde68a;border-radius:12px;padding:12px 20px;margin-bottom:24px;display:none;align-items:center;gap:12px;flex-wrap:wrap;}
+.admin-bar.show{display:flex;}
+.admin-label{font-size:13px;font-weight:700;color:#92400e;}
+.btn-add{background:var(--green);color:#fff;border:none;border-radius:8px;padding:8px 18px;font-size:13px;font-weight:700;cursor:pointer;transition:background .2s;}
+.btn-add:hover{background:#155f2e;}
+.btn-admin-toggle{margin-left:auto;background:none;border:1.5px solid var(--gray3);border-radius:8px;padding:6px 14px;font-size:12px;color:var(--gray2);cursor:pointer;}
+
+/* FILTER */
+.filter-bar{display:flex;align-items:center;gap:10px;margin-bottom:24px;flex-wrap:wrap;}
+.cat-btn{padding:7px 18px;border-radius:8px;border:1.5px solid var(--gray3);background:var(--white);font-size:13px;font-weight:600;color:var(--gray2);cursor:pointer;transition:all .2s;font-family:inherit;}
+.cat-btn.active{background:var(--dark);color:#fff;border-color:var(--dark);}
+.search-box{display:flex;align-items:center;gap:8px;background:var(--white);border:1.5px solid var(--gray3);border-radius:9px;padding:7px 14px;margin-left:auto;}
+.search-box input{border:none;outline:none;font-size:13px;font-family:inherit;color:var(--dark);width:140px;background:transparent;}
+
+/* GRID */
+.sponsors-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:20px;}
+@media(max-width:900px){.sponsors-grid{grid-template-columns:repeat(2,1fr);}}
+@media(max-width:540px){.sponsors-grid{grid-template-columns:1fr;}}
+
+/* CARD */
+.sp-card{background:var(--white);border-radius:var(--radius);box-shadow:var(--card-shadow);overflow:hidden;transition:transform .2s,box-shadow .2s;}
+.sp-card:hover{transform:translateY(-3px);box-shadow:0 8px 28px rgba(0,0,0,.12);}
+.sp-img{width:100%;aspect-ratio:4/3;object-fit:cover;background:#f3f4f6;display:flex;align-items:center;justify-content:center;font-size:40px;}
+.sp-img img{width:100%;height:100%;object-fit:cover;}
+.sp-body{padding:16px 18px 18px;}
+.sp-category{display:inline-block;font-size:11px;font-weight:700;padding:3px 8px;border-radius:5px;margin-bottom:8px;}
+.sp-name{font-size:17px;font-weight:900;margin-bottom:4px;}
+.sp-owner{font-size:12px;color:var(--gray2);margin-bottom:10px;}
+.sp-desc{font-size:13px;color:var(--gray1);line-height:1.7;margin-bottom:12px;}
+.sp-benefit{background:#f0fdf4;border:1.5px solid #bbf7d0;border-radius:8px;padding:8px 12px;font-size:12px;color:var(--green);font-weight:700;margin-bottom:12px;}
+.sp-benefit span{font-weight:400;color:#374151;}
+.sp-links{display:flex;gap:8px;flex-wrap:wrap;}
+.sp-link{display:inline-flex;align-items:center;gap:4px;padding:5px 12px;border-radius:6px;font-size:12px;font-weight:600;text-decoration:none;border:1.5px solid var(--gray3);color:var(--gray1);transition:all .2s;}
+.sp-link:hover{border-color:var(--green);color:var(--green);}
+.sp-link.primary{background:var(--green);color:#fff;border-color:var(--green);}
+.sp-link.primary:hover{background:#155f2e;}
+.sp-admin-btns{display:none;gap:6px;margin-top:10px;}
+.sp-admin-btns.show{display:flex;}
+.btn-edit{padding:5px 12px;border-radius:6px;border:1.5px solid #fde68a;background:#fffbeb;color:#92400e;font-size:12px;font-weight:600;cursor:pointer;}
+.btn-del{padding:5px 12px;border-radius:6px;border:1.5px solid #fca5a5;background:#fef2f2;color:#dc2626;font-size:12px;font-weight:600;cursor:pointer;}
+
+/* EMPTY */
+.empty{text-align:center;padding:80px 20px;color:var(--gray2);font-size:14px;}
+
+/* MODAL */
+.modal-bg{display:none;position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:500;align-items:center;justify-content:center;padding:20px;}
+.modal-bg.open{display:flex;}
+.modal{background:#fff;border-radius:16px;padding:28px;max-width:520px;width:100%;max-height:90vh;overflow-y:auto;}
+.modal h3{font-size:17px;font-weight:800;margin-bottom:20px;}
+.fg{margin-bottom:14px;}
+.fg label{display:block;font-size:12px;font-weight:700;color:var(--gray2);margin-bottom:5px;}
+.fg input,.fg textarea,.fg select{width:100%;padding:10px 13px;border:1.5px solid var(--gray3);border-radius:8px;font-size:14px;font-family:inherit;outline:none;}
+.fg input:focus,.fg textarea:focus,.fg select:focus{border-color:var(--green);}
+.fg textarea{min-height:80px;resize:vertical;line-height:1.6;}
+.modal-btns{display:flex;gap:10px;margin-top:20px;}
+.btn-save{flex:1;background:var(--green);color:#fff;border:none;border-radius:8px;padding:12px;font-size:14px;font-weight:700;cursor:pointer;}
+.btn-cancel{flex:1;background:#f3f4f6;border:none;border-radius:8px;padding:12px;font-size:14px;font-weight:600;cursor:pointer;color:var(--gray1);}
+
+/* PW */
+.pw-modal{display:none;position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:600;align-items:center;justify-content:center;}
+.pw-modal.open{display:flex;}
+.pw-box{background:#fff;border-radius:16px;padding:28px;width:320px;text-align:center;}
+.pw-box h3{font-size:16px;font-weight:800;margin-bottom:16px;}
+.pw-input{width:100%;padding:11px 16px;border:1.5px solid var(--gray3);border-radius:9px;font-size:15px;font-family:inherit;outline:none;text-align:center;letter-spacing:4px;margin-bottom:8px;}
+.pw-err{font-size:12px;color:#dc2626;margin-bottom:10px;min-height:16px;}
+.btn-pw{width:100%;background:var(--green);color:#fff;border:none;border-radius:8px;padding:12px;font-size:14px;font-weight:700;cursor:pointer;}
+
+/* TOAST */
+#toast{position:fixed;bottom:28px;left:50%;transform:translateX(-50%) translateY(100px);background:#1f2937;color:#fff;font-size:14px;font-weight:600;padding:12px 24px;border-radius:12px;z-index:9999;transition:transform .3s;pointer-events:none;white-space:nowrap;}
+#toast.show{transform:translateX(-50%) translateY(0);}
+
+@keyframes spin{to{transform:rotate(360deg);}}
+.spinner{width:24px;height:24px;border:3px solid #e5e7eb;border-top-color:var(--green);border-radius:50%;animation:spin .7s linear infinite;margin:40px auto;}
+</style>
+</head>
+<body>
+
+<nav>
+  <a class="nav-logo" href="index.html">⚽ 중흥FC</a>
+  <button class="hamburger" id="hamburger"><span></span><span></span><span></span></button>
+  <ul class="nav-links" id="nav-links">
+    <li class="nav-item-drop">
+      <a href="intro.html">소개 <span style="font-size:9px;opacity:.6;">▾</span></a>
+      <div class="nav-dropdown"><a href="intro.html">팀 소개</a><a href="members.html">회원명단</a><a href="rules.html">회칙</a></div>
+    </li>
+    <li><a href="notice.html">공지사항</a></li>
+    <li><a href="schedule.html">경기일정</a></li>
+    <li><a href="record.html">경기기록</a></li>
+    <li><a href="rating.html">선발점수</a></li>
+    <li><a href="attendance.html">출석률</a></li>
+    <li><a href="board.html">커뮤니티</a></li>
+    <li><a href="gallery.html">갤러리</a></li>
+    <li><a href="sponsors.html" class="active">협찬·제휴</a></li>
+  </ul>
+</nav>
+<script>
+document.getElementById('hamburger').addEventListener('click',function(){
+  document.getElementById('nav-links').classList.toggle('open');
+  this.classList.toggle('active');
+});
+</script>
+
+<div class="page-header">
+  <div class="page-header-inner">
+    <div class="breadcrumb"><a href="index.html" style="color:#6b7280;text-decoration:none;">홈</a> › <span class="cur">협찬·제휴</span></div>
+    <h1>🤝 협찬·제휴</h1>
+    <p>중흥FC 회원이 운영하는 가게를 소개합니다. 회원임을 밝히시면 특별 혜택을 드려요!</p>
+  </div>
+</div>
+
+<!-- 총무 관리 바 -->
+<div style="max-width:960px;margin:0 auto;padding:0 24px;">
+  <div class="admin-bar" id="admin-bar">
+    <span class="admin-label">⚙️ 총무 모드</span>
+    <button class="btn-add" onclick="openModal()">+ 가게 추가</button>
+    <button class="btn-admin-toggle" onclick="exitAdmin()">관리 종료</button>
+  </div>
+</div>
+
+<div class="main-wrap">
+  <!-- 필터 -->
+  <div class="filter-bar">
+    <button class="cat-btn active" onclick="filterCat('all',this)">전체</button>
+    <button class="cat-btn" onclick="filterCat('food',this)">🍽️ 음식</button>
+    <button class="cat-btn" onclick="filterCat('beauty',this)">💇 미용·뷰티</button>
+    <button class="cat-btn" onclick="filterCat('health',this)">💪 건강·스포츠</button>
+    <button class="cat-btn" onclick="filterCat('etc',this)">🏪 기타</button>
+    <div class="search-box">
+      <span style="color:#9ca3af;">🔍</span>
+      <input type="text" id="search-input" placeholder="가게명 검색" oninput="renderSponsors()">
+    </div>
+  </div>
+
+  <!-- 카드 그리드 -->
+  <div class="sponsors-grid" id="sponsors-grid">
+    <div class="spinner"></div>
+  </div>
+
+  <!-- 총무 진입 버튼 (우하단) -->
+  <button id="admin-entry" onclick="openPw()" title="총무 관리"
+    style="position:fixed;bottom:24px;right:24px;width:44px;height:44px;border-radius:50%;background:#111827;color:#fff;border:none;font-size:18px;cursor:pointer;box-shadow:0 4px 16px rgba(0,0,0,.2);z-index:100;opacity:.4;transition:opacity .2s;"
+    onmouseenter="this.style.opacity='1'" onmouseleave="this.style.opacity='.4'">⚙️</button>
+</div>
+
+<!-- 가게 등록/수정 모달 -->
+<div class="modal-bg" id="modal-bg">
+  <div class="modal">
+    <h3 id="modal-title">🏪 가게 추가</h3>
+    <div class="fg"><label>가게명 *</label><input type="text" id="f-name" placeholder="예) 맛있는 족발"></div>
+    <div class="fg"><label>업종 *</label>
+      <select id="f-cat">
+        <option value="food">🍽️ 음식</option>
+        <option value="beauty">💇 미용·뷰티</option>
+        <option value="health">💪 건강·스포츠</option>
+        <option value="etc">🏪 기타</option>
+      </select>
+    </div>
+    <div class="fg"><label>운영 회원</label><input type="text" id="f-owner" placeholder="예) 김성열 회원"></div>
+    <div class="fg"><label>주소</label><input type="text" id="f-addr" placeholder="예) 광주시 북구 중흥동 123"></div>
+    <div class="fg"><label>전화번호</label><input type="text" id="f-tel" placeholder="예) 062-123-4567"></div>
+    <div class="fg"><label>가게 소개</label><textarea id="f-desc" placeholder="가게에 대한 간단한 소개를 입력해 주세요."></textarea></div>
+    <div class="fg"><label>🎁 회원 혜택</label><input type="text" id="f-benefit" placeholder="예) 중흥FC 회원 10% 할인 + 음료 서비스"></div>
+    <div class="fg"><label>사진 링크 (Google Drive)</label><input type="text" id="f-img" placeholder="https://drive.google.com/..."></div>
+    <div class="fg"><label>지도 링크 (카카오/네이버)</label><input type="text" id="f-map" placeholder="https://map.kakao.com/..."></div>
+    <div class="fg"><label>홈페이지/SNS</label><input type="text" id="f-url" placeholder="https://instagram.com/..."></div>
+    <div class="modal-btns">
+      <button class="btn-cancel" onclick="closeModal()">취소</button>
+      <button class="btn-save" onclick="saveSponsor()">저장</button>
+    </div>
+  </div>
+</div>
+
+<!-- 비밀번호 모달 -->
+<div class="pw-modal" id="pw-modal">
+  <div class="pw-box">
+    <h3>🔐 총무 비밀번호</h3>
+    <input class="pw-input" type="password" id="pw-input" placeholder="••••••" maxlength="20" onkeydown="if(event.key==='Enter')checkPw()">
+    <div class="pw-err" id="pw-err"></div>
+    <button class="btn-pw" onclick="checkPw()">확인</button>
+  </div>
+</div>
+
+<div id="toast"></div>
+
+<!-- FOOTER -->
+<div style="background:#111827;width:100%;margin-top:48px;">
+  <div style="max-width:960px;margin:0 auto;padding:24px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px;">
+    <div style="color:#6b7280;font-size:13px;">
+      <a href="index.html" style="font-size:16px;font-weight:900;color:#fff;text-decoration:none;display:block;margin-bottom:4px;">⚽ 중흥FC</a>
+      <div>광주광역시 북구 중흥동 | 매주 일요일 AM 06:30</div>
+    </div>
+    <div style="font-size:12px;color:#4b5563;">© 2026 중흥FC. All rights reserved.</div>
+  </div>
+</div>
+
+<script>
+const DB = 'https://joonghung-9a14c-default-rtdb.asia-southeast1.firebasedatabase.app';
+const ADMIN_PW = 'jhfc1990';
+const ADMIN_KEY = 'sp_admin';
+const CAT_LABELS = {food:'🍽️ 음식', beauty:'💇 미용·뷰티', health:'💪 건강·스포츠', etc:'🏪 기타'};
+const CAT_COLORS = {food:'#fff7ed;color:#c2410c;border:1px solid #fed7aa', beauty:'#fdf4ff;color:#7e22ce;border:1px solid #e9d5ff', health:'#f0fdf4;color:#15803d;border:1px solid #bbf7d0', etc:'#eff6ff;color:#1d4ed8;border:1px solid #bfdbfe'};
+
+let allSponsors = [];
+let curCat = 'all';
+let editId = null;
+let isAdmin = false;
+
+// ── 초기 로드 ──
+async function loadSponsors(){
+  const res = await fetch(DB+'/sponsors.json').catch(()=>null);
+  const data = res ? await res.json() : null;
+  allSponsors = [];
+  if(data && typeof data === 'object'){
+    Object.entries(data).forEach(([k,v])=>{ if(v) allSponsors.push({id:k,...v}); });
+  }
+  allSponsors.sort((a,b)=>(a.order||99)-(b.order||99)||(a.name||'').localeCompare(b.name||'','ko'));
+  renderSponsors();
+}
+
+// ── 필터 ──
+function filterCat(cat, btn){
+  curCat = cat;
+  document.querySelectorAll('.cat-btn').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+  renderSponsors();
+}
+
+// ── 렌더링 ──
+function renderSponsors(){
+  const grid = document.getElementById('sponsors-grid');
+  const kw = document.getElementById('search-input').value.trim().toLowerCase();
+  const list = allSponsors.filter(s=>
+    (curCat==='all' || s.category===curCat) &&
+    (!kw || (s.name||'').toLowerCase().includes(kw) || (s.desc||'').toLowerCase().includes(kw))
+  );
+
+  if(list.length===0){
+    grid.innerHTML='<div class="empty" style="grid-column:1/-1;">등록된 가게가 없습니다.<br><span style="font-size:12px;color:#d1d5db;">총무에게 문의해 주세요.</span></div>';
+    return;
+  }
+
+  grid.innerHTML = list.map(s=>{
+    const catStyle = CAT_COLORS[s.category]||CAT_COLORS.etc;
+    const imgHTML = s.img
+      ? `<div class="sp-img"><img src="${driveThumb(s.img)}" loading="lazy" onerror="this.parentElement.innerHTML='<span style=\"font-size:48px;\">🏪</span>'"></div>`
+      : `<div class="sp-img"><span style="font-size:48px;">🏪</span></div>`;
+    const benefitHTML = s.benefit
+      ? `<div class="sp-benefit">🎁 회원 혜택 <span>— ${s.benefit}</span></div>` : '';
+    const linksHTML = [
+      s.tel ? `<a class="sp-link" href="tel:${s.tel}">📞 전화</a>` : '',
+      s.map ? `<a class="sp-link" href="${s.map}" target="_blank">🗺️ 지도</a>` : '',
+      s.url ? `<a class="sp-link primary" href="${s.url}" target="_blank">🔗 방문</a>` : '',
+    ].filter(Boolean).join('');
+    const adminBtns = isAdmin
+      ? `<div class="sp-admin-btns show"><button class="btn-edit" onclick="openModal('${s.id}')">수정</button><button class="btn-del" onclick="delSponsor('${s.id}')">삭제</button></div>` : '';
+    return `<div class="sp-card">
+      ${imgHTML}
+      <div class="sp-body">
+        <div class="sp-category" style="background:${catStyle};">${CAT_LABELS[s.category]||'기타'}</div>
+        <div class="sp-name">${s.name||''}</div>
+        <div class="sp-owner">${s.owner ? '👤 '+s.owner : ''}${s.addr ? (s.owner?' · ':'')+'📍 '+s.addr : ''}</div>
+        <div class="sp-desc">${s.desc||''}</div>
+        ${benefitHTML}
+        <div class="sp-links">${linksHTML}</div>
+        ${adminBtns}
+      </div>
+    </div>`;
+  }).join('');
+}
+
+// 드라이브 썸네일 변환
+function driveThumb(url){
+  const m = url.match(/\/d\/([^/]+)/);
+  return m ? `https://drive.google.com/thumbnail?id=${m[1]}&sz=w400` : url;
+}
+
+// ── 총무 인증 ──
+function openPw(){
+  document.getElementById('pw-input').value='';
+  document.getElementById('pw-err').textContent='';
+  document.getElementById('pw-modal').classList.add('open');
+  setTimeout(()=>document.getElementById('pw-input').focus(),100);
+}
+function checkPw(){
+  if(document.getElementById('pw-input').value===ADMIN_PW){
+    isAdmin=true;
+    sessionStorage.setItem(ADMIN_KEY,'1');
+    document.getElementById('pw-modal').classList.remove('open');
+    document.getElementById('admin-bar').classList.add('show');
+    renderSponsors();
+    showToast('✅ 총무 모드 활성화');
+  } else {
+    document.getElementById('pw-err').textContent='❌ 비밀번호가 틀렸습니다.';
+    document.getElementById('pw-input').value='';
+  }
+}
+function exitAdmin(){
+  isAdmin=false; sessionStorage.removeItem(ADMIN_KEY);
+  document.getElementById('admin-bar').classList.remove('show');
+  renderSponsors();
+  showToast('관리 모드 종료');
+}
+
+// ── 모달 ──
+function openModal(id=null){
+  editId=id;
+  const s = id ? allSponsors.find(x=>x.id===id) : null;
+  document.getElementById('modal-title').textContent = id ? '✏️ 가게 수정' : '🏪 가게 추가';
+  document.getElementById('f-name').value    = s?.name||'';
+  document.getElementById('f-cat').value     = s?.category||'food';
+  document.getElementById('f-owner').value   = s?.owner||'';
+  document.getElementById('f-addr').value    = s?.addr||'';
+  document.getElementById('f-tel').value     = s?.tel||'';
+  document.getElementById('f-desc').value    = s?.desc||'';
+  document.getElementById('f-benefit').value = s?.benefit||'';
+  document.getElementById('f-img').value     = s?.img||'';
+  document.getElementById('f-map').value     = s?.map||'';
+  document.getElementById('f-url').value     = s?.url||'';
+  document.getElementById('modal-bg').classList.add('open');
+}
+function closeModal(){ document.getElementById('modal-bg').classList.remove('open'); editId=null; }
+
+// ── 저장 ──
+async function saveSponsor(){
+  const name = document.getElementById('f-name').value.trim();
+  if(!name){ showToast('⚠️ 가게명을 입력해 주세요.'); return; }
+  const data = {
+    name, category: document.getElementById('f-cat').value,
+    owner: document.getElementById('f-owner').value.trim(),
+    addr:  document.getElementById('f-addr').value.trim(),
+    tel:   document.getElementById('f-tel').value.trim(),
+    desc:  document.getElementById('f-desc').value.trim(),
+    benefit: document.getElementById('f-benefit').value.trim(),
+    img:   document.getElementById('f-img').value.trim(),
+    map:   document.getElementById('f-map').value.trim(),
+    url:   document.getElementById('f-url').value.trim(),
+    updatedAt: Date.now()
+  };
+  const H = {'Content-Type':'application/json'};
+  if(editId){
+    await fetch(DB+'/sponsors/'+editId+'.json',{method:'PATCH',headers:H,body:JSON.stringify(data)});
+    const i=allSponsors.findIndex(x=>x.id===editId);
+    if(i>-1) allSponsors[i]={...allSponsors[i],...data};
+    showToast('✅ 수정 완료!');
+  } else {
+    data.createdAt = Date.now();
+    const res = await fetch(DB+'/sponsors.json',{method:'POST',headers:H,body:JSON.stringify(data)}).then(r=>r.json());
+    allSponsors.push({id:res.name,...data});
+    showToast('✅ 등록 완료!');
+  }
+  closeModal(); renderSponsors();
+}
+
+// ── 삭제 ──
+async function delSponsor(id){
+  if(!confirm('이 가게를 삭제하시겠습니까?')) return;
+  await fetch(DB+'/sponsors/'+id+'.json',{method:'DELETE'});
+  allSponsors = allSponsors.filter(x=>x.id!==id);
+  renderSponsors(); showToast('✅ 삭제 완료!');
+}
+
+// ── 토스트 ──
+function showToast(msg,dur=2200){
+  const t=document.getElementById('toast');
+  t.textContent=msg; t.classList.add('show');
+  setTimeout(()=>t.classList.remove('show'),dur);
+}
+
+// ── 세션 복원 ──
+if(sessionStorage.getItem(ADMIN_KEY)){
+  isAdmin=true;
+  document.getElementById('admin-bar').classList.add('show');
+}
+
+loadSponsors();
+</script>
+</body>
+</html>
