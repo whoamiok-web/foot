@@ -102,11 +102,17 @@ document.querySelectorAll('.nav-links a').forEach(a=>{
 });
 // 소개 드롭다운 클릭 토글
 (function(){
+  function isMobile(){ return window.innerWidth <= 640; }
   function initDrop(){
+    // 모바일이면 모든 드롭다운 항상 열기
+    if(isMobile()){
+      document.querySelectorAll('.nav-item-drop').forEach(function(d){ d.classList.add('open'); });
+    }
     document.querySelectorAll('.nav-item-drop').forEach(function(drop){
       var toggle = drop.querySelector(':scope > a');
       if(!toggle) return;
       toggle.addEventListener('click',function(e){
+        if(isMobile()) return; // 모바일에서는 항상 열려있으므로 토글 불필요
         e.preventDefault();
         e.stopPropagation();
         var isOpen = drop.classList.contains('open');
@@ -115,11 +121,18 @@ document.querySelectorAll('.nav-links a').forEach(a=>{
       });
     });
     document.addEventListener('click',function(e){
+      if(isMobile()) return;
       if(!e.target.closest('.nav-item-drop')){
         document.querySelectorAll('.nav-item-drop').forEach(function(d){ d.classList.remove('open'); });
       }
     });
   }
+  // 화면 크기 변경 시 재적용
+  window.addEventListener('resize', function(){
+    if(isMobile()){
+      document.querySelectorAll('.nav-item-drop').forEach(function(d){ d.classList.add('open'); });
+    }
+  });
   if(document.readyState==='loading'){
     document.addEventListener('DOMContentLoaded',initDrop);
   } else {
