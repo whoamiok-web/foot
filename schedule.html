@@ -153,6 +153,22 @@ document.querySelectorAll('.nav-links a').forEach(a=>{
     document.getElementById('hamburger').classList.remove('active');
   });
 });
+// 소개 드롭다운 클릭 토글
+document.querySelectorAll('.nav-item-drop').forEach(function(drop){
+  var toggle = drop.querySelector('a');
+  if(!toggle) return;
+  toggle.addEventListener('click',function(e){
+    e.preventDefault();
+    var isOpen = drop.classList.contains('open');
+    document.querySelectorAll('.nav-item-drop').forEach(function(d){ d.classList.remove('open'); });
+    if(!isOpen) drop.classList.add('open');
+  });
+});
+document.addEventListener('click',function(e){
+  if(!e.target.closest('.nav-item-drop')){
+    document.querySelectorAll('.nav-item-drop').forEach(function(d){ d.classList.remove('open'); });
+  }
+});
 </script>
 <style>
   nav{position:sticky;top:0;z-index:100;background:#111827;display:flex;align-items:center;justify-content:space-between;flex-wrap:nowrap;gap:10px;padding:0 20px;height:60px;box-shadow:0 2px 12px rgba(0,0,0,.3);}
@@ -171,7 +187,7 @@ document.querySelectorAll('.nav-links a').forEach(a=>{
   .nav-item-drop{padding-bottom:12px;margin-bottom:-12px;}
   .nav-dropdown{position:absolute;top:100%;left:50%;transform:translateX(-50%);background:#1f2937;border-radius:10px;padding:6px 0;min-width:120px;box-shadow:0 8px 24px rgba(0,0,0,.3);opacity:0;visibility:hidden;transition:opacity .15s,visibility .15s;z-index:200;}
   .nav-dropdown::before{content:'';position:absolute;top:-5px;left:50%;transform:translateX(-50%);border:5px solid transparent;border-bottom-color:#1f2937;border-top:none;}
-  .nav-item-drop:hover .nav-dropdown{opacity:1;visibility:visible;}
+  .nav-item-drop.open .nav-dropdown{opacity:1;visibility:visible;}
   .nav-dropdown a{display:block;padding:9px 18px;color:#d1d5db;font-size:13px;font-weight:500;white-space:nowrap;text-decoration:none;background:none;border-radius:0;transition:background .15s,color .15s;}
   .nav-dropdown a:hover{background:#374151!important;color:#fff!important;}
   @media(max-width:640px){
