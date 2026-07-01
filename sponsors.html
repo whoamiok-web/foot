@@ -297,7 +297,7 @@ function renderSponsors() {
     if (s.map) links.push('<a class="sp-link" href="' + s.map + '" target="_blank">🗺️ 지도</a>');
     if (s.url) links.push('<a class="sp-link primary" href="' + s.url + '" target="_blank">🔗 방문</a>');
     var adminBtns = isAdmin
-      ? '<div class="sp-admin-btns show"><button class="btn-edit" onclick="openModal('' + s.id + '')">수정</button><button class="btn-del" onclick="delSponsor('' + s.id + '')">삭제</button></div>' : '';
+      ? '<div class="sp-admin-btns show"><button class="btn-edit" onclick="openModal(\'' + s.id + '\')">수정</button><button class="btn-del" onclick="delSponsor(\'' + s.id + '\')">삭제</button></div>' : '';
     return '<div class="sp-card">' + imgHTML +
       '<div class="sp-body">' +
       '<div class="sp-cat" style="' + catStyle + '">' + (CAT_LABELS[s.category]||'기타') + '</div>' +
