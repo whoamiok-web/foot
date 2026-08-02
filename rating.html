@@ -195,7 +195,7 @@ document.querySelectorAll('.nav-links a').forEach(a=>{
   <div class="page-header-inner">
     <div class="breadcrumb"><span onclick="location.href='index.html'" style="cursor:pointer;">홈</span><span>›</span><span class="cur">선발점수</span></div>
     <h1>🏅 선발점수</h1>
-    <p>게임별 선발 출전 횟수를 점수로 누적 관리합니다.</p>
+    <p>게임 결과에 따라 선발 출전 점수를 누적 관리합니다. (승 2점 · 무 1점 · 패 0점)</p>
   </div>
 </div>
 
@@ -254,6 +254,17 @@ let curTab = 'rank';
 
 const posCls = {FW:'pos-fw',MF:'pos-mf',DF:'pos-df',GK:'pos-gk'};
 
+/* 승/무/패 판정 (스코어 미입력 시 null) */
+function getResult(us,opp){
+  const u=parseInt(us), o=parseInt(opp);
+  if(isNaN(u)||isNaN(o)) return null;
+  return u>o?'W':u===o?'D':'L';
+}
+/* 결과별 선발 점수: 승 2점, 무 1점, 패 0점 */
+function pointsForResult(result){
+  return result==='W'?2:result==='D'?1:0;
+}
+
 /* 데이터 로드 */
 async function loadAll(){
   try {
@@ -304,7 +315,7 @@ async function loadAll(){
         v.games.forEach((g,i)=>{
           const starters = toNames(g.starterIds||[]);
           if(starters.length>0){
-            allGames.push({ date:v.date, source:'record', info:`vs ${g.opponent||'상대팀'}`, gameNum:i+1, starterIds:starters });
+            allGames.push({ date:v.date, source:'record', info:`vs ${g.opponent||'상대팀'}`, gameNum:i+1, starterIds:starters, result:getResult(g.us,g.opp) });
           }
         });
       });
@@ -317,8 +328,7 @@ async function loadAll(){
         v.games.forEach((g,i)=>{
           const starters = toNames(g.players||g.starterIds||[]);
           if(starters.length>0){
-            const res = (g.us!==undefined&&g.opp!==undefined) ? `${g.us}:${g.opp}` : '';
-            allGames.push({ date:v.date, source:'schedule', info:`vs ${g.opp_name||'무등FC'}`, gameNum:i+1, result:res, starterIds:starters });
+            allGames.push({ date:v.date, source:'schedule', info:`vs ${g.opp_name||'무등FC'}`, gameNum:i+1, result:getResult(g.us,g.opp), starterIds:starters });
           }
         });
       });
@@ -346,7 +356,7 @@ function renderSummary(){
 /* 회원별 점수 계산 */
 function getMemberScores(){
   return allMembers.map(m=>{
-    const score = allGames.filter(g=>g.starterIds.includes(m.id)).length;
+    const score = allGames.filter(g=>g.starterIds.includes(m.id)).reduce((sum,g)=>sum+pointsForResult(g.result),0);
     return {...m, score};
   }).sort((a,b)=>b.score-a.score||a.name.localeCompare(b.name,'ko'));
 }
@@ -399,8 +409,9 @@ function renderDetail(){
       <div class="game-detail-body">
         ${d.games.map(g=>{
           const names = g.starterIds.map(id=>{ const m=allMembers.find(x=>x.id===id||x.name===id); return m?m.name:id; });
+          const resultLabel = g.result==='W'?'승 (+2점)':g.result==='D'?'무 (+1점)':g.result==='L'?'패 (+0점)':'결과 미입력';
           return `<div style="margin-bottom:12px;">
-            <div style="font-size:12px;font-weight:700;color:var(--gray2);margin-bottom:5px;">${g.gameNum}게임 선발 (${names.length}명)</div>
+            <div style="font-size:12px;font-weight:700;color:var(--gray2);margin-bottom:5px;">${g.gameNum}게임 선발 (${names.length}명) · ${resultLabel}</div>
             <div class="starter-chips">${names.map(n=>`<span class="starter-chip">👕 ${n}</span>`).join('')}</div>
           </div>`;
         }).join('')}
