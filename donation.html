@@ -55,8 +55,9 @@
   /* 랭킹 테이블 */
   .rank-table{background:#fff;border-radius:var(--radius);box-shadow:var(--shadow);overflow:hidden;margin-bottom:24px;}
   .rank-header{display:grid;grid-template-columns:50px 1fr 90px 130px;padding:12px 20px;background:#f9fafb;border-bottom:1.5px solid #e5e7eb;font-size:12px;font-weight:700;color:var(--gray2);}
-  .rank-row{display:grid;grid-template-columns:50px 1fr 90px 130px;padding:14px 20px;border-bottom:1px solid #f3f4f6;align-items:center;transition:background .15s;}
-  .rank-row:last-child{border-bottom:none;}
+  .rank-item{border-bottom:1px solid #f3f4f6;}
+  .rank-item:last-child{border-bottom:none;}
+  .rank-row{display:grid;grid-template-columns:50px 1fr 90px 130px;padding:14px 20px;align-items:center;transition:background .15s;cursor:pointer;}
   .rank-row:hover{background:#f9fafb;}
   .rank-num{font-size:14px;font-weight:800;text-align:center;}
   .rank-1{color:#f59e0b;} .rank-2{color:#9ca3af;} .rank-3{color:#cd7c2f;}
@@ -65,6 +66,13 @@
   .rank-bar-wrap{display:flex;align-items:center;gap:8px;}
   .rank-bar{flex:1;height:8px;background:#f3f4f6;border-radius:4px;overflow:hidden;}
   .rank-bar-fill{height:100%;border-radius:4px;background:var(--green);transition:width .5s;}
+  .rank-detail{display:none;padding:2px 20px 14px;background:#f9fafb;}
+  .rank-detail.open{display:block;}
+  .rank-detail-row{display:flex;justify-content:space-between;align-items:center;gap:12px;padding:8px 0;border-bottom:1px dashed #e5e7eb;font-size:13px;}
+  .rank-detail-row:last-child{border-bottom:none;}
+  .rank-detail-date{color:var(--gray2);font-weight:600;flex-shrink:0;}
+  .rank-detail-reason{color:var(--gray1);flex:1;}
+  .rank-detail-amount{color:var(--green);font-weight:800;flex-shrink:0;}
 
   /* 전체 내역 */
   .list-card{background:#fff;border-radius:var(--radius);box-shadow:var(--shadow);overflow:hidden;}
@@ -106,6 +114,7 @@
     .summary-cards{grid-template-columns:repeat(2,1fr);}
     .rank-header,.rank-row{grid-template-columns:32px 1fr 92px;}
     .rank-header>:nth-child(3),.rank-row>:nth-child(3){display:none;}
+    .rank-detail-row{flex-wrap:wrap;}
     .list-row{grid-template-columns:1fr;gap:4px;}
     .row-admin-btns{justify-content:flex-start;margin-top:4px;}
   }
@@ -412,18 +421,30 @@ function renderRank(){
   const body = document.getElementById('rank-body');
   const totals = getMemberTotals();
   if(totals.length===0){ body.innerHTML='<div class="empty">🙏 등록된 찬조내역이 없습니다.</div>'; return; }
-  const maxTotal = totals[0].total||1;
   body.innerHTML = totals.map((t,i)=>{
     const rnCls = i===0?'rank-1':i===1?'rank-2':i===2?'rank-3':'';
     const rnIcon = i===0?'🥇':i===1?'🥈':i===2?'🥉':(i+1);
-    const pct = Math.round(t.total/maxTotal*100);
-    return `<div class="rank-row">
-      <div class="rank-num ${rnCls}">${rnIcon}</div>
-      <div class="member-name">${t.name}</div>
-      <div style="text-align:center;font-size:13px;color:var(--gray2);">${t.count}건</div>
-      <div class="amount-num">${fmtWon(t.total)}</div>
+    const memberDonations = allDonations.filter(d=>d.name===t.name);
+    const detailRows = memberDonations.map(d=>`
+      <div class="rank-detail-row">
+        <span class="rank-detail-date">📅 ${(d.date||'').replace(/-/g,'.')}</span>
+        <span class="rank-detail-reason">${d.reason||''}</span>
+        <span class="rank-detail-amount">${fmtWon(Number(d.amount)||0)}</span>
+      </div>`).join('');
+    return `<div class="rank-item">
+      <div class="rank-row" onclick="toggleRankDetail(this)">
+        <div class="rank-num ${rnCls}">${rnIcon}</div>
+        <div class="member-name">${t.name}</div>
+        <div style="text-align:center;font-size:13px;color:var(--gray2);">${t.count}건</div>
+        <div class="amount-num">${fmtWon(t.total)}</div>
+      </div>
+      <div class="rank-detail">${detailRows}</div>
     </div>`;
   }).join('');
+}
+
+function toggleRankDetail(rowEl){
+  rowEl.nextElementSibling.classList.toggle('open');
 }
 
 /* 모달 */
