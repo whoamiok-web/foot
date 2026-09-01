@@ -2,23 +2,23 @@
 <html lang="ko">
 <head>
 <meta charset="UTF-8">
-<title>출석률 - 중흥FC | 광주 조기축구회</title>
-<meta name="description" content="중흥FC 회원별 경기 출석률을 확인하세요.">
-<meta name="keywords" content="중흥FC 출석률">
+<title>찬조내역 - 중흥FC | 광주 조기축구회</title>
+<meta name="description" content="중흥FC 회원 찬조내역을 확인하세요.">
+<meta name="keywords" content="중흥FC 찬조내역">
 <meta name="author" content="중흥FC">
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="중흥FC">
-<meta property="og:title" content="출석률 - 중흥FC | 광주 조기축구회">
-<meta property="og:description" content="중흥FC 회원별 경기 출석률을 확인하세요.">
+<meta property="og:title" content="찬조내역 - 중흥FC | 광주 조기축구회">
+<meta property="og:description" content="중흥FC 회원 찬조내역을 확인하세요.">
 <meta property="og:image" content="https://jhfc.kr/og-image.png">
 <meta property="og:url" content="https://jhfc.kr/">
 <meta property="og:locale" content="ko_KR">
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:title" content="출석률 - 중흥FC | 광주 조기축구회">
-<meta name="twitter:description" content="중흥FC 회원별 경기 출석률을 확인하세요.">
+<meta name="twitter:title" content="찬조내역 - 중흥FC | 광주 조기축구회">
+<meta name="twitter:description" content="중흥FC 회원 찬조내역을 확인하세요.">
 <meta name="twitter:image" content="https://jhfc.kr/og-image.png">
 <meta name="naver-site-verification" content="1847479c54800558c19e2fd620b5ded3">
-<link rel="canonical" href="https://jhfc.kr/attendance.html">
+<link rel="canonical" href="https://jhfc.kr/donation.html">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700;900&display=swap" rel="stylesheet">
 <style>
@@ -38,7 +38,7 @@
   /* 상단 요약 */
   .summary-cards{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:24px;}
   .sum-card{background:#fff;border-radius:12px;padding:16px 20px;box-shadow:var(--shadow);text-align:center;}
-  .sum-num{font-size:26px;font-weight:900;color:var(--dark);}
+  .sum-num{font-size:22px;font-weight:900;color:var(--dark);}
   .sum-num.green{color:var(--green);}
   .sum-label{font-size:12px;color:var(--gray2);margin-top:3px;}
 
@@ -54,42 +54,28 @@
 
   /* 랭킹 테이블 */
   .rank-table{background:#fff;border-radius:var(--radius);box-shadow:var(--shadow);overflow:hidden;margin-bottom:24px;}
-  .rank-header{display:grid;grid-template-columns:50px 40px 1fr 80px 120px 100px;padding:12px 20px;background:#f9fafb;border-bottom:1.5px solid #e5e7eb;font-size:12px;font-weight:700;color:var(--gray2);}
-  .rank-row{display:grid;grid-template-columns:50px 40px 1fr 80px 120px 100px;padding:14px 20px;border-bottom:1px solid #f3f4f6;align-items:center;transition:background .15s;}
+  .rank-header{display:grid;grid-template-columns:50px 1fr 90px 130px;padding:12px 20px;background:#f9fafb;border-bottom:1.5px solid #e5e7eb;font-size:12px;font-weight:700;color:var(--gray2);}
+  .rank-row{display:grid;grid-template-columns:50px 1fr 90px 130px;padding:14px 20px;border-bottom:1px solid #f3f4f6;align-items:center;transition:background .15s;}
   .rank-row:last-child{border-bottom:none;}
   .rank-row:hover{background:#f9fafb;}
   .rank-num{font-size:14px;font-weight:800;text-align:center;}
   .rank-1{color:#f59e0b;} .rank-2{color:#9ca3af;} .rank-3{color:#cd7c2f;}
-  .pos-badge{font-size:10px;font-weight:700;padding:2px 6px;border-radius:4px;}
-  .pos-fw{background:#fff7ed;color:#ea580c;border:1px solid #fed7aa;}
-  .pos-mf{background:#eff6ff;color:#2563eb;border:1px solid #bfdbfe;}
-  .pos-df{background:#ecfdf5;color:var(--green);border:1px solid #a7f3d0;}
-  .pos-gk{background:#fdf4ff;color:#9333ea;border:1px solid #e9d5ff;}
   .member-name{font-size:14px;font-weight:700;}
-  .attend-count{font-size:13px;color:var(--gray2);text-align:center;}
-  /* 출석률 바 */
-  .rate-wrap{display:flex;align-items:center;gap:8px;}
-  .rate-bar{flex:1;height:8px;background:#f3f4f6;border-radius:4px;overflow:hidden;}
-  .rate-fill{height:100%;border-radius:4px;background:var(--green);transition:width .5s;}
-  .rate-fill.mid{background:#f59e0b;}
-  .rate-fill.low{background:#ef4444;}
-  .rate-pct{font-size:13px;font-weight:700;width:38px;text-align:right;}
+  .amount-num{font-size:15px;font-weight:900;color:var(--green);text-align:right;}
+  .rank-bar-wrap{display:flex;align-items:center;gap:8px;}
+  .rank-bar{flex:1;height:8px;background:#f3f4f6;border-radius:4px;overflow:hidden;}
+  .rank-bar-fill{height:100%;border-radius:4px;background:var(--green);transition:width .5s;}
 
-  /* 경기별 체크 */
-  .match-attend-card{background:#fff;border-radius:var(--radius);box-shadow:var(--shadow);margin-bottom:12px;overflow:hidden;}
-  .match-attend-head{padding:14px 20px;background:#f9fafb;border-bottom:1px solid #e5e7eb;display:flex;align-items:center;justify-content:space-between;cursor:pointer;}
-  .match-attend-head:hover{background:#f3f4f6;}
-  .match-date-badge{background:var(--dark);color:#fff;font-size:12px;font-weight:700;padding:4px 10px;border-radius:6px;}
-  .match-attend-count{font-size:13px;color:var(--gray2);}
-  .match-attend-body{padding:16px 20px;display:none;}
-  .match-attend-body.open{display:block;}
-  .member-check-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(140px,1fr));gap:8px;}
-  .member-check-item{display:flex;align-items:center;gap:8px;padding:8px 12px;border-radius:8px;border:1.5px solid var(--gray3);cursor:pointer;transition:all .2s;font-size:13px;font-weight:600;}
-  .member-check-item.checked{background:#ecfdf5;border-color:var(--green);color:var(--green);}
-  .member-check-item.readonly{cursor:default;}
-  .check-icon{font-size:14px;flex-shrink:0;}
-  .match-admin-btns{display:none;gap:6px;margin-top:12px;justify-content:flex-end;}
-  .match-admin-btns.show{display:flex;}
+  /* 전체 내역 */
+  .list-card{background:#fff;border-radius:var(--radius);box-shadow:var(--shadow);overflow:hidden;}
+  .list-row{display:grid;grid-template-columns:100px 1fr 110px 1fr auto;gap:12px;padding:14px 20px;border-bottom:1px solid #f3f4f6;align-items:center;}
+  .list-row:last-child{border-bottom:none;}
+  .list-date{font-size:12px;color:var(--gray2);font-weight:600;}
+  .list-name{font-size:14px;font-weight:700;}
+  .list-amount{font-size:14px;font-weight:900;color:var(--green);text-align:right;}
+  .list-reason{font-size:13px;color:var(--gray1);}
+  .row-admin-btns{display:none;gap:6px;}
+  .row-admin-btns.show{display:flex;}
   .btn-sm{padding:5px 12px;border-radius:6px;font-size:12px;font-weight:600;cursor:pointer;font-family:inherit;border:1.5px solid;}
   .btn-edit-sm{border-color:#e5e7eb;color:var(--gray2);background:#fff;}
   .btn-del-sm{border-color:#fee2e2;color:#ef4444;background:#fff5f5;}
@@ -101,18 +87,12 @@
 
   /* 모달 */
   .overlay{position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:200;display:flex;align-items:center;justify-content:center;backdrop-filter:blur(4px);}
-  .mbox{background:#fff;border-radius:16px;padding:28px;width:540px;max-width:95vw;box-shadow:0 8px 40px rgba(0,0,0,.2);max-height:90vh;overflow-y:auto;}
+  .mbox{background:#fff;border-radius:16px;padding:28px;width:440px;max-width:95vw;box-shadow:0 8px 40px rgba(0,0,0,.2);max-height:90vh;overflow-y:auto;}
   .mbox h3{font-size:18px;font-weight:800;margin-bottom:18px;}
   .fg{margin-bottom:14px;}
   .fg label{font-size:13px;font-weight:700;color:var(--gray1);margin-bottom:5px;display:block;}
   .fg input{width:100%;padding:10px 13px;border:1.5px solid var(--gray3);border-radius:8px;font-size:14px;font-family:inherit;outline:none;}
   .fg input:focus{border-color:var(--green);}
-  .check-section{background:#f9fafb;border-radius:10px;padding:14px;margin-bottom:14px;}
-  .check-section-title{font-size:13px;font-weight:700;color:var(--gray1);margin-bottom:10px;}
-  .check-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(130px,1fr));gap:6px;}
-  .check-item{display:flex;align-items:center;gap:7px;padding:7px 10px;border-radius:7px;border:1.5px solid var(--gray3);cursor:pointer;font-size:13px;font-weight:600;transition:all .2s;user-select:none;}
-  .check-item.on{background:#ecfdf5;border-color:var(--green);color:var(--green);}
-  .check-all-btn{padding:6px 14px;border-radius:7px;background:#f3f4f6;border:1.5px solid var(--gray3);font-size:12px;font-weight:600;cursor:pointer;font-family:inherit;margin-bottom:10px;}
   .mbtns{display:flex;gap:8px;justify-content:flex-end;margin-top:18px;}
   .mbtn-ok{padding:10px 24px;border-radius:9px;background:var(--green);color:#fff;border:none;font-size:14px;font-weight:700;cursor:pointer;font-family:inherit;}
   .mbtn-cancel{padding:10px 18px;border-radius:9px;border:1.5px solid var(--gray3);background:#fff;font-size:14px;font-weight:600;color:var(--gray2);cursor:pointer;font-family:inherit;}
@@ -124,14 +104,11 @@
   @media(max-width:640px){
     .main-wrap{padding:24px 16px 48px;} .page-header{padding:28px 20px;}
     .summary-cards{grid-template-columns:repeat(2,1fr);}
-    .rank-header,.rank-row{grid-template-columns:44px 36px 1fr 60px 90px;}
+    .rank-header,.rank-row{grid-template-columns:38px 1fr 76px;}
     .rank-header>:last-child,.rank-row>:last-child{display:none;}
+    .list-row{grid-template-columns:1fr;gap:4px;}
+    .row-admin-btns{justify-content:flex-start;margin-top:4px;}
   }
-  footer{background:#111827;color:#6b7280;padding:32px 40px;font-size:13px;}
-  .footer-inner{max-width:1160px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;gap:24px;flex-wrap:wrap;}
-  .footer-left{flex:1;}
-  .footer-right{font-size:12px;color:#4b5563;white-space:nowrap;flex-shrink:0;}
-  .footer-logo{font-size:17px;font-weight:900;color:#fff;}
 </style>
 </head>
 <body>
@@ -140,14 +117,14 @@
   <button class="hamburger" id="hamburger" aria-label="메뉴"><span></span><span></span><span></span></button>
   <ul class="nav-links" id="nav-links">
     <li class="nav-item-drop">
-      <a href="intro.html" class="">소개 <span class="nav-arrow">▾</span></a>
+      <a href="intro.html" class="nav-active">소개 <span class="nav-arrow">▾</span></a>
       <div class="nav-dropdown"><a href="intro.html">팀 소개</a><a href="members.html">회원명단</a><a href="presidents.html">역대 회장</a><a href="rules.html">회칙</a><a href="sponsors.html">스폰서</a><a href="donation.html">찬조내역</a></div>
     </li>
     <li><a href="notice.html" class="">공지사항</a></li>
     <li><a href="schedule.html" class="">경기일정</a></li>
     <li><a href="record.html" class="">경기기록</a></li>
     <li><a href="rating.html" class="">선발점수</a></li>
-    <li><a href="attendance.html" class="nav-active">출석률</a></li>
+    <li><a href="attendance.html" class="">출석률</a></li>
     <li><a href="board.html" class="">커뮤니티</a></li>
     <li><a href="gallery.html" class="">갤러리</a></li>
   </ul>
@@ -239,64 +216,60 @@ document.querySelectorAll('.nav-links a').forEach(a=>{
 </style>
 <div class="page-header">
   <div class="page-header-inner">
-    <div class="breadcrumb"><span onclick="location.href='index.html'" style="cursor:pointer;">홈</span><span>›</span><span class="cur">출석률</span></div>
-    <h1>📊 회원 출석률</h1>
-    <p>경기별 참석 현황과 회원 출석률을 확인하세요.</p>
+    <div class="breadcrumb"><span onclick="location.href='index.html'" style="cursor:pointer;">홈</span><span>›</span><span class="cur">찬조내역</span></div>
+    <h1>🙏 찬조내역</h1>
+    <p>회원들의 소중한 찬조를 기록하고 감사한 마음을 전합니다.</p>
   </div>
 </div>
 
 <div class="main-wrap">
   <!-- 요약 -->
   <div class="summary-cards">
-    <div class="sum-card"><div class="sum-num green" id="s-matches">-</div><div class="sum-label">총 경기일수</div></div>
-    <div class="sum-card"><div class="sum-num green" id="s-members">-</div><div class="sum-label">등록 회원</div></div>
-    <div class="sum-card"><div class="sum-num" id="s-avg">-</div><div class="sum-label">평균 출석률</div></div>
-    <div class="sum-card"><div class="sum-num" id="s-top">-</div><div class="sum-label">최고 참여자</div></div>
+    <div class="sum-card"><div class="sum-num green" id="s-count">-</div><div class="sum-label">총 찬조 건수</div></div>
+    <div class="sum-card"><div class="sum-num green" id="s-total">-</div><div class="sum-label">총 찬조 금액</div></div>
+    <div class="sum-card"><div class="sum-num" id="s-people">-</div><div class="sum-label">참여 인원</div></div>
+    <div class="sum-card"><div class="sum-num" id="s-top">-</div><div class="sum-label">최다 찬조자</div></div>
   </div>
 
   <div class="top-bar">
     <div class="left-bar">
       <div class="tab-bar">
-        <button class="tab-btn active" id="tab-rank">랭킹</button>
-        <button class="tab-btn" id="tab-match">경기별</button>
+        <button class="tab-btn active" id="tab-list">전체 내역</button>
+        <button class="tab-btn" id="tab-rank">회원별 랭킹</button>
       </div>
       <span id="admin-ui"></span>
     </div>
-    <button class="add-btn" id="btn-add">+ 경기 참석 입력</button>
+    <button class="add-btn" id="btn-add">+ 찬조 입력</button>
+  </div>
+
+  <!-- 전체 내역 뷰 -->
+  <div id="view-list">
+    <div class="list-card" id="list-body"><div class="loading"><div class="spinner"></div>불러오는 중...</div></div>
   </div>
 
   <!-- 랭킹 뷰 -->
-  <div id="view-rank">
+  <div id="view-rank" style="display:none;">
     <div class="rank-table">
       <div class="rank-header">
         <div style="text-align:center;">순위</div>
-        <div style="text-align:center;">포지션</div>
         <div>이름</div>
-        <div style="text-align:center;">참석일수</div>
-        <div>출석률</div>
-        <div style="text-align:center;">등번호</div>
+        <div style="text-align:center;">건수</div>
+        <div style="text-align:right;">누적 금액</div>
       </div>
-      <div id="rank-body"><div class="loading"><div class="spinner"></div>불러오는 중...</div></div>
+      <div id="rank-body"></div>
     </div>
-  </div>
-
-  <!-- 경기별 뷰 -->
-  <div id="view-match" style="display:none;">
-    <div id="match-attend-list"><div class="loading"><div class="spinner"></div>불러오는 중...</div></div>
   </div>
 </div>
 
-<!-- 참석 입력 모달 -->
-<div class="overlay" id="attend-modal" style="display:none;">
+<!-- 찬조 입력 모달 -->
+<div class="overlay" id="donation-modal" style="display:none;">
   <div class="mbox">
-    <h3 id="modal-title">경기 참석 입력</h3>
-    <div class="fg"><label>경기일 *</label><input type="date" id="f-date"></div>
-    <div class="fg"><label>경기 메모</label><input type="text" id="f-memo" placeholder="예) vs 상무FC 친선경기"></div>
-    <div class="check-section">
-      <div class="check-section-title">✅ 참석 회원 선택</div>
-      <button class="check-all-btn" id="btn-check-all">전체 선택 / 해제</button>
-      <div class="check-grid" id="check-grid"></div>
-    </div>
+    <h3 id="modal-title">찬조 입력</h3>
+    <div class="fg"><label>이름 *</label><input type="text" id="f-name" list="member-list" placeholder="홍길동"></div>
+    <datalist id="member-list"></datalist>
+    <div class="fg"><label>날짜 *</label><input type="date" id="f-date"></div>
+    <div class="fg"><label>금액(원) *</label><input type="number" id="f-amount" placeholder="100000" min="0"></div>
+    <div class="fg"><label>사유</label><input type="text" id="f-reason" placeholder="예) 창단기념일 축하 찬조"></div>
     <div class="mbtns">
       <button class="mbtn-cancel" id="btn-modal-cancel">취소</button>
       <button class="mbtn-ok" id="btn-submit">저장하기</button>
@@ -325,29 +298,11 @@ document.querySelectorAll('.nav-links a').forEach(a=>{
       <div>광주광역시 북구 중흥동 | 매주 일요일 AM 06:30 | 전남대학교 부설중학교 운동장</div>
       <div style="margin-top:3px;">가입문의: 총무 010&#8209;4686&#8209;9320 | <a href="https://open.kakao.com/o/pFIIRBAi" target="_blank" style="color:#9ca3af;">💬 카카오톡 채널</a></div>
       <div style="margin-top:3px;">회비계좌: <span onclick="copyAccount(event)" style="cursor:pointer;color:#d1d5db;border-bottom:1px dashed #6b7280;" title="클릭하면 복사됩니다">카카오뱅크 7942&#8209;2614&#8209;9821 나성균</span> <span id="copy-toast" style="display:none;font-size:11px;color:#23a852;font-weight:700;">✅ 복사 완료!</span></div>
+      <div style="margin-top:14px;font-size:12px;color:#4b5563;">© 2026 중흥FC. All rights reserved.</div>
     </div>
-    <div style="font-size:12px;color:#4b5563;white-space:nowrap;align-self:flex-end;">© 2026 중흥FC. All rights reserved.</div>
   </div>
 </div>
-<script>
-function copyAccount(e){
-  if(e) e.preventDefault();
-  navigator.clipboard.writeText('79422614982').then(()=>{
-    const t=document.getElementById('copy-toast');
-    t.style.display='inline'; setTimeout(()=>t.style.display='none',2000);
-  });
-}
-</script>
-</div>
-<script>
-function copyAccount(e){
-  if(e) e.preventDefault();
-  navigator.clipboard.writeText('79422614982').then(()=>{
-    const t=document.getElementById('copy-toast');
-    t.style.display='inline'; setTimeout(()=>t.style.display='none',2000);
-  });
-}
-</script>
+<script>function copyAccount(e){ if(e) e.preventDefault(); navigator.clipboard.writeText('79422614982').then(()=>{ const t=document.getElementById('copy-toast'); t.style.display='inline'; setTimeout(()=>t.style.display='none',2000); }); }</script>
 <div class="toast" id="toast"></div>
 
 <script>
@@ -356,14 +311,13 @@ const ADMIN_PW = 'joonghung2015';
 const ADMIN_KEY = 'jfc_admin';
 
 let allMembers = [];
-let allAttendances = [];
+let allDonations = [];
 let editId = null;
 let pwCb = null;
-let curTab = 'rank';
-let allChecked = false;
+let curTab = 'list';
 
 const isAdmin = () => sessionStorage.getItem(ADMIN_KEY) === '1';
-const posCls = {FW:'pos-fw',MF:'pos-mf',DF:'pos-df',GK:'pos-gk'};
+const fmtWon = n => (n||0).toLocaleString('ko-KR')+'원';
 
 /* 관리자 */
 function setAdminUI(){
@@ -372,7 +326,7 @@ function setAdminUI(){
     el.innerHTML='<span class="admin-badge" id="logout-btn">✅ 관리자 · 로그아웃</span>';
     document.getElementById('logout-btn').onclick=()=>{ sessionStorage.removeItem(ADMIN_KEY); setAdminUI(); renderAll(); };
   } else el.innerHTML='';
-  document.querySelectorAll('.match-admin-btns').forEach(b=>b.classList.toggle('show',isAdmin()));
+  document.querySelectorAll('.row-admin-btns').forEach(b=>b.classList.toggle('show',isAdmin()));
 }
 
 /* 비번 */
@@ -389,197 +343,141 @@ const api=(path,opt={})=>fetch(DB+path+'.json',opt).then(r=>{ if(!r.ok) throw ne
 /* 데이터 로드 */
 async function loadAll(){
   try{
-    // schedule + members 동시 로드
-    const [sData, mRaw] = await Promise.all([
-      api('/schedule'),
-      api('/members')
-    ]);
-    // members 노드에서 포지션·등번호 가져오기
-    const memberMap = {}; // name → {pos, num}
-    if(mRaw&&typeof mRaw==='object'){
-      Object.entries(mRaw).forEach(([k,v])=>{ if(v&&v.name) memberMap[v.name]={pos:v.pos||'',num:v.num||''}; });
-    }
+    const [mRaw, dRaw] = await Promise.all([ api('/members'), api('/donations') ]);
     allMembers=[];
-    allAttendances=[];
-    if(sData&&typeof sData==='object'){
-      const nameSet = new Set();
-      Object.entries(sData).forEach(([k,v])=>{ if(v&&v.attendees) v.attendees.forEach(n=>nameSet.add(n)); });
-      allMembers = [...nameSet].map(name=>{
-        const info = memberMap[name]||{};
-        return {id:name, name, pos:info.pos||'', num:info.num||''};
-      });
-      allMembers.sort((a,b)=>(parseInt(a.num)||999)-(parseInt(b.num)||999)||a.name.localeCompare(b.name,'ko'));
-      Object.entries(sData).forEach(([k,v])=>{
-        if(v&&v.date) allAttendances.push({id:k, date:v.date, members:v.attendees||[], memo:''});
-      });
-      allAttendances.sort((a,b)=>(b.date||'').localeCompare(a.date||''));
+    if(mRaw&&typeof mRaw==='object'){
+      Object.entries(mRaw).forEach(([k,v])=>{ if(v&&v.name) allMembers.push({id:k,...v}); });
     }
+    allMembers.sort((a,b)=>(parseInt(a.num)||999)-(parseInt(b.num)||999)||a.name.localeCompare(b.name,'ko'));
+    document.getElementById('member-list').innerHTML = allMembers.map(m=>`<option value="${m.name}">`).join('');
+
+    allDonations=[];
+    if(dRaw&&typeof dRaw==='object'){
+      Object.entries(dRaw).forEach(([k,v])=>{ if(v&&v.name) allDonations.push({id:k,...v}); });
+    }
+    allDonations.sort((a,b)=>(b.date||'').localeCompare(a.date||''));
+
     renderSummary();
     renderAll();
   } catch(e){
-    document.getElementById('rank-body').innerHTML=`<div class="empty">⚠️ 불러오기 실패: ${e.message}</div>`;
+    document.getElementById('list-body').innerHTML=`<div class="empty">⚠️ 불러오기 실패: ${e.message}</div>`;
   }
+}
+
+/* 회원별 집계 */
+function getMemberTotals(){
+  const map = {};
+  allDonations.forEach(d=>{
+    if(!map[d.name]) map[d.name]={name:d.name, total:0, count:0};
+    map[d.name].total += Number(d.amount)||0;
+    map[d.name].count += 1;
+  });
+  return Object.values(map).sort((a,b)=>b.total-a.total||a.name.localeCompare(b.name,'ko'));
 }
 
 /* 요약 */
 function renderSummary(){
-  const total = new Set(allAttendances.map(a=>a.date||'')).size;
-  const uniqueDates = new Set(allAttendances.map(a=>a.date||'')).size;
-  document.getElementById('s-matches').textContent = uniqueDates;
-  document.getElementById('s-members').textContent = allMembers.length;
-  if(total===0||allMembers.length===0){ document.getElementById('s-avg').textContent='-'; document.getElementById('s-top').textContent='-'; return; }
-  const rates = allMembers.map(m=>{ const cnt=allAttendances.filter(a=>(a.members||[]).includes(m.id)).length; return {name:m.name,rate:total>0?Math.round(cnt/total*100):0}; });
-  const avg = Math.round(rates.reduce((s,r)=>s+r.rate,0)/rates.length);
-  const top = rates.sort((a,b)=>b.rate-a.rate)[0];
-  document.getElementById('s-avg').textContent = avg+'%';
-  document.getElementById('s-top').textContent = top ? top.name : '-';
+  document.getElementById('s-count').textContent = allDonations.length;
+  const totalAmount = allDonations.reduce((s,d)=>s+(Number(d.amount)||0),0);
+  document.getElementById('s-total').textContent = fmtWon(totalAmount);
+  const totals = getMemberTotals();
+  document.getElementById('s-people').textContent = totals.length;
+  document.getElementById('s-top').textContent = totals.length>0 ? totals[0].name : '-';
 }
 
-function renderAll(){ curTab==='rank' ? renderRank() : renderMatchAttend(); }
+function renderAll(){ curTab==='list' ? renderList() : renderRank(); }
+
+/* 전체 내역 */
+function renderList(){
+  const body = document.getElementById('list-body');
+  if(allDonations.length===0){ body.innerHTML='<div class="empty">🙏 등록된 찬조내역이 없습니다.</div>'; setAdminUI(); return; }
+  body.innerHTML = allDonations.map(d=>`
+    <div class="list-row">
+      <div class="list-date">📅 ${(d.date||'').replace(/-/g,'.')}</div>
+      <div class="list-name">${d.name}</div>
+      <div class="list-amount">${fmtWon(Number(d.amount)||0)}</div>
+      <div class="list-reason">${d.reason||''}</div>
+      <div class="row-admin-btns${isAdmin()?' show':''}">
+        <button class="btn-sm btn-edit-sm" data-id="${d.id}">✏️ 수정</button>
+        <button class="btn-sm btn-del-sm" data-id="${d.id}">🗑 삭제</button>
+      </div>
+    </div>`).join('');
+  body.querySelectorAll('.btn-edit-sm').forEach(b=>b.onclick=()=>{ const d=allDonations.find(x=>x.id===b.dataset.id); if(d) openModal(d); });
+  body.querySelectorAll('.btn-del-sm').forEach(b=>b.onclick=()=>delDonation(b.dataset.id));
+  setAdminUI();
+}
 
 /* 랭킹 */
 function renderRank(){
   const body = document.getElementById('rank-body');
-  if(allMembers.length===0){ body.innerHTML='<div class="empty">등록된 회원이 없습니다.</div>'; return; }
-  const total = new Set(allAttendances.map(a=>a.date||'')).size;
-  const ranked = allMembers.map(m=>{
-    const cnt = allAttendances.filter(a=>(a.members||[]).includes(m.id)).length;
-    const rate = total>0 ? Math.round(cnt/total*100) : 0;
-    return {...m, cnt, rate};
-  }).sort((a,b)=>b.rate-a.rate||b.cnt-a.cnt);
-
-  body.innerHTML = ranked.map((m,i)=>{
+  const totals = getMemberTotals();
+  if(totals.length===0){ body.innerHTML='<div class="empty">🙏 등록된 찬조내역이 없습니다.</div>'; return; }
+  const maxTotal = totals[0].total||1;
+  body.innerHTML = totals.map((t,i)=>{
     const rnCls = i===0?'rank-1':i===1?'rank-2':i===2?'rank-3':'';
     const rnIcon = i===0?'🥇':i===1?'🥈':i===2?'🥉':(i+1);
-    const fillCls = m.rate>=70?'':m.rate>=40?'mid':'low';
+    const pct = Math.round(t.total/maxTotal*100);
     return `<div class="rank-row">
       <div class="rank-num ${rnCls}">${rnIcon}</div>
-      <div style="display:flex;justify-content:center;"><span class="pos-badge ${posCls[m.pos]||''}">${m.pos||'?'}</span></div>
-      <div class="member-name">${m.name}</div>
-      <div class="attend-count">${m.cnt} / ${total}</div>
-      <div class="rate-wrap">
-        <div class="rate-bar"><div class="rate-fill ${fillCls}" style="width:${m.rate}%"></div></div>
-        <span class="rate-pct">${m.rate}%</span>
-      </div>
-      <div class="attend-count">${m.num||'-'}</div>
+      <div class="member-name">${t.name}</div>
+      <div style="text-align:center;font-size:13px;color:var(--gray2);">${t.count}건</div>
+      <div class="amount-num">${fmtWon(t.total)}</div>
     </div>`;
   }).join('');
-}
-
-/* 경기별 */
-function renderMatchAttend(){
-  const list = document.getElementById('match-attend-list');
-  if(allAttendances.length===0){ list.innerHTML='<div class="empty">📋 등록된 경기 참석 기록이 없습니다.</div>'; setAdminUI(); return; }
-  list.innerHTML = allAttendances.map(a=>{
-    const attendIds = a.members||[];
-    const attendNames = allMembers.filter(m=>attendIds.includes(m.id)).map(m=>m.name);
-    const absentNames = allMembers.filter(m=>!attendIds.includes(m.id)).map(m=>m.name);
-    return `<div class="match-attend-card">
-      <div class="match-attend-head" onclick="toggleCard('${a.id}')">
-        <div style="display:flex;align-items:center;gap:12px;">
-          <span class="match-date-badge">📅 ${(a.date||'').replace(/-/g,'.')}</span>
-          ${a.memo?`<span style="font-size:13px;color:var(--gray1);font-weight:500;">${a.memo}</span>`:''}
-        </div>
-        <span class="match-attend-count">✅ ${attendIds.length}명 참석 / 전체 ${allMembers.length}명</span>
-      </div>
-      <div class="match-attend-body" id="card-${a.id}">
-        <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;">
-          <div>
-            <div style="font-size:12px;font-weight:700;color:var(--green);margin-bottom:8px;">✅ 참석 (${attendNames.length}명)</div>
-            <div class="member-check-grid">${attendNames.length>0?attendNames.map(n=>`<div class="member-check-item checked readonly"><span class="check-icon">✅</span>${n}</div>`).join(''):'<div style="font-size:13px;color:#9ca3af;">없음</div>'}</div>
-          </div>
-          <div>
-            <div style="font-size:12px;font-weight:700;color:#ef4444;margin-bottom:8px;">❌ 불참 (${absentNames.length}명)</div>
-            <div class="member-check-grid">${absentNames.length>0?absentNames.map(n=>`<div class="member-check-item readonly"><span class="check-icon">❌</span>${n}</div>`).join(''):'<div style="font-size:13px;color:#9ca3af;">없음</div>'}</div>
-          </div>
-        </div>
-        <div class="match-admin-btns${isAdmin()?' show':''}">
-          <button class="btn-sm btn-edit-sm" data-id="${a.id}">✏️ 수정</button>
-          <button class="btn-sm btn-del-sm" data-id="${a.id}">🗑 삭제</button>
-        </div>
-      </div>
-    </div>`;
-  }).join('');
-
-  list.querySelectorAll('.btn-edit-sm').forEach(b=>b.onclick=()=>{ const a=allAttendances.find(x=>x.id===b.dataset.id); if(a) openModal(a); });
-  list.querySelectorAll('.btn-del-sm').forEach(b=>b.onclick=()=>delAttendance(b.dataset.id));
-  setAdminUI();
-}
-
-function toggleCard(id){
-  const el = document.getElementById('card-'+id);
-  if(el) el.classList.toggle('open');
 }
 
 /* 모달 */
-function openModal(a){
-  editId = a ? a.id : null;
-  document.getElementById('modal-title').textContent = a ? '참석 수정' : '경기 참석 입력';
-  document.getElementById('btn-submit').textContent  = a ? '수정하기' : '저장하기';
-  document.getElementById('f-date').value = a ? a.date : '';
-  document.getElementById('f-memo').value = a ? (a.memo||'') : '';
-  const checkedIds = a ? (a.members||[]) : [];
-  const grid = document.getElementById('check-grid');
-  grid.innerHTML = allMembers.map(m=>`
-    <div class="check-item${checkedIds.includes(m.id)?' on':''}" data-id="${m.id}">
-      <span class="check-icon">${checkedIds.includes(m.id)?'✅':'⬜'}</span>
-      <span>${m.name}</span>
-    </div>`).join('');
-  grid.querySelectorAll('.check-item').forEach(el=>{
-    el.onclick=()=>{
-      el.classList.toggle('on');
-      el.querySelector('.check-icon').textContent = el.classList.contains('on')?'✅':'⬜';
-    };
-  });
-  document.getElementById('attend-modal').style.display='flex';
+function openModal(d){
+  editId = d ? d.id : null;
+  document.getElementById('modal-title').textContent = d ? '찬조 수정' : '찬조 입력';
+  document.getElementById('btn-submit').textContent  = d ? '수정하기' : '저장하기';
+  document.getElementById('f-name').value = d ? d.name : '';
+  document.getElementById('f-date').value = d ? d.date : '';
+  document.getElementById('f-amount').value = d ? d.amount : '';
+  document.getElementById('f-reason').value = d ? (d.reason||'') : '';
+  document.getElementById('donation-modal').style.display='flex';
+  setTimeout(()=>document.getElementById('f-name').focus(),100);
 }
-function closeModal(){ document.getElementById('attend-modal').style.display='none'; }
-
-function getCheckedIds(){ return Array.from(document.querySelectorAll('#check-grid .check-item.on')).map(el=>el.dataset.id); }
-
-/* 전체 선택/해제 */
-document.getElementById('btn-check-all').onclick=()=>{
-  allChecked=!allChecked;
-  document.querySelectorAll('#check-grid .check-item').forEach(el=>{
-    el.classList.toggle('on',allChecked);
-    el.querySelector('.check-icon').textContent=allChecked?'✅':'⬜';
-  });
-};
+function closeModal(){ document.getElementById('donation-modal').style.display='none'; }
 
 /* CRUD */
-function saveAttendance(){
+function saveDonation(){
+  const name = document.getElementById('f-name').value.trim();
   const date = document.getElementById('f-date').value;
-  if(!date){ showToast('⚠️ 경기일을 선택해 주세요.'); return; }
-  const data = { date, memo:document.getElementById('f-memo').value.trim(), members:getCheckedIds(), updatedAt:Date.now() };
+  const amount = document.getElementById('f-amount').value;
+  if(!name){ showToast('⚠️ 이름을 입력해 주세요.'); return; }
+  if(!date){ showToast('⚠️ 날짜를 선택해 주세요.'); return; }
+  if(amount==='' || isNaN(Number(amount))){ showToast('⚠️ 금액을 입력해 주세요.'); return; }
+  const data = { name, date, amount:Number(amount), reason:document.getElementById('f-reason').value.trim(), updatedAt:Date.now() };
   const btn=document.getElementById('btn-submit');
   btn.disabled=true; btn.textContent='저장 중...';
   const reset=()=>{ btn.disabled=false; btn.textContent=editId?'수정하기':'저장하기'; };
 
   if(editId){
-    api('/attendances/'+editId,{method:'PATCH',headers:{'Content-Type':'application/json'},body:JSON.stringify(data)})
-      .then(()=>{ const i=allAttendances.findIndex(a=>a.id===editId); if(i>-1) allAttendances[i]={...allAttendances[i],...data}; allAttendances.sort((a,b)=>(b.date||'').localeCompare(a.date||'')); renderSummary(); renderAll(); closeModal(); showToast('✅ 수정되었습니다.'); reset(); })
+    api('/donations/'+editId,{method:'PATCH',headers:{'Content-Type':'application/json'},body:JSON.stringify(data)})
+      .then(()=>{ const i=allDonations.findIndex(x=>x.id===editId); if(i>-1) allDonations[i]={...allDonations[i],...data}; allDonations.sort((a,b)=>(b.date||'').localeCompare(a.date||'')); renderSummary(); renderAll(); closeModal(); showToast('✅ 수정되었습니다.'); reset(); })
       .catch(e=>{ showToast('❌ 실패: '+e.message); reset(); });
   } else {
     data.createdAt=Date.now();
-    api('/attendances',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(data)})
-      .then(res=>{ allAttendances.unshift({id:res.name,...data}); allAttendances.sort((a,b)=>(b.date||'').localeCompare(a.date||'')); renderSummary(); renderAll(); closeModal(); showToast('✅ 저장되었습니다.'); reset(); })
+    api('/donations',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(data)})
+      .then(res=>{ allDonations.unshift({id:res.name,...data}); allDonations.sort((a,b)=>(b.date||'').localeCompare(a.date||'')); renderSummary(); renderAll(); closeModal(); showToast('✅ 저장되었습니다.'); reset(); })
       .catch(e=>{ showToast('❌ 실패: '+e.message); reset(); });
   }
 }
 
-function delAttendance(id){
-  if(!confirm('이 기록을 삭제하시겠습니까?')) return;
-  api('/attendances/'+id,{method:'DELETE'}).then(()=>{ allAttendances=allAttendances.filter(a=>a.id!==id); renderSummary(); renderAll(); showToast('✅ 삭제되었습니다.'); }).catch(e=>showToast('❌ 실패: '+e.message));
+function delDonation(id){
+  if(!confirm('이 찬조내역을 삭제하시겠습니까?')) return;
+  api('/donations/'+id,{method:'DELETE'}).then(()=>{ allDonations=allDonations.filter(x=>x.id!==id); renderSummary(); renderAll(); showToast('✅ 삭제되었습니다.'); }).catch(e=>showToast('❌ 실패: '+e.message));
 }
 
 /* 탭 */
-document.getElementById('tab-rank').onclick=function(){ curTab='rank'; this.classList.add('active'); document.getElementById('tab-match').classList.remove('active'); document.getElementById('view-rank').style.display='block'; document.getElementById('view-match').style.display='none'; renderRank(); };
-document.getElementById('tab-match').onclick=function(){ curTab='match'; this.classList.add('active'); document.getElementById('tab-rank').classList.remove('active'); document.getElementById('view-rank').style.display='none'; document.getElementById('view-match').style.display='block'; renderMatchAttend(); };
+document.getElementById('tab-list').onclick=function(){ curTab='list'; this.classList.add('active'); document.getElementById('tab-rank').classList.remove('active'); document.getElementById('view-list').style.display='block'; document.getElementById('view-rank').style.display='none'; renderList(); };
+document.getElementById('tab-rank').onclick=function(){ curTab='rank'; this.classList.add('active'); document.getElementById('tab-list').classList.remove('active'); document.getElementById('view-list').style.display='none'; document.getElementById('view-rank').style.display='block'; renderRank(); };
 
 /* 버튼 */
 document.getElementById('btn-add').onclick=()=>{ if(isAdmin()){ openModal(); } else openPw(()=>openModal()); };
 document.getElementById('btn-modal-cancel').onclick=closeModal;
-document.getElementById('btn-submit').onclick=saveAttendance;
+document.getElementById('btn-submit').onclick=saveDonation;
 document.getElementById('btn-pw-cancel').onclick=closePw;
 document.getElementById('btn-pw-ok').onclick=checkPw;
 document.getElementById('pw-input').onkeydown=e=>{ if(e.key==='Enter') checkPw(); };
