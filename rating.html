@@ -268,8 +268,7 @@ function pointsForResult(result){
 /* 데이터 로드 */
 async function loadAll(){
   try {
-    const [rData, sData, mRaw] = await Promise.all([
-      fetch(DB+'/records.json').then(r=>r.json()).catch(()=>null),
+    const [sData, mRaw] = await Promise.all([
       fetch(DB+'/schedule.json').then(r=>r.json()).catch(()=>null),
       fetch(DB+'/members.json').then(r=>r.json()).catch(()=>null)
     ]);
@@ -308,20 +307,8 @@ async function loadAll(){
     // 게임별 선발 데이터 수집 (모두 이름 기반으로 통일)
     allGames=[];
 
-    // /records 노드 - starterIds(Firebase ID) → 이름으로 변환
-    if(rData&&typeof rData==='object'){
-      Object.entries(rData).forEach(([k,v])=>{
-        if(!v||!v.games) return;
-        v.games.forEach((g,i)=>{
-          const starters = toNames(g.starterIds||[]);
-          if(starters.length>0){
-            allGames.push({ date:v.date, source:'record', info:`vs ${g.opponent||'상대팀'}`, gameNum:i+1, starterIds:starters, result:getResult(g.us,g.opp) });
-          }
-        });
-      });
-    }
-
     // /schedule 노드 - players(이름) 또는 starterIds(ID) 모두 지원
+    // (경기기록에서 저장한 데이터도 저장 시 /schedule로 동기화되므로 이 노드 하나만 읽으면 됨 — /records까지 같이 읽으면 중복 집계됨)
     if(sData&&typeof sData==='object'){
       Object.entries(sData).forEach(([k,v])=>{
         if(!v||!v.games) return;
