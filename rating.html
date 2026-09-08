@@ -195,7 +195,7 @@ document.querySelectorAll('.nav-links a').forEach(a=>{
   <div class="page-header-inner">
     <div class="breadcrumb"><span onclick="location.href='index.html'" style="cursor:pointer;">홈</span><span>›</span><span class="cur">선발점수</span></div>
     <h1>🏅 선발점수</h1>
-    <p>게임 결과에 따라 선발 출전 점수를 누적 관리합니다. (승 2점 · 무 1점 · 패 0점)</p>
+    <p>출석과 게임 결과에 따라 선발 출전 점수를 누적 관리합니다. (출석 1점/일 · 승 2점 · 무 1점 · 패 0점)</p>
   </div>
 </div>
 
@@ -250,6 +250,7 @@ document.querySelectorAll('.nav-links a').forEach(a=>{
 const DB = 'https://joonghung-9a14c-default-rtdb.asia-southeast1.firebasedatabase.app';
 let allMembers = [];
 let allGames = []; // 모든 경기의 게임별 데이터 [{date, matchInfo, gameNum, starterIds}]
+let allAttendanceDays = []; // 날짜별 출석 데이터 [{date, attendees}]
 let curTab = 'rank';
 
 const posCls = {FW:'pos-fw',MF:'pos-mf',DF:'pos-df',GK:'pos-gk'};
@@ -306,12 +307,16 @@ async function loadAll(){
 
     // 게임별 선발 데이터 수집 (모두 이름 기반으로 통일)
     allGames=[];
+    // 날짜별 출석 데이터 [{date, attendees:[이름...]}] - 선발 경기 수와 무관하게 당일 출석 1점 계산용
+    allAttendanceDays=[];
 
     // /schedule 노드 - players(이름) 또는 starterIds(ID) 모두 지원
     // (경기기록에서 저장한 데이터도 저장 시 /schedule로 동기화되므로 이 노드 하나만 읽으면 됨 — /records까지 같이 읽으면 중복 집계됨)
     if(sData&&typeof sData==='object'){
       Object.entries(sData).forEach(([k,v])=>{
-        if(!v||!v.games) return;
+        if(!v) return;
+        if(v.date) allAttendanceDays.push({ date:v.date, attendees:toNames(v.attendees||[]) });
+        if(!v.games) return;
         v.games.forEach((g,i)=>{
           const starters = toNames(g.players||g.starterIds||[]);
           if(starters.length>0){
@@ -334,17 +339,21 @@ async function loadAll(){
 function renderSummary(){
   document.getElementById('s-games').textContent = allGames.length;
   document.getElementById('s-members').textContent = allMembers.length;
-  if(allMembers.length===0||allGames.length===0){ document.getElementById('s-top').textContent='-'; return; }
+  if(allMembers.length===0||(allGames.length===0&&allAttendanceDays.length===0)){ document.getElementById('s-top').textContent='-'; return; }
   const scores = getMemberScores();
   const top = scores[0];
   document.getElementById('s-top').textContent = top ? `${top.name} (${top.score}점)` : '-';
 }
 
 /* 회원별 점수 계산 */
+function getAttendancePoints(memberId){
+  return allAttendanceDays.filter(d=>(d.attendees||[]).includes(memberId)).length;
+}
 function getMemberScores(){
   return allMembers.map(m=>{
-    const score = allGames.filter(g=>g.starterIds.includes(m.id)).reduce((sum,g)=>sum+pointsForResult(g.result),0);
-    return {...m, score};
+    const gameScore = allGames.filter(g=>g.starterIds.includes(m.id)).reduce((sum,g)=>sum+pointsForResult(g.result),0);
+    const attendScore = getAttendancePoints(m.id);
+    return {...m, gameScore, attendScore, score:gameScore+attendScore};
   }).sort((a,b)=>b.score-a.score||a.name.localeCompare(b.name,'ko'));
 }
 
@@ -362,7 +371,7 @@ function renderRank(){
     return `<div class="rank-row">
       <div class="rank-num ${cls}">${icon}</div>
       <div style="display:flex;justify-content:center;"><span class="pos-badge ${posCls[m.pos]||''}">${m.pos||'?'}</span></div>
-      <div class="member-name">${m.name}${m.role?` <span style="font-size:10px;color:#9ca3af;">(${m.role})</span>`:''}</div>
+      <div class="member-name">${m.name}${m.role?` <span style="font-size:10px;color:#9ca3af;">(${m.role})</span>`:''}<br><span style="font-size:10px;font-weight:500;color:var(--gray2);">출석 ${m.attendScore}점 + 경기 ${m.gameScore}점</span></div>
       <div class="score-num">${m.score}</div>
       <div class="score-bar-wrap">
         <div class="score-bar"><div class="score-bar-fill" style="width:${pct}%"></div></div>
