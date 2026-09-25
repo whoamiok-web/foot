@@ -2,23 +2,23 @@
 <html lang="ko">
 <head>
 <meta charset="UTF-8">
-<title>찬조내역 - 중흥FC | 광주 조기축구회</title>
-<meta name="description" content="중흥FC 회원 찬조내역을 확인하세요.">
-<meta name="keywords" content="중흥FC 찬조내역">
+<title>유니폼 사이즈 - 중흥FC | 광주 조기축구회</title>
+<meta name="description" content="중흥FC 회원 유니폼 사이즈를 입력하고 공유하세요.">
+<meta name="keywords" content="중흥FC 유니폼 사이즈">
 <meta name="author" content="중흥FC">
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="중흥FC">
-<meta property="og:title" content="찬조내역 - 중흥FC | 광주 조기축구회">
-<meta property="og:description" content="중흥FC 회원 찬조내역을 확인하세요.">
+<meta property="og:title" content="유니폼 사이즈 - 중흥FC | 광주 조기축구회">
+<meta property="og:description" content="중흥FC 회원 유니폼 사이즈를 입력하고 공유하세요.">
 <meta property="og:image" content="https://jhfc.kr/og-image.png">
 <meta property="og:url" content="https://jhfc.kr/">
 <meta property="og:locale" content="ko_KR">
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:title" content="찬조내역 - 중흥FC | 광주 조기축구회">
-<meta name="twitter:description" content="중흥FC 회원 찬조내역을 확인하세요.">
+<meta name="twitter:title" content="유니폼 사이즈 - 중흥FC | 광주 조기축구회">
+<meta name="twitter:description" content="중흥FC 회원 유니폼 사이즈를 입력하고 공유하세요.">
 <meta name="twitter:image" content="https://jhfc.kr/og-image.png">
 <meta name="naver-site-verification" content="1847479c54800558c19e2fd620b5ded3">
-<link rel="canonical" href="https://jhfc.kr/donation.html">
+<link rel="canonical" href="https://jhfc.kr/uniform.html">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700;900&display=swap" rel="stylesheet">
 <style>
@@ -36,7 +36,7 @@
   .main-wrap{max-width:1000px;margin:0 auto;padding:28px 40px 60px;}
 
   /* 상단 요약 */
-  .summary-cards{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:24px;}
+  .summary-cards{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:24px;}
   .sum-card{background:#fff;border-radius:12px;padding:16px 20px;box-shadow:var(--shadow);text-align:center;}
   .sum-num{font-size:22px;font-weight:900;color:var(--dark);}
   .sum-num.green{color:var(--green);}
@@ -52,41 +52,28 @@
   .tab-btn{padding:7px 18px;border-radius:8px;border:1.5px solid var(--gray3);background:#fff;font-size:13px;font-weight:600;color:var(--gray2);cursor:pointer;font-family:inherit;transition:all .2s;}
   .tab-btn.active{background:var(--green);color:#fff;border-color:var(--green);}
 
-  /* 랭킹 테이블 */
-  .rank-table{background:#fff;border-radius:var(--radius);box-shadow:var(--shadow);overflow:hidden;margin-bottom:24px;}
-  .rank-header{display:grid;grid-template-columns:50px 1fr 90px 130px;padding:12px 20px;background:#f9fafb;border-bottom:1.5px solid #e5e7eb;font-size:12px;font-weight:700;color:var(--gray2);}
-  .rank-item{border-bottom:1px solid #f3f4f6;}
-  .rank-item:last-child{border-bottom:none;}
-  .rank-row{display:grid;grid-template-columns:50px 1fr 90px 130px;padding:14px 20px;align-items:center;transition:background .15s;cursor:pointer;}
-  .rank-row:hover{background:#f9fafb;}
-  .rank-num{font-size:14px;font-weight:800;text-align:center;}
-  .rank-1{color:#f59e0b;} .rank-2{color:#9ca3af;} .rank-3{color:#cd7c2f;}
-  .member-name{font-size:14px;font-weight:700;}
-  .amount-num{font-size:15px;font-weight:900;color:var(--green);text-align:right;}
-  .rank-bar-wrap{display:flex;align-items:center;gap:8px;}
-  .rank-bar{flex:1;height:8px;background:#f3f4f6;border-radius:4px;overflow:hidden;}
-  .rank-bar-fill{height:100%;border-radius:4px;background:var(--green);transition:width .5s;}
-  .rank-detail{display:none;padding:2px 20px 14px;background:#f9fafb;}
-  .rank-detail.open{display:block;}
-  .rank-detail-row{display:flex;justify-content:space-between;align-items:center;gap:12px;padding:8px 0;border-bottom:1px dashed #e5e7eb;font-size:13px;}
-  .rank-detail-row:last-child{border-bottom:none;}
-  .rank-detail-date{color:var(--gray2);font-weight:600;flex-shrink:0;}
-  .rank-detail-reason{color:var(--gray1);flex:1;}
-  .rank-detail-amount{color:var(--green);font-weight:800;flex-shrink:0;}
-
-  /* 전체 내역 */
+  /* 전체 목록 */
   .list-card{background:#fff;border-radius:var(--radius);box-shadow:var(--shadow);overflow:hidden;}
-  .list-row{display:grid;grid-template-columns:100px 1fr 110px 1fr auto;gap:12px;padding:14px 20px;border-bottom:1px solid #f3f4f6;align-items:center;}
+  .list-row{display:grid;grid-template-columns:1fr 80px 1fr auto;gap:12px;padding:14px 20px;border-bottom:1px solid #f3f4f6;align-items:center;}
   .list-row:last-child{border-bottom:none;}
-  .list-date{font-size:12px;color:var(--gray2);font-weight:600;}
   .list-name{font-size:14px;font-weight:700;}
-  .list-amount{font-size:14px;font-weight:900;color:var(--green);text-align:right;}
-  .list-reason{font-size:13px;color:var(--gray1);}
+  .size-badge{display:inline-block;font-size:13px;font-weight:900;color:var(--green);background:#ecfdf5;border:1px solid #a7f3d0;border-radius:6px;padding:3px 10px;text-align:center;}
+  .list-note{font-size:13px;color:var(--gray1);}
+  .row-btns{display:flex;gap:6px;}
   .row-admin-btns{display:none;gap:6px;}
   .row-admin-btns.show{display:flex;}
   .btn-sm{padding:5px 12px;border-radius:6px;font-size:12px;font-weight:600;cursor:pointer;font-family:inherit;border:1.5px solid;}
   .btn-edit-sm{border-color:#e5e7eb;color:var(--gray2);background:#fff;}
   .btn-del-sm{border-color:#fee2e2;color:#ef4444;background:#fff5f5;}
+
+  /* 사이즈 집계 */
+  .size-table{background:#fff;border-radius:var(--radius);box-shadow:var(--shadow);overflow:hidden;}
+  .size-row{display:grid;grid-template-columns:70px 1fr 46px;gap:12px;padding:12px 20px;border-bottom:1px solid #f3f4f6;align-items:center;}
+  .size-row:last-child{border-bottom:none;}
+  .size-row-label{font-size:14px;font-weight:800;color:var(--dark);}
+  .size-bar{height:18px;background:#f3f4f6;border-radius:6px;overflow:hidden;}
+  .size-bar-fill{height:100%;background:var(--green);border-radius:6px;transition:width .5s;}
+  .size-row-count{font-size:13px;font-weight:700;color:var(--gray2);text-align:right;}
 
   .empty{text-align:center;padding:48px;color:var(--gray2);font-size:14px;}
   .loading{text-align:center;padding:48px;color:var(--gray2);}
@@ -96,11 +83,12 @@
   /* 모달 */
   .overlay{position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:200;display:flex;align-items:center;justify-content:center;backdrop-filter:blur(4px);}
   .mbox{background:#fff;border-radius:16px;padding:28px;width:440px;max-width:95vw;box-shadow:0 8px 40px rgba(0,0,0,.2);max-height:90vh;overflow-y:auto;}
-  .mbox h3{font-size:18px;font-weight:800;margin-bottom:18px;}
+  .mbox h3{font-size:18px;font-weight:800;margin-bottom:6px;}
+  .mbox .sub{font-size:12px;color:var(--gray2);margin-bottom:18px;}
   .fg{margin-bottom:14px;}
   .fg label{font-size:13px;font-weight:700;color:var(--gray1);margin-bottom:5px;display:block;}
-  .fg input{width:100%;padding:10px 13px;border:1.5px solid var(--gray3);border-radius:8px;font-size:14px;font-family:inherit;outline:none;}
-  .fg input:focus{border-color:var(--green);}
+  .fg input,.fg select{width:100%;padding:10px 13px;border:1.5px solid var(--gray3);border-radius:8px;font-size:14px;font-family:inherit;outline:none;background:#fff;}
+  .fg input:focus,.fg select:focus{border-color:var(--green);}
   .mbtns{display:flex;gap:8px;justify-content:flex-end;margin-top:18px;}
   .mbtn-ok{padding:10px 24px;border-radius:9px;background:var(--green);color:#fff;border:none;font-size:14px;font-weight:700;cursor:pointer;font-family:inherit;}
   .mbtn-cancel{padding:10px 18px;border-radius:9px;border:1.5px solid var(--gray3);background:#fff;font-size:14px;font-weight:600;color:var(--gray2);cursor:pointer;font-family:inherit;}
@@ -111,12 +99,9 @@
   .toast.show{opacity:1;transform:translateX(-50%) translateY(0);}
   @media(max-width:640px){
     .main-wrap{padding:24px 16px 48px;} .page-header{padding:28px 20px;}
-    .summary-cards{grid-template-columns:repeat(2,1fr);}
-    .rank-header,.rank-row{grid-template-columns:32px 1fr 92px;}
-    .rank-header>:nth-child(3),.rank-row>:nth-child(3){display:none;}
-    .rank-detail-row{flex-wrap:wrap;}
-    .list-row{grid-template-columns:1fr;gap:4px;}
-    .row-admin-btns{justify-content:flex-start;margin-top:4px;}
+    .summary-cards{grid-template-columns:repeat(3,1fr);}
+    .list-row{grid-template-columns:1fr;gap:6px;}
+    .row-btns{justify-content:flex-start;}
   }
 </style>
 </head>
@@ -126,7 +111,7 @@
   <button class="hamburger" id="hamburger" aria-label="메뉴"><span></span><span></span><span></span></button>
   <ul class="nav-links" id="nav-links">
     <li class="nav-item-drop">
-      <a href="intro.html" class="nav-active">소개 <span class="nav-arrow">▾</span></a>
+      <a href="intro.html" class="">소개 <span class="nav-arrow">▾</span></a>
       <div class="nav-dropdown"><a href="intro.html">팀 소개</a><a href="members.html">회원명단</a><a href="presidents.html">역대 회장</a><a href="rules.html">회칙</a><a href="sponsors.html">스폰서</a><a href="donation.html">찬조내역</a></div>
     </li>
     <li><a href="notice.html" class="">공지사항</a></li>
@@ -134,7 +119,7 @@
     <li><a href="record.html" class="">경기기록</a></li>
     <li><a href="rating.html" class="">선발점수</a></li>
     <li><a href="attendance.html" class="">출석률</a></li>
-    <li><a href="uniform.html" class="">유니폼</a></li>
+    <li><a href="uniform.html" class="nav-active">유니폼</a></li>
     <li><a href="board.html" class="">커뮤니티</a></li>
     <li><a href="gallery.html" class="">갤러리</a></li>
   </ul>
@@ -226,60 +211,64 @@ document.querySelectorAll('.nav-links a').forEach(a=>{
 </style>
 <div class="page-header">
   <div class="page-header-inner">
-    <div class="breadcrumb"><span onclick="location.href='index.html'" style="cursor:pointer;">홈</span><span>›</span><span class="cur">찬조내역</span></div>
-    <h1>🙏 찬조내역</h1>
-    <p>회원들의 소중한 찬조를 기록하고 감사한 마음을 전합니다.</p>
+    <div class="breadcrumb"><span onclick="location.href='index.html'" style="cursor:pointer;">홈</span><span>›</span><span class="cur">유니폼</span></div>
+    <h1>👕 유니폼 사이즈</h1>
+    <p>유니폼 구입을 위해 본인 사이즈를 입력해 주세요. (한국 스포츠의류 숫자 사이즈)</p>
   </div>
 </div>
 
 <div class="main-wrap">
   <!-- 요약 -->
   <div class="summary-cards">
-    <div class="sum-card"><div class="sum-num green" id="s-count">-</div><div class="sum-label">총 찬조 건수</div></div>
-    <div class="sum-card"><div class="sum-num green" id="s-total">-</div><div class="sum-label">총 찬조 금액</div></div>
-    <div class="sum-card"><div class="sum-num" id="s-people">-</div><div class="sum-label">참여 인원</div></div>
-    <div class="sum-card"><div class="sum-num" id="s-top">-</div><div class="sum-label">최다 찬조자</div></div>
+    <div class="sum-card"><div class="sum-num green" id="s-count">-</div><div class="sum-label">입력 인원</div></div>
+    <div class="sum-card"><div class="sum-num" id="s-missing">-</div><div class="sum-label">미입력 인원</div></div>
+    <div class="sum-card"><div class="sum-num" id="s-top">-</div><div class="sum-label">최다 사이즈</div></div>
   </div>
 
   <div class="top-bar">
     <div class="left-bar">
       <div class="tab-bar">
-        <button class="tab-btn active" id="tab-list">전체 내역</button>
-        <button class="tab-btn" id="tab-rank">회원별 랭킹</button>
+        <button class="tab-btn active" id="tab-list">전체 목록</button>
+        <button class="tab-btn" id="tab-size">사이즈 집계</button>
       </div>
       <span id="admin-ui"></span>
     </div>
-    <button class="add-btn" id="btn-add">+ 찬조 입력</button>
+    <button class="add-btn" id="btn-add">+ 내 사이즈 입력</button>
   </div>
 
-  <!-- 전체 내역 뷰 -->
+  <!-- 전체 목록 뷰 -->
   <div id="view-list">
     <div class="list-card" id="list-body"><div class="loading"><div class="spinner"></div>불러오는 중...</div></div>
   </div>
 
-  <!-- 랭킹 뷰 -->
-  <div id="view-rank" style="display:none;">
-    <div class="rank-table">
-      <div class="rank-header">
-        <div style="text-align:center;">순위</div>
-        <div>이름</div>
-        <div style="text-align:center;">건수</div>
-        <div style="text-align:right;">누적 금액</div>
-      </div>
-      <div id="rank-body"></div>
-    </div>
+  <!-- 사이즈 집계 뷰 -->
+  <div id="view-size" style="display:none;">
+    <div class="size-table" id="size-body"></div>
   </div>
 </div>
 
-<!-- 찬조 입력 모달 -->
-<div class="overlay" id="donation-modal" style="display:none;">
+<!-- 사이즈 입력 모달 -->
+<div class="overlay" id="uniform-modal" style="display:none;">
   <div class="mbox">
-    <h3 id="modal-title">찬조 입력</h3>
+    <h3 id="modal-title">내 사이즈 입력</h3>
+    <p class="sub">이름을 다시 입력하면 기존 사이즈가 수정됩니다.</p>
     <div class="fg"><label>이름 *</label><input type="text" id="f-name" list="member-list" placeholder="홍길동"></div>
     <datalist id="member-list"></datalist>
-    <div class="fg"><label>날짜 *</label><input type="date" id="f-date"></div>
-    <div class="fg"><label>금액(원) *</label><input type="number" id="f-amount" placeholder="100000" min="0"></div>
-    <div class="fg"><label>사유</label><input type="text" id="f-reason" placeholder="예) 창단기념일 축하 찬조"></div>
+    <div class="fg"><label>사이즈 *</label>
+      <select id="f-size">
+        <option value="">선택</option>
+        <option value="90">90</option>
+        <option value="95">95</option>
+        <option value="100">100</option>
+        <option value="105">105</option>
+        <option value="110">110</option>
+        <option value="115">115</option>
+        <option value="120">120</option>
+        <option value="125">125</option>
+        <option value="130">130</option>
+      </select>
+    </div>
+    <div class="fg"><label>메모/요청사항</label><input type="text" id="f-note" placeholder="예) 루즈핏 원함, 등번호 10번 희망"></div>
     <div class="mbtns">
       <button class="mbtn-cancel" id="btn-modal-cancel">취소</button>
       <button class="mbtn-ok" id="btn-submit">저장하기</button>
@@ -291,7 +280,7 @@ document.querySelectorAll('.nav-links a').forEach(a=>{
 <div class="overlay" id="pw-modal" style="display:none;">
   <div class="mbox" style="width:320px;">
     <h3>🔐 관리자 확인</h3>
-    <p style="font-size:13px;color:var(--gray2);margin-bottom:16px;">관리자만 입력할 수 있습니다.</p>
+    <p style="font-size:13px;color:var(--gray2);margin-bottom:16px;">다른 회원의 사이즈 삭제는 관리자만 할 수 있습니다.</p>
     <input class="pw-input" type="password" id="pw-input" placeholder="비밀번호" maxlength="20">
     <div class="pw-err" id="pw-err"></div>
     <div class="mbtns">
@@ -321,21 +310,23 @@ const ADMIN_PW = 'joonghung2015';
 const ADMIN_KEY = 'jfc_admin';
 
 let allMembers = [];
-let allDonations = [];
-let editId = null;
+let allSizes = []; // [{key, name, size, note, updatedAt}]
+let editKey = null;
 let pwCb = null;
 let curTab = 'list';
 
 const isAdmin = () => sessionStorage.getItem(ADMIN_KEY) === '1';
-const fmtWon = n => (n||0).toLocaleString('ko-KR')+'원';
 
-/* 관리자 */
+/* 관리자 - 삭제 권한 확인용(사이즈 입력/수정은 회원 누구나 가능) */
 function setAdminUI(){
   const el = document.getElementById('admin-ui');
   if(isAdmin()){
     el.innerHTML='<span class="admin-badge" id="logout-btn">✅ 관리자 · 로그아웃</span>';
     document.getElementById('logout-btn').onclick=()=>{ sessionStorage.removeItem(ADMIN_KEY); setAdminUI(); renderAll(); };
-  } else el.innerHTML='';
+  } else {
+    el.innerHTML='<span class="admin-badge" id="login-btn" style="background:#fff;color:var(--gray2);border-color:var(--gray3);">🔐 관리자 로그인</span>';
+    document.getElementById('login-btn').onclick=()=>openPw(()=>{ setAdminUI(); renderAll(); });
+  }
   document.querySelectorAll('.row-admin-btns').forEach(b=>b.classList.toggle('show',isAdmin()));
 }
 
@@ -349,11 +340,13 @@ function checkPw(){
 
 /* API */
 const api=(path,opt={})=>fetch(DB+path+'.json',opt).then(r=>{ if(!r.ok) throw new Error('HTTP '+r.status); return r.json(); });
+/* 이름 → Firebase 키 (경로에 쓸 수 없는 문자만 치환) */
+function nameToKey(name){ return encodeURIComponent(name.trim()).replace(/\./g,'%2E'); }
 
 /* 데이터 로드 */
 async function loadAll(){
   try{
-    const [mRaw, dRaw] = await Promise.all([ api('/members'), api('/donations') ]);
+    const [mRaw, uRaw] = await Promise.all([ api('/members'), api('/uniform_sizes') ]);
     allMembers=[];
     if(mRaw&&typeof mRaw==='object'){
       Object.entries(mRaw).forEach(([k,v])=>{ if(v&&v.name) allMembers.push({id:k,...v}); });
@@ -361,11 +354,11 @@ async function loadAll(){
     allMembers.sort((a,b)=>(parseInt(a.num)||999)-(parseInt(b.num)||999)||a.name.localeCompare(b.name,'ko'));
     document.getElementById('member-list').innerHTML = allMembers.map(m=>`<option value="${m.name}">`).join('');
 
-    allDonations=[];
-    if(dRaw&&typeof dRaw==='object'){
-      Object.entries(dRaw).forEach(([k,v])=>{ if(v&&v.name) allDonations.push({id:k,...v}); });
+    allSizes=[];
+    if(uRaw&&typeof uRaw==='object'){
+      Object.entries(uRaw).forEach(([k,v])=>{ if(v&&v.name) allSizes.push({key:k,...v}); });
     }
-    allDonations.sort((a,b)=>(b.date||'').localeCompare(a.date||''));
+    allSizes.sort((a,b)=>a.name.localeCompare(b.name,'ko'));
 
     renderSummary();
     renderAll();
@@ -374,132 +367,106 @@ async function loadAll(){
   }
 }
 
-/* 회원별 집계 */
-function getMemberTotals(){
-  const map = {};
-  allDonations.forEach(d=>{
-    if(!map[d.name]) map[d.name]={name:d.name, total:0, count:0};
-    map[d.name].total += Number(d.amount)||0;
-    map[d.name].count += 1;
-  });
-  return Object.values(map).sort((a,b)=>b.total-a.total||a.name.localeCompare(b.name,'ko'));
-}
-
 /* 요약 */
 function renderSummary(){
-  document.getElementById('s-count').textContent = allDonations.length;
-  const totalAmount = allDonations.reduce((s,d)=>s+(Number(d.amount)||0),0);
-  document.getElementById('s-total').textContent = fmtWon(totalAmount);
-  const totals = getMemberTotals();
-  document.getElementById('s-people').textContent = totals.length;
-  document.getElementById('s-top').textContent = totals.length>0 ? totals[0].name : '-';
+  document.getElementById('s-count').textContent = allSizes.length;
+  const enteredNames = new Set(allSizes.map(s=>s.name));
+  const missing = allMembers.filter(m=>!enteredNames.has(m.name)).length;
+  document.getElementById('s-missing').textContent = missing;
+  const counts = getSizeCounts();
+  const top = counts[0];
+  document.getElementById('s-top').textContent = top ? `${top.size} (${top.count}명)` : '-';
 }
 
-function renderAll(){ curTab==='list' ? renderList() : renderRank(); }
+function getSizeCounts(){
+  const map = {};
+  allSizes.forEach(s=>{ map[s.size]=(map[s.size]||0)+1; });
+  return Object.entries(map).map(([size,count])=>({size,count})).sort((a,b)=>b.count-a.count||a.size.localeCompare(b.size));
+}
 
-/* 전체 내역 */
+function renderAll(){ curTab==='list' ? renderList() : renderSizeCounts(); }
+
+/* 전체 목록 */
 function renderList(){
   const body = document.getElementById('list-body');
-  if(allDonations.length===0){ body.innerHTML='<div class="empty">🙏 등록된 찬조내역이 없습니다.</div>'; setAdminUI(); return; }
-  body.innerHTML = allDonations.map(d=>`
+  if(allSizes.length===0){ body.innerHTML='<div class="empty">👕 아직 입력된 사이즈가 없습니다.<br><small>위 "+ 내 사이즈 입력" 버튼으로 입력해 주세요.</small></div>'; setAdminUI(); return; }
+  body.innerHTML = allSizes.map(s=>`
     <div class="list-row">
-      <div class="list-date">📅 ${(d.date||'').replace(/-/g,'.')}</div>
-      <div class="list-name">${d.name}</div>
-      <div class="list-amount">${fmtWon(Number(d.amount)||0)}</div>
-      <div class="list-reason">${d.reason||''}</div>
-      <div class="row-admin-btns${isAdmin()?' show':''}">
-        <button class="btn-sm btn-edit-sm" data-id="${d.id}">✏️ 수정</button>
-        <button class="btn-sm btn-del-sm" data-id="${d.id}">🗑 삭제</button>
+      <div class="list-name">${s.name}</div>
+      <div><span class="size-badge">${s.size}</span></div>
+      <div class="list-note">${s.note||''}</div>
+      <div class="row-btns">
+        <button class="btn-sm btn-edit-sm" data-key="${s.key}">✏️ 수정</button>
+        <span class="row-admin-btns${isAdmin()?' show':''}"><button class="btn-sm btn-del-sm" data-key="${s.key}">🗑 삭제</button></span>
       </div>
     </div>`).join('');
-  body.querySelectorAll('.btn-edit-sm').forEach(b=>b.onclick=()=>{ const d=allDonations.find(x=>x.id===b.dataset.id); if(d) openModal(d); });
-  body.querySelectorAll('.btn-del-sm').forEach(b=>b.onclick=()=>delDonation(b.dataset.id));
+  body.querySelectorAll('.btn-edit-sm').forEach(b=>b.onclick=()=>{ const s=allSizes.find(x=>x.key===b.dataset.key); if(s) openModal(s); });
+  body.querySelectorAll('.btn-del-sm').forEach(b=>b.onclick=()=>delSize(b.dataset.key));
   setAdminUI();
 }
 
-/* 랭킹 */
-function renderRank(){
-  const body = document.getElementById('rank-body');
-  const totals = getMemberTotals();
-  if(totals.length===0){ body.innerHTML='<div class="empty">🙏 등록된 찬조내역이 없습니다.</div>'; return; }
-  body.innerHTML = totals.map((t,i)=>{
-    const rnCls = i===0?'rank-1':i===1?'rank-2':i===2?'rank-3':'';
-    const rnIcon = i===0?'🥇':i===1?'🥈':i===2?'🥉':(i+1);
-    const memberDonations = allDonations.filter(d=>d.name===t.name);
-    const detailRows = memberDonations.map(d=>`
-      <div class="rank-detail-row">
-        <span class="rank-detail-date">📅 ${(d.date||'').replace(/-/g,'.')}</span>
-        <span class="rank-detail-reason">${d.reason||''}</span>
-        <span class="rank-detail-amount">${fmtWon(Number(d.amount)||0)}</span>
-      </div>`).join('');
-    return `<div class="rank-item">
-      <div class="rank-row" onclick="toggleRankDetail(this)">
-        <div class="rank-num ${rnCls}">${rnIcon}</div>
-        <div class="member-name">${t.name}</div>
-        <div style="text-align:center;font-size:13px;color:var(--gray2);">${t.count}건</div>
-        <div class="amount-num">${fmtWon(t.total)}</div>
-      </div>
-      <div class="rank-detail">${detailRows}</div>
-    </div>`;
-  }).join('');
+/* 사이즈 집계 */
+function renderSizeCounts(){
+  const body = document.getElementById('size-body');
+  const counts = getSizeCounts();
+  if(counts.length===0){ body.innerHTML='<div class="empty">👕 아직 입력된 사이즈가 없습니다.</div>'; return; }
+  const maxCount = counts[0].count||1;
+  body.innerHTML = counts.map(c=>`
+    <div class="size-row">
+      <div class="size-row-label">${c.size}</div>
+      <div class="size-bar"><div class="size-bar-fill" style="width:${Math.round(c.count/maxCount*100)}%"></div></div>
+      <div class="size-row-count">${c.count}명</div>
+    </div>`).join('');
 }
 
-function toggleRankDetail(rowEl){
-  rowEl.nextElementSibling.classList.toggle('open');
-}
-
-/* 모달 */
-function openModal(d){
-  editId = d ? d.id : null;
-  document.getElementById('modal-title').textContent = d ? '찬조 수정' : '찬조 입력';
-  document.getElementById('btn-submit').textContent  = d ? '수정하기' : '저장하기';
-  document.getElementById('f-name').value = d ? d.name : '';
-  document.getElementById('f-date').value = d ? d.date : '';
-  document.getElementById('f-amount').value = d ? d.amount : '';
-  document.getElementById('f-reason').value = d ? (d.reason||'') : '';
-  document.getElementById('donation-modal').style.display='flex';
+/* 모달 - 이름을 다시 입력하면 같은 키로 덮어써서 본인 사이즈를 수정하는 방식 */
+function openModal(s){
+  editKey = s ? s.key : null;
+  document.getElementById('modal-title').textContent = s ? '사이즈 수정' : '내 사이즈 입력';
+  document.getElementById('btn-submit').textContent  = '저장하기';
+  document.getElementById('f-name').value = s ? s.name : '';
+  document.getElementById('f-size').value = s ? s.size : '';
+  document.getElementById('f-note').value = s ? (s.note||'') : '';
+  document.getElementById('uniform-modal').style.display='flex';
   setTimeout(()=>document.getElementById('f-name').focus(),100);
 }
-function closeModal(){ document.getElementById('donation-modal').style.display='none'; }
+function closeModal(){ document.getElementById('uniform-modal').style.display='none'; }
 
-/* CRUD */
-function saveDonation(){
+/* 저장 - 이름 기준 키로 upsert (같은 이름 재입력 시 자동으로 본인 것이 수정됨) */
+function saveSize(){
   const name = document.getElementById('f-name').value.trim();
-  const date = document.getElementById('f-date').value;
-  const amount = document.getElementById('f-amount').value;
+  const size = document.getElementById('f-size').value;
   if(!name){ showToast('⚠️ 이름을 입력해 주세요.'); return; }
-  if(!date){ showToast('⚠️ 날짜를 선택해 주세요.'); return; }
-  if(amount==='' || isNaN(Number(amount))){ showToast('⚠️ 금액을 입력해 주세요.'); return; }
-  const data = { name, date, amount:Number(amount), reason:document.getElementById('f-reason').value.trim(), updatedAt:Date.now() };
+  if(!size){ showToast('⚠️ 사이즈를 선택해 주세요.'); return; }
+  const key = nameToKey(name);
+  const data = { name, size, note:document.getElementById('f-note').value.trim(), updatedAt:Date.now() };
   const btn=document.getElementById('btn-submit');
   btn.disabled=true; btn.textContent='저장 중...';
-  const reset=()=>{ btn.disabled=false; btn.textContent=editId?'수정하기':'저장하기'; };
+  const reset=()=>{ btn.disabled=false; btn.textContent='저장하기'; };
 
-  if(editId){
-    api('/donations/'+editId,{method:'PATCH',headers:{'Content-Type':'application/json'},body:JSON.stringify(data)})
-      .then(()=>{ const i=allDonations.findIndex(x=>x.id===editId); if(i>-1) allDonations[i]={...allDonations[i],...data}; allDonations.sort((a,b)=>(b.date||'').localeCompare(a.date||'')); renderSummary(); renderAll(); closeModal(); showToast('✅ 수정되었습니다.'); reset(); })
-      .catch(e=>{ showToast('❌ 실패: '+e.message); reset(); });
-  } else {
-    data.createdAt=Date.now();
-    api('/donations',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(data)})
-      .then(res=>{ allDonations.unshift({id:res.name,...data}); allDonations.sort((a,b)=>(b.date||'').localeCompare(a.date||'')); renderSummary(); renderAll(); closeModal(); showToast('✅ 저장되었습니다.'); reset(); })
-      .catch(e=>{ showToast('❌ 실패: '+e.message); reset(); });
-  }
+  api('/uniform_sizes/'+key,{method:'PUT',headers:{'Content-Type':'application/json'},body:JSON.stringify(data)})
+    .then(()=>{
+      const i=allSizes.findIndex(x=>x.key===key);
+      if(i>-1) allSizes[i]={key,...data}; else allSizes.push({key,...data});
+      allSizes.sort((a,b)=>a.name.localeCompare(b.name,'ko'));
+      renderSummary(); renderAll(); closeModal(); showToast('✅ 저장되었습니다.'); reset();
+    })
+    .catch(e=>{ showToast('❌ 실패: '+e.message); reset(); });
 }
 
-function delDonation(id){
-  if(!confirm('이 찬조내역을 삭제하시겠습니까?')) return;
-  api('/donations/'+id,{method:'DELETE'}).then(()=>{ allDonations=allDonations.filter(x=>x.id!==id); renderSummary(); renderAll(); showToast('✅ 삭제되었습니다.'); }).catch(e=>showToast('❌ 실패: '+e.message));
+function delSize(key){
+  if(!confirm('이 사이즈 입력을 삭제하시겠습니까?')) return;
+  api('/uniform_sizes/'+key,{method:'DELETE'}).then(()=>{ allSizes=allSizes.filter(x=>x.key!==key); renderSummary(); renderAll(); showToast('✅ 삭제되었습니다.'); }).catch(e=>showToast('❌ 실패: '+e.message));
 }
 
 /* 탭 */
-document.getElementById('tab-list').onclick=function(){ curTab='list'; this.classList.add('active'); document.getElementById('tab-rank').classList.remove('active'); document.getElementById('view-list').style.display='block'; document.getElementById('view-rank').style.display='none'; renderList(); };
-document.getElementById('tab-rank').onclick=function(){ curTab='rank'; this.classList.add('active'); document.getElementById('tab-list').classList.remove('active'); document.getElementById('view-list').style.display='none'; document.getElementById('view-rank').style.display='block'; renderRank(); };
+document.getElementById('tab-list').onclick=function(){ curTab='list'; this.classList.add('active'); document.getElementById('tab-size').classList.remove('active'); document.getElementById('view-list').style.display='block'; document.getElementById('view-size').style.display='none'; renderList(); };
+document.getElementById('tab-size').onclick=function(){ curTab='size'; this.classList.add('active'); document.getElementById('tab-list').classList.remove('active'); document.getElementById('view-list').style.display='none'; document.getElementById('view-size').style.display='block'; renderSizeCounts(); };
 
 /* 버튼 */
-document.getElementById('btn-add').onclick=()=>{ if(isAdmin()){ openModal(); } else openPw(()=>openModal()); };
+document.getElementById('btn-add').onclick=()=>openModal();
 document.getElementById('btn-modal-cancel').onclick=closeModal;
-document.getElementById('btn-submit').onclick=saveDonation;
+document.getElementById('btn-submit').onclick=saveSize;
 document.getElementById('btn-pw-cancel').onclick=closePw;
 document.getElementById('btn-pw-ok').onclick=checkPw;
 document.getElementById('pw-input').onkeydown=e=>{ if(e.key==='Enter') checkPw(); };
