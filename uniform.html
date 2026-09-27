@@ -56,7 +56,8 @@
   .list-card{background:#fff;border-radius:var(--radius);box-shadow:var(--shadow);overflow:hidden;}
   .list-row{display:grid;grid-template-columns:1fr 80px 1fr auto;gap:12px;padding:14px 20px;border-bottom:1px solid #f3f4f6;align-items:center;}
   .list-row:last-child{border-bottom:none;}
-  .list-name{font-size:14px;font-weight:700;}
+  .list-name{font-size:14px;font-weight:700;display:flex;align-items:center;gap:8px;}
+  .num-badge{font-size:20px;font-weight:900;color:var(--green);background:#ecfdf5;border:1.5px solid #a7f3d0;border-radius:8px;padding:0 10px;line-height:1.6;}
   .size-badge{display:inline-block;font-size:13px;font-weight:900;color:var(--green);background:#ecfdf5;border:1px solid #a7f3d0;border-radius:6px;padding:3px 10px;text-align:center;}
   .list-note{font-size:13px;color:var(--gray1);}
   .row-btns{display:flex;gap:6px;}
@@ -390,16 +391,20 @@ function renderAll(){ curTab==='list' ? renderList() : renderSizeCounts(); }
 function renderList(){
   const body = document.getElementById('list-body');
   if(allSizes.length===0){ body.innerHTML='<div class="empty">👕 아직 입력된 사이즈가 없습니다.<br><small>위 "+ 내 사이즈 입력" 버튼으로 입력해 주세요.</small></div>'; setAdminUI(); return; }
-  body.innerHTML = allSizes.map(s=>`
+  body.innerHTML = allSizes.map(s=>{
+    const member = allMembers.find(m=>m.name===s.name);
+    const num = member && member.num ? member.num : '';
+    return `
     <div class="list-row">
-      <div class="list-name">${s.name}</div>
+      <div class="list-name">${s.name}${num?`<span class="num-badge">${num}</span>`:''}</div>
       <div><span class="size-badge">${s.size}</span></div>
       <div class="list-note">${s.note||''}</div>
       <div class="row-btns">
         <button class="btn-sm btn-edit-sm" data-key="${s.key}">✏️ 수정</button>
         <span class="row-admin-btns${isAdmin()?' show':''}"><button class="btn-sm btn-del-sm" data-key="${s.key}">🗑 삭제</button></span>
       </div>
-    </div>`).join('');
+    </div>`;
+  }).join('');
   body.querySelectorAll('.btn-edit-sm').forEach(b=>b.onclick=()=>{ const s=allSizes.find(x=>x.key===b.dataset.key); if(s) openModal(s); });
   body.querySelectorAll('.btn-del-sm').forEach(b=>b.onclick=()=>delSize(b.dataset.key));
   setAdminUI();
