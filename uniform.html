@@ -36,11 +36,12 @@
   .main-wrap{max-width:1000px;margin:0 auto;padding:28px 40px 60px;}
 
   /* 상단 요약 */
-  .summary-cards{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:24px;}
+  .summary-cards{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:24px;}
   .sum-card{background:#fff;border-radius:12px;padding:16px 20px;box-shadow:var(--shadow);text-align:center;}
   .sum-num{font-size:22px;font-weight:900;color:var(--dark);}
   .sum-num.green{color:var(--green);}
   .sum-label{font-size:12px;color:var(--gray2);margin-top:3px;}
+  .cost-banner{background:#fff7ed;border:1.5px solid #fed7aa;border-radius:12px;padding:12px 18px;margin-bottom:16px;display:flex;align-items:center;gap:8px;font-size:14px;font-weight:700;color:#9a3412;}
 
   .top-bar{display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;flex-wrap:wrap;gap:10px;}
   .left-bar{display:flex;align-items:center;gap:10px;flex-wrap:wrap;}
@@ -54,11 +55,15 @@
 
   /* 전체 목록 */
   .list-card{background:#fff;border-radius:var(--radius);box-shadow:var(--shadow);overflow:hidden;}
-  .list-row{display:grid;grid-template-columns:1fr 80px 1fr auto;gap:12px;padding:14px 20px;border-bottom:1px solid #f3f4f6;align-items:center;}
+  .list-row{display:grid;grid-template-columns:1fr 80px 1fr 110px auto;gap:12px;padding:14px 20px;border-bottom:1px solid #f3f4f6;align-items:center;}
   .list-row:last-child{border-bottom:none;}
   .list-name{font-size:14px;font-weight:700;display:flex;align-items:center;gap:8px;}
   .num-badge{font-size:20px;font-weight:900;color:var(--green);background:#ecfdf5;border:1.5px solid #a7f3d0;border-radius:8px;padding:0 10px;line-height:1.6;}
   .size-badge{display:inline-block;font-size:13px;font-weight:900;color:var(--green);background:#ecfdf5;border:1px solid #a7f3d0;border-radius:6px;padding:3px 10px;text-align:center;}
+  .paid-badge{display:inline-flex;align-items:center;gap:4px;font-size:12px;font-weight:700;padding:4px 10px;border-radius:6px;cursor:default;white-space:nowrap;}
+  .paid-badge.paid{background:#ecfdf5;color:var(--green);border:1px solid #a7f3d0;}
+  .paid-badge.unpaid{background:#fef2f2;color:#ef4444;border:1px solid #fecaca;}
+  .paid-badge.toggleable{cursor:pointer;}
   .list-note{font-size:13px;color:var(--gray1);}
   .row-btns{display:flex;gap:6px;}
   .row-admin-btns{display:none;gap:6px;}
@@ -100,7 +105,7 @@
   .toast.show{opacity:1;transform:translateX(-50%) translateY(0);}
   @media(max-width:640px){
     .main-wrap{padding:24px 16px 48px;} .page-header{padding:28px 20px;}
-    .summary-cards{grid-template-columns:repeat(3,1fr);}
+    .summary-cards{grid-template-columns:repeat(2,1fr);}
     .list-row{grid-template-columns:1fr;gap:6px;}
     .row-btns{justify-content:flex-start;}
   }
@@ -219,10 +224,12 @@ document.querySelectorAll('.nav-links a').forEach(a=>{
 </div>
 
 <div class="main-wrap">
+  <div class="cost-banner">💰 유니폼 비용 <span id="cost-display">20,000원</span> / 1인 — 회비계좌로 입금 후 납부 여부는 목록에서 확인하실 수 있습니다.</div>
   <!-- 요약 -->
   <div class="summary-cards">
     <div class="sum-card"><div class="sum-num green" id="s-count">-</div><div class="sum-label">입력 인원</div></div>
     <div class="sum-card"><div class="sum-num" id="s-missing">-</div><div class="sum-label">미입력 인원</div></div>
+    <div class="sum-card"><div class="sum-num green" id="s-paid">-</div><div class="sum-label">납부 인원</div></div>
     <div class="sum-card"><div class="sum-num" id="s-top">-</div><div class="sum-label">최다 사이즈</div></div>
   </div>
 
@@ -281,7 +288,7 @@ document.querySelectorAll('.nav-links a').forEach(a=>{
 <div class="overlay" id="pw-modal" style="display:none;">
   <div class="mbox" style="width:320px;">
     <h3>🔐 관리자 확인</h3>
-    <p style="font-size:13px;color:var(--gray2);margin-bottom:16px;">다른 회원의 사이즈 삭제는 관리자만 할 수 있습니다.</p>
+    <p style="font-size:13px;color:var(--gray2);margin-bottom:16px;">삭제·납부 상태 변경은 관리자만 할 수 있습니다.</p>
     <input class="pw-input" type="password" id="pw-input" placeholder="비밀번호" maxlength="20">
     <div class="pw-err" id="pw-err"></div>
     <div class="mbtns">
@@ -374,6 +381,8 @@ function renderSummary(){
   const enteredNames = new Set(allSizes.map(s=>s.name));
   const missing = allMembers.filter(m=>!enteredNames.has(m.name)).length;
   document.getElementById('s-missing').textContent = missing;
+  const paidCount = allSizes.filter(s=>s.paid).length;
+  document.getElementById('s-paid').textContent = `${paidCount} / ${allSizes.length}`;
   const counts = getSizeCounts();
   const top = counts[0];
   document.getElementById('s-top').textContent = top ? `${top.size} (${top.count}명)` : '-';
@@ -394,11 +403,14 @@ function renderList(){
   body.innerHTML = allSizes.map(s=>{
     const member = allMembers.find(m=>m.name===s.name);
     const num = member && member.num ? member.num : '';
+    const paidCls = s.paid ? 'paid' : 'unpaid';
+    const paidLabel = s.paid ? '✅ 납부완료' : '⬜ 미납';
     return `
     <div class="list-row">
       <div class="list-name">${s.name}${num?`<span class="num-badge">${num}</span>`:''}</div>
       <div><span class="size-badge">${s.size}</span></div>
       <div class="list-note">${s.note||''}</div>
+      <div><span class="paid-badge ${paidCls} toggleable" data-key="${s.key}" title="클릭하여 납부 상태 변경(관리자)">${paidLabel}</span></div>
       <div class="row-btns">
         <button class="btn-sm btn-edit-sm" data-key="${s.key}">✏️ 수정</button>
         <span class="row-admin-btns${isAdmin()?' show':''}"><button class="btn-sm btn-del-sm" data-key="${s.key}">🗑 삭제</button></span>
@@ -407,6 +419,7 @@ function renderList(){
   }).join('');
   body.querySelectorAll('.btn-edit-sm').forEach(b=>b.onclick=()=>{ const s=allSizes.find(x=>x.key===b.dataset.key); if(s) openModal(s); });
   body.querySelectorAll('.btn-del-sm').forEach(b=>b.onclick=()=>delSize(b.dataset.key));
+  body.querySelectorAll('.paid-badge').forEach(b=>b.onclick=()=>togglePaid(b.dataset.key));
   setAdminUI();
 }
 
@@ -444,7 +457,8 @@ function saveSize(){
   if(!name){ showToast('⚠️ 이름을 입력해 주세요.'); return; }
   if(!size){ showToast('⚠️ 사이즈를 선택해 주세요.'); return; }
   const key = nameToKey(name);
-  const data = { name, size, note:document.getElementById('f-note').value.trim(), updatedAt:Date.now() };
+  const existing = allSizes.find(x=>x.key===key);
+  const data = { name, size, note:document.getElementById('f-note').value.trim(), paid:existing?!!existing.paid:false, updatedAt:Date.now() };
   const btn=document.getElementById('btn-submit');
   btn.disabled=true; btn.textContent='저장 중...';
   const reset=()=>{ btn.disabled=false; btn.textContent='저장하기'; };
@@ -462,6 +476,19 @@ function saveSize(){
 function delSize(key){
   if(!confirm('이 사이즈 입력을 삭제하시겠습니까?')) return;
   api('/uniform_sizes/'+key,{method:'DELETE'}).then(()=>{ allSizes=allSizes.filter(x=>x.key!==key); renderSummary(); renderAll(); showToast('✅ 삭제되었습니다.'); }).catch(e=>showToast('❌ 실패: '+e.message));
+}
+
+/* 납부 여부 토글 - 금액 관련이라 관리자만 변경 가능 */
+function togglePaid(key){
+  const run=()=>{
+    const s = allSizes.find(x=>x.key===key);
+    if(!s) return;
+    const paid = !s.paid;
+    api('/uniform_sizes/'+key,{method:'PATCH',headers:{'Content-Type':'application/json'},body:JSON.stringify({paid})})
+      .then(()=>{ s.paid=paid; renderSummary(); renderAll(); showToast(paid?'✅ 납부 완료로 변경':'⬜ 미납으로 변경'); })
+      .catch(e=>showToast('❌ 실패: '+e.message));
+  };
+  isAdmin() ? run() : openPw(run);
 }
 
 /* 탭 */
