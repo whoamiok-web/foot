@@ -75,7 +75,9 @@
   .list-row{display:grid;grid-template-columns:1fr 80px 1fr 110px auto;gap:12px;padding:14px 20px;border-bottom:1px solid #f3f4f6;align-items:center;}
   .list-row:last-child{border-bottom:none;}
   .list-name{font-size:14px;font-weight:700;display:flex;align-items:center;gap:8px;}
-  .num-badge{font-size:20px;font-weight:900;color:var(--green);background:#ecfdf5;border:1.5px solid #a7f3d0;border-radius:8px;padding:0 10px;line-height:1.6;}
+  .num-badge{display:inline-flex;align-items:center;gap:4px;font-weight:900;color:var(--green);background:#ecfdf5;border:1.5px solid #a7f3d0;border-radius:8px;padding:2px 10px;white-space:nowrap;}
+  .num-badge .num-label{font-size:11px;font-weight:700;color:var(--green2);}
+  .num-badge .num-value{font-size:20px;}
   .size-badge{display:inline-block;font-size:13px;font-weight:900;color:var(--green);background:#ecfdf5;border:1px solid #a7f3d0;border-radius:6px;padding:3px 10px;text-align:center;}
   .paid-badge{display:inline-flex;align-items:center;gap:4px;font-size:12px;font-weight:700;padding:4px 10px;border-radius:6px;cursor:default;white-space:nowrap;}
   .paid-badge.paid{background:#ecfdf5;color:var(--green);border:1px solid #a7f3d0;}
@@ -236,7 +238,7 @@ document.querySelectorAll('.nav-links a').forEach(a=>{
   <div class="page-header-inner">
     <div class="breadcrumb"><span onclick="location.href='index.html'" style="cursor:pointer;">홈</span><span>›</span><span class="cur">유니폼</span></div>
     <h1>👕 유니폼 사이즈</h1>
-    <p>유니폼 구입을 위해 본인 사이즈를 입력해 주세요. (한국 스포츠의류 숫자 사이즈)</p>
+    <p>유니폼 구입을 위해 본인 사이즈를 입력해 주세요. (아래 사이즈표의 영문 사이즈 기준)</p>
   </div>
 </div>
 
@@ -250,7 +252,7 @@ document.querySelectorAll('.nav-links a').forEach(a=>{
       <span class="guide-arrow" id="guide-arrow">▾</span>
     </div>
     <div class="guide-body" id="guide-body">
-      <div class="guide-note">* 측정 방식에 따라 오차(±3)가 있을 수 있습니다. 참고용 표이며, 실제 입력은 아래 숫자 사이즈(90~130) 중 가까운 값으로 선택해 주세요.</div>
+      <div class="guide-note">* 측정 방식에 따라 오차(±3)가 있을 수 있습니다. 아래 표의 사이즈(5XS~5XL) 그대로 입력해 주세요.</div>
       <div class="guide-table-wrap">
         <table class="guide-table">
           <thead>
@@ -325,15 +327,19 @@ document.querySelectorAll('.nav-links a').forEach(a=>{
     <div class="fg"><label>사이즈 *</label>
       <select id="f-size">
         <option value="">선택</option>
-        <option value="90">90</option>
-        <option value="95">95</option>
-        <option value="100">100</option>
-        <option value="105">105</option>
-        <option value="110">110</option>
-        <option value="115">115</option>
-        <option value="120">120</option>
-        <option value="125">125</option>
-        <option value="130">130</option>
+        <option value="5XS">5XS</option>
+        <option value="4XS">4XS</option>
+        <option value="3XS">3XS</option>
+        <option value="2XS">2XS</option>
+        <option value="XS">XS</option>
+        <option value="S">S</option>
+        <option value="M">M</option>
+        <option value="L">L</option>
+        <option value="XL">XL</option>
+        <option value="2XL">2XL</option>
+        <option value="3XL">3XL</option>
+        <option value="4XL">4XL</option>
+        <option value="5XL">5XL</option>
       </select>
     </div>
     <div class="fg"><label>메모/요청사항</label><input type="text" id="f-note" placeholder="예) 루즈핏 원함, 등번호 10번 희망"></div>
@@ -448,10 +454,21 @@ function renderSummary(){
   document.getElementById('s-top').textContent = top ? `${top.size} (${top.count}명)` : '-';
 }
 
+const SIZE_ORDER = ['5XS','4XS','3XS','2XS','XS','S','M','L','XL','2XL','3XL','4XL','5XL'];
 function getSizeCounts(){
   const map = {};
   allSizes.forEach(s=>{ map[s.size]=(map[s.size]||0)+1; });
   return Object.entries(map).map(([size,count])=>({size,count})).sort((a,b)=>b.count-a.count||a.size.localeCompare(b.size));
+}
+/* 사이즈 집계 탭 표시용 - 사이즈표 순서(5XS~5XL)대로 정렬 */
+function getSizeCountsOrdered(){
+  return getSizeCounts().sort((a,b)=>{
+    const ai=SIZE_ORDER.indexOf(a.size), bi=SIZE_ORDER.indexOf(b.size);
+    if(ai===-1&&bi===-1) return a.size.localeCompare(b.size);
+    if(ai===-1) return 1;
+    if(bi===-1) return -1;
+    return ai-bi;
+  });
 }
 
 function renderAll(){ curTab==='list' ? renderList() : renderSizeCounts(); }
@@ -467,7 +484,7 @@ function renderList(){
     const paidLabel = s.paid ? '✅ 납부완료' : '⬜ 미납';
     return `
     <div class="list-row">
-      <div class="list-name">${s.name}${num?`<span class="num-badge">${num}</span>`:''}</div>
+      <div class="list-name">${s.name}${num?`<span class="num-badge"><span class="num-label">등번호</span><span class="num-value">${num}</span></span>`:''}</div>
       <div><span class="size-badge">${s.size}</span></div>
       <div class="list-note">${s.note||''}</div>
       <div><span class="paid-badge ${paidCls} toggleable" data-key="${s.key}" title="클릭하여 납부 상태 변경(관리자)">${paidLabel}</span></div>
@@ -486,9 +503,9 @@ function renderList(){
 /* 사이즈 집계 */
 function renderSizeCounts(){
   const body = document.getElementById('size-body');
-  const counts = getSizeCounts();
+  const counts = getSizeCountsOrdered();
   if(counts.length===0){ body.innerHTML='<div class="empty">👕 아직 입력된 사이즈가 없습니다.</div>'; return; }
-  const maxCount = counts[0].count||1;
+  const maxCount = Math.max(...counts.map(c=>c.count),1);
   body.innerHTML = counts.map(c=>`
     <div class="size-row">
       <div class="size-row-label">${c.size}</div>
