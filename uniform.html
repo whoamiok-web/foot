@@ -43,6 +43,23 @@
   .sum-label{font-size:12px;color:var(--gray2);margin-top:3px;}
   .cost-banner{background:#fff7ed;border:1.5px solid #fed7aa;border-radius:12px;padding:12px 18px;margin-bottom:16px;display:flex;align-items:center;gap:8px;font-size:14px;font-weight:700;color:#9a3412;}
 
+  /* 사이즈표 */
+  .guide-card{background:#fff;border-radius:var(--radius);box-shadow:var(--shadow);margin-bottom:16px;overflow:hidden;}
+  .guide-head{padding:14px 20px;display:flex;align-items:center;justify-content:space-between;cursor:pointer;font-size:14px;font-weight:700;color:var(--gray1);}
+  .guide-head:hover{background:#f9fafb;}
+  .guide-arrow{font-size:12px;color:var(--gray2);transition:transform .2s;}
+  .guide-arrow.open{transform:rotate(180deg);}
+  .guide-body{display:none;padding:0 20px 18px;}
+  .guide-body.open{display:block;}
+  .guide-note{font-size:12px;color:var(--gray2);margin-bottom:10px;}
+  .guide-table-wrap{overflow-x:auto;}
+  .guide-table{width:100%;border-collapse:collapse;font-size:12px;white-space:nowrap;}
+  .guide-table th,.guide-table td{padding:8px 10px;text-align:center;border-bottom:1px solid #f3f4f6;}
+  .guide-table thead th{background:#f9fafb;color:var(--gray2);font-weight:700;border-bottom:2px solid #e5e7eb;}
+  .guide-table tbody tr:last-child td{border-bottom:none;}
+  .guide-table td:first-child,.guide-table th:first-child{font-weight:800;color:var(--dark);position:sticky;left:0;background:#fff;}
+  .guide-table thead th:first-child{background:#f9fafb;}
+
   .top-bar{display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;flex-wrap:wrap;gap:10px;}
   .left-bar{display:flex;align-items:center;gap:10px;flex-wrap:wrap;}
   .admin-badge{display:inline-flex;align-items:center;gap:5px;background:#ecfdf5;color:var(--green);border:1px solid #a7f3d0;font-size:12px;font-weight:700;padding:4px 10px;border-radius:6px;cursor:pointer;}
@@ -225,6 +242,49 @@ document.querySelectorAll('.nav-links a').forEach(a=>{
 
 <div class="main-wrap">
   <div class="cost-banner">💰 유니폼 비용 <span id="cost-display">20,000원</span> / 1인 — 회비계좌로 입금 후 납부 여부는 목록에서 확인하실 수 있습니다.</div>
+
+  <!-- 사이즈표 -->
+  <div class="guide-card">
+    <div class="guide-head" onclick="document.getElementById('guide-body').classList.toggle('open');document.getElementById('guide-arrow').classList.toggle('open');">
+      <span>📏 축구 유니폼 사이즈표 (내 사이즈 확인하기)</span>
+      <span class="guide-arrow" id="guide-arrow">▾</span>
+    </div>
+    <div class="guide-body" id="guide-body">
+      <div class="guide-note">* 측정 방식에 따라 오차(±3)가 있을 수 있습니다. 참고용 표이며, 실제 입력은 아래 숫자 사이즈(90~130) 중 가까운 값으로 선택해 주세요.</div>
+      <div class="guide-table-wrap">
+        <table class="guide-table">
+          <thead>
+            <tr>
+              <th rowspan="2">사이즈<br>(cm)</th>
+              <th colspan="2">상의</th>
+              <th colspan="2">하의</th>
+              <th colspan="2">권장사이즈</th>
+            </tr>
+            <tr>
+              <th>총기장</th><th>가슴단면</th>
+              <th>총기장</th><th>허리단면</th>
+              <th>키(cm)</th><th>체중(kg)</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr><td>5XS</td><td>49</td><td>39</td><td>33</td><td>20</td><td>100-110</td><td>정상체중</td></tr>
+            <tr><td>4XS</td><td>52</td><td>41</td><td>34.5</td><td>21.5</td><td>110-120</td><td>정상체중</td></tr>
+            <tr><td>3XS</td><td>55</td><td>43</td><td>36</td><td>23</td><td>120-130</td><td>정상체중</td></tr>
+            <tr><td>2XS</td><td>58</td><td>45</td><td>37.5</td><td>24.5</td><td>130-140</td><td>정상체중</td></tr>
+            <tr><td>XS</td><td>61</td><td>47</td><td>39</td><td>26</td><td>140-150</td><td>정상체중</td></tr>
+            <tr><td>S</td><td>64</td><td>49</td><td>40.5</td><td>27.5</td><td>150-160</td><td>정상체중</td></tr>
+            <tr><td>M</td><td>67</td><td>51</td><td>42</td><td>29</td><td>160-170</td><td>정상체중</td></tr>
+            <tr><td>L</td><td>70</td><td>53</td><td>43.5</td><td>30.5</td><td>170-175</td><td>정상체중</td></tr>
+            <tr><td>XL</td><td>73</td><td>55</td><td>45</td><td>32</td><td>175-180</td><td>정상체중</td></tr>
+            <tr><td>2XL</td><td>76</td><td>57</td><td>46.5</td><td>33.5</td><td>180-185</td><td>정상체중</td></tr>
+            <tr><td>3XL</td><td>79</td><td>59</td><td>48</td><td>35</td><td>185-190</td><td>~100kg</td></tr>
+            <tr><td>4XL</td><td>82</td><td>61</td><td>49.5</td><td>36.5</td><td>190-</td><td>~105kg</td></tr>
+            <tr><td>5XL</td><td>85</td><td>63</td><td>51</td><td>38</td><td>190-</td><td>~110kg</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
   <!-- 요약 -->
   <div class="summary-cards">
     <div class="sum-card"><div class="sum-num green" id="s-count">-</div><div class="sum-label">입력 인원</div></div>
