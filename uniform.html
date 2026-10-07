@@ -322,7 +322,7 @@ document.querySelectorAll('.nav-links a').forEach(a=>{
 <div class="overlay" id="uniform-modal" style="display:none;">
   <div class="mbox">
     <h3 id="modal-title">내 사이즈 입력</h3>
-    <p class="sub">이름을 다시 입력하면 기존 사이즈가 수정됩니다.</p>
+    <p class="sub">입력 시 설정한 비밀번호가 있어야 나중에 수정할 수 있습니다.</p>
     <div class="fg"><label>이름 *</label><input type="text" id="f-name" list="member-list" placeholder="홍길동"></div>
     <datalist id="member-list"></datalist>
     <div class="fg"><label>사이즈 *</label>
@@ -344,9 +344,24 @@ document.querySelectorAll('.nav-links a').forEach(a=>{
       </select>
     </div>
     <div class="fg"><label>메모/요청사항</label><input type="text" id="f-note" placeholder="예) 루즈핏 원함"></div>
+    <div class="fg"><label>비밀번호 * <span style="font-size:11px;color:var(--gray2);font-weight:500;">(4자리 이상, 나중에 수정할 때 필요)</span></label><input type="password" id="f-pw" placeholder="수정 시 필요한 비밀번호" maxlength="20"></div>
     <div class="mbtns">
       <button class="mbtn-cancel" id="btn-modal-cancel">취소</button>
       <button class="mbtn-ok" id="btn-submit">저장하기</button>
+    </div>
+  </div>
+</div>
+
+<!-- 수정용 개인 비번 확인 모달 -->
+<div class="overlay" id="entry-pw-modal" style="display:none;">
+  <div class="mbox" style="width:320px;">
+    <h3>🔐 비밀번호 확인</h3>
+    <p style="font-size:13px;color:var(--gray2);margin-bottom:16px;">사이즈 입력 시 설정한 비밀번호를 입력해 주세요.</p>
+    <input class="pw-input" type="password" id="entry-pw-input" placeholder="비밀번호" maxlength="20">
+    <div class="pw-err" id="entry-pw-err"></div>
+    <div class="mbtns">
+      <button class="mbtn-cancel" id="btn-entry-pw-cancel">취소</button>
+      <button class="mbtn-ok" id="btn-entry-pw-ok">확인</button>
     </div>
   </div>
 </div>
@@ -495,7 +510,7 @@ function renderList(){
       </div>
     </div>`;
   }).join('');
-  body.querySelectorAll('.btn-edit-sm').forEach(b=>b.onclick=()=>{ const s=allSizes.find(x=>x.key===b.dataset.key); if(s) openModal(s); });
+  body.querySelectorAll('.btn-edit-sm').forEach(b=>b.onclick=()=>{ const s=allSizes.find(x=>x.key===b.dataset.key); if(s) openEntryPw(s); });
   body.querySelectorAll('.btn-del-sm').forEach(b=>b.onclick=()=>delSize(b.dataset.key));
   body.querySelectorAll('.paid-badge').forEach(b=>b.onclick=()=>togglePaid(b.dataset.key));
   setAdminUI();
@@ -515,28 +530,35 @@ function renderSizeCounts(){
     </div>`).join('');
 }
 
-/* 모달 - 이름을 다시 입력하면 같은 키로 덮어써서 본인 사이즈를 수정하는 방식 */
-function openModal(s){
+/* 모달 */
+function openModal(s, prefillPw){
   editKey = s ? s.key : null;
   document.getElementById('modal-title').textContent = s ? '사이즈 수정' : '내 사이즈 입력';
   document.getElementById('btn-submit').textContent  = '저장하기';
   document.getElementById('f-name').value = s ? s.name : '';
   document.getElementById('f-size').value = s ? s.size : '';
   document.getElementById('f-note').value = s ? (s.note||'') : '';
+  document.getElementById('f-pw').value = prefillPw || '';
   document.getElementById('uniform-modal').style.display='flex';
   setTimeout(()=>document.getElementById('f-name').focus(),100);
 }
 function closeModal(){ document.getElementById('uniform-modal').style.display='none'; }
 
-/* 저장 - 이름 기준 키로 upsert (같은 이름 재입력 시 자동으로 본인 것이 수정됨) */
+/* 저장 - 이름 기준 키로 upsert. 이미 존재하는 이름이면 그 사람이 설정해둔 비밀번호가 일치해야 저장됨(관리자는 예외) */
 function saveSize(){
   const name = document.getElementById('f-name').value.trim();
   const size = document.getElementById('f-size').value;
+  const pw = document.getElementById('f-pw').value;
   if(!name){ showToast('⚠️ 이름을 입력해 주세요.'); return; }
   if(!size){ showToast('⚠️ 사이즈를 선택해 주세요.'); return; }
   const key = nameToKey(name);
   const existing = allSizes.find(x=>x.key===key);
-  const data = { name, size, note:document.getElementById('f-note').value.trim(), paid:existing?!!existing.paid:false, updatedAt:Date.now() };
+  if(existing && !isAdmin()){
+    if(!existing.pw){ /* 과거 비밀번호 없이 저장된 데이터 - 그대로 통과시켜 비밀번호를 새로 설정하게 함 */ }
+    else if(pw!==existing.pw){ showToast('❌ 비밀번호가 일치하지 않습니다. "✏️ 수정" 버튼으로 본인 비밀번호를 입력해 주세요.'); return; }
+  }
+  if(!existing && (!pw || pw.length<4)){ showToast('⚠️ 비밀번호를 4자리 이상 입력해 주세요.'); return; }
+  const data = { name, size, note:document.getElementById('f-note').value.trim(), paid:existing?!!existing.paid:false, pw:pw||(existing?existing.pw:''), updatedAt:Date.now() };
   const btn=document.getElementById('btn-submit');
   btn.disabled=true; btn.textContent='저장 중...';
   const reset=()=>{ btn.disabled=false; btn.textContent='저장하기'; };
@@ -549,6 +571,24 @@ function saveSize(){
       renderSummary(); renderAll(); closeModal(); showToast('✅ 저장되었습니다.'); reset();
     })
     .catch(e=>{ showToast('❌ 실패: '+e.message); reset(); });
+}
+
+/* 수정 버튼 - 본인이 설정한 비밀번호 확인 후에만 수정 모달을 열어줌(관리자는 비밀번호 없이 바로 수정 가능) */
+let entryPwTarget = null;
+function openEntryPw(s){
+  if(isAdmin()){ openModal(s, s.pw||''); return; }
+  if(!s.pw){ openModal(s, ''); return; } /* 과거 비밀번호 없이 저장된 데이터는 그대로 수정 허용 */
+  entryPwTarget = s;
+  document.getElementById('entry-pw-input').value='';
+  document.getElementById('entry-pw-err').textContent='';
+  document.getElementById('entry-pw-modal').style.display='flex';
+  setTimeout(()=>document.getElementById('entry-pw-input').focus(),100);
+}
+function closeEntryPw(){ document.getElementById('entry-pw-modal').style.display='none'; }
+function checkEntryPw(){
+  const v = document.getElementById('entry-pw-input').value;
+  if(entryPwTarget && v===entryPwTarget.pw){ closeEntryPw(); openModal(entryPwTarget, v); }
+  else{ document.getElementById('entry-pw-err').textContent='❌ 비밀번호가 틀렸습니다.'; document.getElementById('entry-pw-input').value=''; }
 }
 
 function delSize(key){
@@ -579,6 +619,9 @@ document.getElementById('btn-modal-cancel').onclick=closeModal;
 document.getElementById('btn-submit').onclick=saveSize;
 document.getElementById('btn-pw-cancel').onclick=closePw;
 document.getElementById('btn-pw-ok').onclick=checkPw;
+document.getElementById('btn-entry-pw-cancel').onclick=closeEntryPw;
+document.getElementById('btn-entry-pw-ok').onclick=checkEntryPw;
+document.getElementById('entry-pw-input').onkeydown=e=>{ if(e.key==='Enter') checkEntryPw(); };
 document.getElementById('pw-input').onkeydown=e=>{ if(e.key==='Enter') checkPw(); };
 
 function showToast(msg){ const t=document.getElementById('toast'); t.textContent=msg; t.classList.add('show'); setTimeout(()=>t.classList.remove('show'),2500); }
